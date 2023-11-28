@@ -5,36 +5,75 @@
         <ion-buttons slot="start">
           <ion-back-button default-href="/"></ion-back-button>
         </ion-buttons>
-        <ion-title>Pilih Ruang Rapat</ion-title>
+        <ion-title>Detail Pick</ion-title>
       </ion-toolbar>
     </ion-header>
+
     <ion-content>
-      <div v-for="plan in meetingPlans?.packages" :key="plan.roomType">
-        <ion-item button :detail="true" @click="setPlans(plan.roomIndex)">
-          <ion-thumbnail slot="start">
-            <img
-              alt="Silhouette of mountains"
-              src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-            />
-          </ion-thumbnail>
-          <ion-label>
-            <h3>{{ plan.name }}</h3>
-            <p> Max Join {{ plan.maxJoin }}</p>
-          </ion-label>
-        </ion-item>
-        </div>
-        <!-- <ion-item button :detail="true">
-          <ion-thumbnail slot="start">
-            <img
-              alt="Silhouette of mountains"
-              src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-            />
-          </ion-thumbnail>
-          <ion-label>
-            <h3>Ruang Rapat Umum</h3>
-            <p>0055 - 0055</p>
-          </ion-label>
-        </ion-item> -->
+      <!-- <ion-label class="font-black">Order</ion-label> -->
+
+      <ion-card-content>
+        <ion-list class="fur-el">
+          <div class="content-furniture">
+            <div class="display-flex">
+              <ion-label class="cust-name">Furniture</ion-label>
+              <ion-icon class="ic-chev-detail-black float-right-flex font-black"
+                :icon="chevronDown"
+                slot="end"></ion-icon>
+            </div>
+            
+            <div class="display-flex font-black">
+              <p >Tracking ID :</p>
+              <p> 34533727344</p>
+            </div>
+  
+            <ion-button shape="round" size="small">Pending</ion-button>
+          </div>
+        </ion-list>
+      </ion-card-content>
+
+      <ion-card-content>
+        <ion-list class="fur-el2">
+          <div class="content-furniture">
+            <div class="display-flex">
+              <ion-label>Stationary Item</ion-label>
+              <ion-icon class="ic-chev-detail float-right-flex"
+                :icon="chevronDown"
+                slot="end"></ion-icon>
+            </div>
+            <div class="display-flex">
+              <p>Tracking ID </p>
+              <p class="float-right-flex"> 34533727344</p>
+            </div>
+
+            <div class="display-flex">
+              <p>Origin </p>
+              <p class="float-right-flex"> 34533727344</p>
+            </div>
+            <div class="display-flex">
+              <p class>Destination</p>
+              <p class="float-right-flex"> 34533727344</p>
+            </div>
+
+            <div class="display-flex">
+              <p class="color-white">Shipper Name</p>
+              <p class="float-right-flex"> 34533727344</p>
+            </div>
+
+            <div class="display-flex">
+              <p class="color-white">Commodity</p>
+              <p class="float-right-flex"> 34533727344</p>
+            </div>
+
+            <div class="display-flex">
+              <p class>Status</p>
+              <p class="float-right-flex"> 34533727344</p>
+            </div>
+  
+            <!-- <ion-button shape="round" size="small">Pending</ion-button> -->
+          </div>
+        </ion-list>
+      </ion-card-content>
     </ion-content>
   </ion-page>
 </template>
@@ -50,9 +89,11 @@ import {
   IonItem,
   IonThumbnail,
   IonLabel,
-  IonContent
+  IonContent,
+  IonList,
+  IonIcon
 } from "@ionic/vue";
-import { personCircle } from 'ionicons/icons'
+import { personCircle, chevronDown, chevronUp } from 'ionicons/icons'
 import { useStore } from 'vuex'
 import { onMounted } from 'vue'
 import { ref } from 'vue'
@@ -62,29 +103,9 @@ const store = useStore()
 
 
 const meetingPlans = ref<DataPlans>()
-onMounted(async () => {
-    await gettedMeetingPlans()
-    await getMeetingPlans()
+// onMounted(async () => {
 
-    console.debug('data plan',meetingPlans.value)
-})
+// })
 
-const getMeetingPlans = async () =>{
-  meetingPlans.value = store.getters['dashboard/get']('meetingPlans')
-}
 
-const gettedMeetingPlans = async () => {
-  const option = {
-    pageNum: 1,
-    pageSize: 15
-  }
-
-  await store.dispatch('dashboard/meetingPlans',option)
-};
-
-const setPlans = (roomIndex: string) => {
-  store.dispatch('dashboard/setPlans',roomIndex)
-  router.push('meeting-form')
-  // console.debug('roomIndex',roomIndex)
-}
 </script>

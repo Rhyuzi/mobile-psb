@@ -163,3 +163,117 @@
   padding: 10px;
   border-radius: 10px 0px 10px 10px;
 }
+
+.custom-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+ion-card {
+  background-color: white !important;
+  border: 4px solid #ccc;
+  border-radius: 10px;
+}
+.item-pick {
+  background-color: #bfbebe;
+}
+ion-searchbar{
+  background-color: #bfbebe;
+  color: black;
+}
+.sc-ion-searchbar-md-h {
+  color: black;
+  --icon-color: var(--ion-card-background) !important;
+}
+ion-icon{
+  color: black;
+}
+.searchbar-input.sc-ion-searchbar-md {
+  border-radius: 20px;
+  color: black !important;
+}
+.img-ic{
+  font-size: 37px;
+  max-width: 11%;
+  margin: 0px 5px 0px 2px;
+}
+.ic-toolbar{
+  margin-right: 9px;
+  color: white;
+  font-size: 26px;
+  max-width: 11%;
+}
+.cust-name{
+  color: black;
+  margin: 7px 0px 0px 2px;
+}
+.font-black{
+  color: black;
+}
+.item-inner{
+  border-style: none !important;
+}
+.display-flex {
+  display: flex;
+  margin: 3px 16px 4px 16px;
+}
+.margin-memo{
+  margin-left: 14px;
+  max-width: 22rem;
+}
+
+.float-right-flex{
+  margin-left: auto !important;
+}
+
+ion-list{
+  border-radius: 7px;
+}
+.pick-addr{
+  margin: 9px 17px 0;
+  max-width: 17rem;
+}
+
+
+
+.chat-item {
+  ion-avatar {
+    margin-right: 8px;
+  }
+
+  ion-label {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    padding-right: 8px;
+  }
+
+  ion-note {
+    font-size: 12px;
+  }
+}
+.fur-el {
+  background-color: #f2f4f5;
+}
+.content-furniture{
+  font-size: large;
+  margin: 4px 12px 14px;
+  font-family: sans-serif;
+}
+
+.fur-el2{
+  background-color: #073C7A;
+}
+.font-white {
+  color: white;
+}
+.ic-chev-detail{
+  color: white;
+  font-size: 26px;
+  max-width: 11%;
+}
+.ic-chev-detail-black{
+  font-size: 26px;
+  max-width: 11%;
+}

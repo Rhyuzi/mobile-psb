@@ -50,7 +50,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/select-room",
     component: () => import("@/views/SelectRoom.vue"),
     meta: {
-      requireAuth: true,
+      requireAuth: false,
     },
   },
   {

@@ -35,9 +35,9 @@ class ConfApiHelper {
     }
 
     async sendApi<T = any>(endpoint: string, method: HttpMethod, data?: any): Promise<T> {
-        const API_URI = `http://192.168.100.41:80/${endpoint}`
+        const API_URI = `http://localhost:80/${endpoint}`
 
-        // if (method === 'post') return await axios.post(API_URI, data)
+        // if (method === 'post') return await axios.post(API_URI, daata)
         // else return await axios.get(API_URI)
 
         const requestConfig: AxiosRequestConfig = {
