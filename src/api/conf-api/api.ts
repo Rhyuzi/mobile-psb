@@ -22,3 +22,7 @@ export async function signIn(payload: any): Promise<any> {
 export async function getPickup(payload: any): Promise<any> {
     return await request(endPoints.PICKUP_DATA, 'post', payload)
 }
+
+export async function getDetailPickup(payload: any): Promise<any> {
+    return await request(endPoints.DETAIL_PICKUP_DATA, 'post', payload)
+}

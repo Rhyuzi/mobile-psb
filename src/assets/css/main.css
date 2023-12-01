@@ -175,10 +175,11 @@ ion-card {
   border-radius: 10px;
 }
 .item-pick {
-  background-color: #bfbebe;
+  /* background-color: #bfbebe; */
+  background-color: aliceblue;
 }
 ion-searchbar{
-  background-color: #bfbebe;
+  /* background-color: #bfbebe; */
   color: black;
 }
 .sc-ion-searchbar-md-h {
@@ -193,7 +194,7 @@ ion-icon{
   color: black !important;
 }
 .img-ic{
-  font-size: 37px;
+  font-size: 20px;
   max-width: 11%;
   margin: 0px 5px 0px 2px;
 }
@@ -205,7 +206,11 @@ ion-icon{
 }
 .cust-name{
   color: black;
-  margin: 7px 0px 0px 2px;
+  margin: 0px 0px 0px 2px;
+  max-width: 145px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .font-black{
   color: black;
@@ -215,10 +220,10 @@ ion-icon{
 }
 .display-flex {
   display: flex;
-  margin: 3px 16px 4px 16px;
+  margin: 3px 10px 0px 10px;
 }
 .margin-memo{
-  margin-left: 14px;
+  margin-left: 14px !important;
   max-width: 22rem;
 }
 
@@ -276,4 +281,31 @@ ion-list{
 .ic-chev-detail-black{
   font-size: 26px;
   max-width: 11%;
+}
+.desc-detail {
+  margin: 10px;
+}
+.font-skyblue{
+  color: #073C7A;
+}
+.title-detail {
+  font-weight: 100;
+}
+.font-cont-detail {
+  font-size: 15px;
+}
+.flex-item {
+  flex: 1;
+}
+.title-header {
+  margin: 16px 20px 20px;
+}
+.font-monospace {
+  font-family: monospace;
+}
+.font-bold {
+  font-weight: bolder !important;
+}
+.font-none {
+  font-family: none;
 }

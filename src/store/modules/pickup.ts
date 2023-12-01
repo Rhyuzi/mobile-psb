@@ -1,5 +1,5 @@
 /* eslint-disable no-async-promise-executor */
-import {  getPickup } from '@/api/conf-api/api'
+import {  getPickup,getDetailPickup } from '@/api/conf-api/api'
 import {
     IAccountResponse,
     ISignInParams,
@@ -36,7 +36,7 @@ export default {
     actions: {
         async getPickupData({ commit }: { commit: Commit }) {
             const data = {
-                customer_id: localStorage.customer_id
+                customer_id: localStorage.pegawai_id
             };
             try {
                 const res = await getPickup(data);
@@ -44,6 +44,22 @@ export default {
                     commit("SET", ["pickupsList", res.data]);
                 }
                 console.debug("data pickup", res.data);
+                return res;
+            } catch (error) {
+                console.error("Error fetching pickup data:", error);
+                throw error; // Re-throw the error to be handled by the caller if needed
+            }
+        },
+        async getDetailPickup({ commit }: { commit: Commit }) {
+            const data = {
+                pickup_id: localStorage.idPickup
+            };
+            try {
+                const res = await getDetailPickup(data);
+                // if (res.error === false) {
+                //     commit("SET", ["pickupsList", res.data]);
+                // }
+                // console.debug("data pickup", res.data);
                 return res;
             } catch (error) {
                 console.error("Error fetching pickup data:", error);

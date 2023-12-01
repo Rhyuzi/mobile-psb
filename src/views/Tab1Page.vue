@@ -2,7 +2,10 @@
     <ion-page>
         <ion-header>
             <ion-toolbar>
-                <ion-title>Pick Up</ion-title>
+                <div class="title-header">
+                    <p class="font-monospace">Selamat Datang,</p>
+                    <p>{{ dataUser.name }}</p>
+                </div>
                 <ion-icon @click="onClickSearch" class="ic-toolbar"
                         :icon="inSearch.icon"
                         slot="end"></ion-icon>
@@ -11,29 +14,30 @@
         </ion-header>
         <ion-content :fullscreen="true">
             <div class="item-pick" v-for="pickup in pickups" :key="pickup.POrderNo">
-       <ion-card-content>
+       <ion-card-content @click="seeDetail(pickup.POrderID)">
             <ion-list>
                 <div class="display-flex">
                     <ion-icon class="img-ic"
                         :icon="personCircle"
                         color="secondary"
                         slot="start"></ion-icon>
-                    <ion-label class="cust-name">{{ pickup.POrderCustName }}</ion-label>
-                    <p class="font-black float-right-flex">{{ pickup.POrderDate }}</p>
+                    <ion-label class="cust-name font-monospace">{{ pickup.POrderCustName }}</ion-label>
+                    <p class="font-black float-right-flex font-none">{{ pickup.POrderDate }}</p>
                 </div>
                 <div class="display-flex">
-                    <p class="font-black pick-addr custom-ellipsis">{{ pickup.POrderCustAddr }}</p>
-                    <p class="font-black float-right-flex">{{ pickup.POrderQty }} qty</p>
+                    <p class="font-black pick-addr custom-ellipsis font-bold">{{ pickup.POrderCustAddr }}</p>
+                    <!-- <p class="font-black float-right-flex">{{ pickup.POrderQty }} qty</p> -->
                 </div>
-                <p class="font-black margin-memo">Memo :</p>
-                <p class="font-black margin-memo custom-ellipsis">{{ pickup.POrderMemo ? pickup.POrderMemo : 'Tidak ada memo'   }}</p>
+                <p class="font-black margin-memo font-bold">{{ pickup.POrderIsi }}</p>
+               
 
                 <div class="display-flex">
+                    <p class="font-black cont-qty">{{ pickup.POrderQty }} qty</p>
                     <ion-icon class="img-ic float-right-flex"
                     :icon="personCircle"
                     color="secondary"
                     slot="start"></ion-icon>
-                    <ion-label class="cust-name">{{ pickup.POrderDEO }}</ion-label>
+                    <ion-label class="cust-name font-monospace">{{ pickup.POrderDEO }}</ion-label>
                 </div>
             </ion-list>
         </ion-card-content>
@@ -75,10 +79,13 @@ import { useStore } from 'vuex'
 import { onMounted, reactive } from 'vue'
 import { ref } from 'vue'
 import { IPickupItem } from '../api/conf-api/interface/dashboard'
+import router from "@/router";
 const store = useStore()
 const ionRouter = useIonRouter()
 
+
 const pickups = ref<IPickupItem[]>([])
+const dataUser = JSON.parse(localStorage.user)
 
 onMounted(async () => {
     getPickupOrder()
@@ -106,5 +113,11 @@ const onClickSearch = () => {
 const setOpenSearch = (state: boolean) => {
     isSearch.value = state;
 };
+
+const seeDetail = (idPickup: any) => {
+    localStorage.setItem("idPickup", idPickup)
+    console.debug('idPickup',idPickup)
+    router.push("/select-room");
+}
 
 </script>

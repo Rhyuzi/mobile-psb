@@ -16,15 +16,14 @@
         <ion-list class="fur-el">
           <div class="content-furniture">
             <div class="display-flex">
-              <ion-label class="cust-name">Furniture</ion-label>
-              <ion-icon class="ic-chev-detail-black float-right-flex font-black"
+              <ion-label class="cust-name">Nama Customer</ion-label>
+              <!-- <ion-icon class="ic-chev-detail-black float-right-flex font-black"
                 :icon="chevronDown"
-                slot="end"></ion-icon>
+                slot="end"></ion-icon> -->
             </div>
             
             <div class="display-flex font-black">
-              <p >Tracking ID :</p>
-              <p> 34533727344</p>
+              <p> {{ pickups?.POrderCustName }}</p>
             </div>
   
             <ion-button shape="round" size="small">Pending</ion-button>
@@ -32,48 +31,93 @@
         </ion-list>
       </ion-card-content>
 
+
+
       <ion-card-content>
         <ion-list class="fur-el2">
           <div class="content-furniture">
             <div class="display-flex">
-              <ion-label>Stationary Item</ion-label>
-              <ion-icon class="ic-chev-detail float-right-flex"
+              <ion-label size="large">Detail Data</ion-label>
+              <!-- <ion-icon class="ic-chev-detail float-right-flex"
                 :icon="chevronDown"
-                slot="end"></ion-icon>
+                slot="end"></ion-icon> -->
+            </div>
+            
+            <div class="display-flex">
+              <p>{{ pickups?.POrderIsi }}, {{ pickups?.POrderCustAddr }}</p>           
+            </div>
+          <br>
+            <div class="display-flex">
+              <ion-label class="font-cont-detail">Tanggal dibuat</ion-label>
+              <p class="custom-ellipsis float-right-flex">{{ pickups?.POrderDate }}</p>
             </div>
             <div class="display-flex">
-              <p>Tracking ID </p>
-              <p class="float-right-flex"> 34533727344</p>
-            </div>
-
-            <div class="display-flex">
-              <p>Origin </p>
-              <p class="float-right-flex"> 34533727344</p>
+              <ion-label class="font-cont-detail">Nama Pengirim</ion-label>
+              <p class="custom-ellipsis float-right-flex">{{ pickups?.POrderDEO }}</p>
             </div>
             <div class="display-flex">
-              <p class>Destination</p>
-              <p class="float-right-flex"> 34533727344</p>
+              <ion-label class="font-cont-detail">Nama Customer</ion-label>
+              <p class="custom-ellipsis float-right-flex">{{ pickups?.POrderCustName   }}</p>
             </div>
-
             <div class="display-flex">
-              <p class="color-white">Shipper Name</p>
-              <p class="float-right-flex"> 34533727344</p>
-            </div>
-
-            <div class="display-flex">
-              <p class="color-white">Commodity</p>
-              <p class="float-right-flex"> 34533727344</p>
-            </div>
-
-            <div class="display-flex">
-              <p class>Status</p>
-              <p class="float-right-flex"> 34533727344</p>
-            </div>
-  
-            <!-- <ion-button shape="round" size="small">Pending</ion-button> -->
+              <ion-label class="font-cont-detail">Nama Pembuat</ion-label>
+              <p class="custom-ellipsis float-right-flex">{{ pickups?.POrderCSO ? pickups?.POrderCSO : '-'   }}</p>
+            </div>            
           </div>
         </ion-list>
       </ion-card-content>
+
+      <ion-card-content>
+        <ion-list class="fur-el">
+          <div class="content-furniture">
+            <div class="display-flex">
+              <ion-label size="large" class="cust-name">Detail Barang</ion-label>
+              <!-- <ion-icon class="ic-chev-detail-black float-right-flex font-black"
+                :icon="chevronDown"
+                slot="end"></ion-icon> -->
+            </div>
+            
+            <div class="display-flex font-black">
+              <!-- <p> {{ pickups?.POrderMemo ? pickups?.POrderMemo : 'Tidak ada memo'   }}</p> -->
+              <p>{{ pickups?.POrderIsi }}</p>
+            </div>
+
+            <div class="display-flex">
+              <!-- <div class="desc-detail font-black flex-item">
+                <h3 class="font-skyblue">ISI</h3>
+                <p>{{ pickups?.POrderIsi }}</p>
+            </div> -->
+
+            <div class="desc-detail font-black flex-item">
+              <h3 class="font-skyblue">QTY</h3>
+              <p>{{ pickups?.POrderQty }}</p>
+            </div>
+            
+            <div class="desc-detail font-black flex-item">
+              <h3 class="font-skyblue">Berat</h3>
+              <p>{{ pickups?.POrderWeight }}</p>
+            </div>
+            </div>
+            
+
+            <!-- <div class="display-flex">
+
+            <div class="desc-detail font-black">
+              <h3 class="font-skyblue">QTY</h3>
+              <p>{{ pickups?.POrderQty }}</p>
+            </div>
+            
+            <div class="desc-detail font-black">
+              <h3 class="font-skyblue">Berat</h3>
+              <p>{{ pickups?.POrderWeight }}</p>
+            </div>
+            </div> -->
+
+          </div>
+        </ion-list>
+      </ion-card-content>
+
+    
     </ion-content>
   </ion-page>
 </template>
@@ -99,13 +143,19 @@ import { onMounted } from 'vue'
 import { ref } from 'vue'
 import { DataPlans } from '@/interfaces/jumpaRtcSDK'
 import router from "@/router";
+import { IPickupItem } from '../api/conf-api/interface/dashboard'
+
 const store = useStore()
+const pickups = ref<IPickupItem | null>(null);
 
+onMounted(async () => {
+  getDetailPickUp()
+})
 
-const meetingPlans = ref<DataPlans>()
-// onMounted(async () => {
-
-// })
-
+const getDetailPickUp = async () => {
+    const result = await store.dispatch('pickup/getDetailPickup');
+    pickups.value = result.data
+    console.debug("After",pickups.value);
+};
 
 </script>

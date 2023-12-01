@@ -55,4 +55,5 @@ export interface IPickupItem {
   POrderVol: string;
   POrderWeight: string;
   ip_address: string;
+  POrderID: string;
 }

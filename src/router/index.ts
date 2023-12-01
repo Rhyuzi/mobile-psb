@@ -43,7 +43,7 @@ const routes: Array<RouteRecordRaw> = [
       },
     ],
     meta: {
-      requireAuth: false,
+      requireAuth: true,
     },
   },
   {
@@ -89,17 +89,17 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (localStorage.getItem("accessToken")) {
+  if (localStorage.getItem("user")) {
     store.commit("auth/SET", ["isAuth", true]);
   }
 
-  if (localStorage.getItem("account") && localStorage.getItem("email")) {
-    const account = localStorage.getItem("account");
-    const email = localStorage.getItem("email");
+  // if (localStorage.getItem("account") && localStorage.getItem("email")) {
+  //   const account = localStorage.getItem("account");
+  //   const email = localStorage.getItem("email");
 
-    store.commit("auth/SET", ["account", account]);
-    store.commit("auth/SET", ["email", email]);
-  }
+  //   store.commit("auth/SET", ["account", account]);
+  //   store.commit("auth/SET", ["email", email]);
+  // }
 
   const auth = store.getters["auth/get"]('isAuth');
   if ((to.path === "/login" || to.path === "/") && auth) {
@@ -107,7 +107,7 @@ router.beforeEach((to, from, next) => {
   } else if (to.matched.some((record) => record.meta.requireAuth)) {
     if (!auth) {
       next({
-        path: "/login",
+        path: "/",
         query: { redirect: to.fullPath },
       });
     } else {
