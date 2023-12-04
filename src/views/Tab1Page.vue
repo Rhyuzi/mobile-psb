@@ -121,3 +121,5 @@ const seeDetail = (idPickup: any) => {
 }
 
 </script>
+<style>
+</style>

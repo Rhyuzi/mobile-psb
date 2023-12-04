@@ -1,11 +1,4 @@
 import endPoints from './endpoints'
-import {
-    IAccountInfo,
-    IAccountResponse,
-    ISignInParams,
-    ISignInResponse,
-    IUpdateAccountInfo
-} from './interface/account'
 import { ICommonResponse, IPage, ITimezone } from './interface/common'
 import { IMeetListPayload, IMeetListResponse } from './interface/dashboard'
 import { IPlan } from './interface/room-resource'

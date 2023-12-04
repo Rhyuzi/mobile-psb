@@ -16,7 +16,7 @@
         <ion-list class="fur-el">
           <div class="content-furniture">
             <div class="display-flex">
-              <ion-label class="cust-name">Nama Customer</ion-label>
+              <ion-label class="cust-name font-monoscope">Nama Customer</ion-label>
               <!-- <ion-icon class="ic-chev-detail-black float-right-flex font-black"
                 :icon="chevronDown"
                 slot="end"></ion-icon> -->
@@ -25,8 +25,6 @@
             <div class="display-flex font-black">
               <p> {{ pickups?.POrderCustName }}</p>
             </div>
-  
-            <ion-button shape="round" size="small">Pending</ion-button>
           </div>
         </ion-list>
       </ion-card-content>
@@ -37,7 +35,7 @@
         <ion-list class="fur-el2">
           <div class="content-furniture">
             <div class="display-flex">
-              <ion-label size="large">Detail Data</ion-label>
+              <ion-label size="large" class="font-monoscope">Detail Data</ion-label>
               <!-- <ion-icon class="ic-chev-detail float-right-flex"
                 :icon="chevronDown"
                 slot="end"></ion-icon> -->
@@ -71,7 +69,7 @@
         <ion-list class="fur-el">
           <div class="content-furniture">
             <div class="display-flex">
-              <ion-label size="large" class="cust-name">Detail Barang</ion-label>
+              <ion-label size="large" class="cust-name font-monoscope">Detail Barang</ion-label>
               <!-- <ion-icon class="ic-chev-detail-black float-right-flex font-black"
                 :icon="chevronDown"
                 slot="end"></ion-icon> -->
@@ -100,23 +98,22 @@
             </div>
             
 
-            <!-- <div class="display-flex">
-
-            <div class="desc-detail font-black">
-              <h3 class="font-skyblue">QTY</h3>
-              <p>{{ pickups?.POrderQty }}</p>
-            </div>
-            
-            <div class="desc-detail font-black">
-              <h3 class="font-skyblue">Berat</h3>
-              <p>{{ pickups?.POrderWeight }}</p>
-            </div>
-            </div> -->
+           
 
           </div>
         </ion-list>
       </ion-card-content>
 
+      <div class="display-flex btn-bottom">
+
+        <div class="desc-detail font-black flex-item">
+          <ion-button shape="round" size="small" color="success">Setuju/Ambil</ion-button>
+        </div>
+
+        <div class="desc-detail font-black flex-item">
+          <ion-button shape="round" size="small" color="danger">Batalkan</ion-button>
+        </div>
+      </div>
     
     </ion-content>
   </ion-page>
@@ -141,7 +138,6 @@ import { personCircle, chevronDown, chevronUp } from 'ionicons/icons'
 import { useStore } from 'vuex'
 import { onMounted } from 'vue'
 import { ref } from 'vue'
-import { DataPlans } from '@/interfaces/jumpaRtcSDK'
 import router from "@/router";
 import { IPickupItem } from '../api/conf-api/interface/dashboard'
 

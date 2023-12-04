@@ -173,6 +173,7 @@ ion-card {
   background-color: white !important;
   border: 4px solid #ccc;
   border-radius: 10px;
+  margin-bottom: 36px;
 }
 .item-pick {
   /* background-color: #bfbebe; */
@@ -308,4 +309,10 @@ ion-list{
 }
 .font-none {
   font-family: none;
+}
+#background-content {
+  background: aliceblue !important;
+}
+.btn-bottom {
+ margin-left: 40px;
 }

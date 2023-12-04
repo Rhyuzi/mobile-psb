@@ -14,21 +14,21 @@
     </ion-header>
     <div class="container-join">
       <img src="../assets/image/psb-logo.png" class="login-logo" alt="">
-      <ion-card>
+      <ion-card class="font-black">
         <ion-card-header>
-          <ion-card-title>Masuk</ion-card-title>
+          <ion-card-title class="font-black">Masuk</ion-card-title>
         </ion-card-header>
 
         <ion-card-content>
-          <form action="" ref="formLoginRef">
+          <form action="" ref="formLoginRef" class="font-black">
             <ion-input
               ref="email"
-              color="primary"
+              color="dark"
               label="Email atau Nama Akun"
               label-placement="floating"
               fill="outline"
               placeholder="Masukan Email atau Nama Akun"
-              :class="v$.username.$error ? 'ion-invalid' : 'ion-valid'"
+              :class="v$.username.$error ? 'ion-invalid font-black' : 'ion-valid font-black'"
               :error-text="
                 v$.username.$error
                   ? v$.username.$errors[0].$message.toString()
@@ -40,7 +40,7 @@
             ><br />
             <ion-input
               ref="password"
-              color="primary"
+              color="dark"
               label="Kata Sandi (jika diperlukan)"
               label-placement="floating"
               fill="outline"

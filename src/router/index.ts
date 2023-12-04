@@ -12,20 +12,6 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
-    path: "/login",
-    component: () => import("@/views/LoginFormPage.vue"),
-    meta: {
-      requireAuth: false,
-    },
-  },
-  {
-    path: "/join",
-    component: () => import("@/views/JoinPage.vue"),
-    meta: {
-      requireAuth: false,
-    },
-  },
-  {
     path: "/tabs/",
     component: TabsPage,
     children: [
@@ -49,34 +35,6 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/select-room",
     component: () => import("@/views/SelectRoom.vue"),
-    meta: {
-      requireAuth: false,
-    },
-  },
-  {
-    path: "/meeting-form",
-    component: () => import("@/views/MeetingFormPage.vue"),
-    meta: {
-      requireAuth: true,
-    },
-  },
-  {
-    path: "/schedule-meet",
-    component: () => import("@/views/ScheduleMeetingPage.vue"),
-    meta: {
-      requireAuth: true,
-    },
-  },
-  {
-    path: "/detail-meet",
-    component: () => import("@/views/DetailMeetingPage.vue"),
-    meta: {
-      requireAuth: true,
-    },
-  },
-  {
-    path: "/meetings",
-    component: () => import("@/views/MeetingPage.vue"),
     meta: {
       requireAuth: false,
     },
