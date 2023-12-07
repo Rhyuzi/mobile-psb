@@ -107,16 +107,23 @@
       <div class="display-flex btn-bottom">
 
         <div class="desc-detail font-black flex-item">
-          <ion-button shape="round" size="small" color="success">Setuju/Ambil</ion-button>
+          <ion-button shape="round" size="small" color="success" @click="updateSetujui">Setuju/Ambil</ion-button>
         </div>
 
         <div class="desc-detail font-black flex-item">
-          <ion-button shape="round" size="small" color="danger">Batalkan</ion-button>
+          <ion-button shape="round" size="small" color="danger" @click="updateBatalkan">Batalkan</ion-button>
         </div>
       </div>
     
     </ion-content>
+    <ion-alert
+    :is-open="isOpen"
+    :message="message"
+    :buttons="alertButtons"
+    @didDismiss="setOpen(false)"
+  ></ion-alert>
   </ion-page>
+ 
 </template>
 
 <script setup lang="ts">
@@ -132,7 +139,9 @@ import {
   IonLabel,
   IonContent,
   IonList,
-  IonIcon
+  IonIcon,
+  IonAlert,
+  onIonViewWillEnter
 } from "@ionic/vue";
 import { personCircle, chevronDown, chevronUp } from 'ionicons/icons'
 import { useStore } from 'vuex'
@@ -143,15 +152,52 @@ import { IPickupItem } from '../api/conf-api/interface/dashboard'
 
 const store = useStore()
 const pickups = ref<IPickupItem | null>(null);
+let message = ""
 
-onMounted(async () => {
+const isOpen = ref(false);
+  const alertButtons = ['Tutup'];
+
+  const setOpen = (state: boolean) => {
+    isOpen.value = state;
+  };
+  
+
+  onIonViewWillEnter(() => {
+  // This function will be executed each time the view is about to enter
   getDetailPickUp()
-})
+});
+
+// onMounted(async () => {
+//   getDetailPickUp()
+// })
 
 const getDetailPickUp = async () => {
     const result = await store.dispatch('pickup/getDetailPickup');
     pickups.value = result.data
     console.debug("After",pickups.value);
+};
+
+const updateSetujui = async () => {
+  
+  const param = {
+    pickup_id: pickups.value?.POrderID,
+    status: 1
+  }
+    const result = await store.dispatch('pickup/updateStatus',param);
+    message = result.message
+    router.push("/tabs/");
+    setOpen(true)
+};
+
+const updateBatalkan = async () => {
+  const param = {
+    pickup_id: pickups.value?.POrderID,
+    status: 0
+  }
+    const result = await store.dispatch('pickup/updateStatus',param);
+    message = result.message
+    router.push("/tabs/");
+    setOpen(true)
 };
 
 </script>

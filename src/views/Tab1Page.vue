@@ -72,7 +72,8 @@ import {
     IonItem,
     IonThumbnail,
     IonLabel,
-    IonAvatar
+    IonAvatar,
+    onIonViewWillEnter
 } from '@ionic/vue'
 import { personCircle, searchCircle, wifi, search, close } from 'ionicons/icons'
 import { useStore } from 'vuex'
@@ -87,9 +88,9 @@ const ionRouter = useIonRouter()
 const pickups = ref<IPickupItem[]>([])
 const dataUser = JSON.parse(localStorage.user)
 
-onMounted(async () => {
-    getPickupOrder()
-})
+// onMounted(async () => {
+//     getPickupOrder()
+// })
 const isSearch = ref(false);
 const inSearch = reactive({
     icon: search,
@@ -119,7 +120,9 @@ const seeDetail = (idPickup: any) => {
     console.debug('idPickup',idPickup)
     router.push("/select-room");
 }
+onIonViewWillEnter(() => {
+  // This function will be executed each time the view is about to enter
+  getPickupOrder()
+});
 
 </script>
-<style>
-</style>

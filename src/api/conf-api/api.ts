@@ -19,3 +19,7 @@ export async function getPickup(payload: any): Promise<any> {
 export async function getDetailPickup(payload: any): Promise<any> {
     return await request(endPoints.DETAIL_PICKUP_DATA, 'post', payload)
 }
+
+export async function updateStatus(payload: any): Promise<any> {
+    return await request(endPoints.UPDATE_STATUS_PICKUP, 'post', payload)
+}

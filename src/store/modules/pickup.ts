@@ -1,11 +1,5 @@
 /* eslint-disable no-async-promise-executor */
-import {  getPickup,getDetailPickup } from '@/api/conf-api/api'
-import {
-    IAccountResponse,
-    ISignInParams,
-    ISignInResponse
-} from '@/api/conf-api/interface/account'
-import { ICommonResponse } from '@/api/conf-api/interface/common'
+import {  getPickup,getDetailPickup,updateStatus } from '@/api/conf-api/api'
 import md5 from 'crypto-js/md5'
 import { State } from 'ionicons/dist/types/stencil-public-runtime'
 import { Commit } from 'vuex'
@@ -60,6 +54,17 @@ export default {
                 //     commit("SET", ["pickupsList", res.data]);
                 // }
                 // console.debug("data pickup", res.data);
+                return res;
+            } catch (error) {
+                console.error("Error fetching pickup data:", error);
+                throw error; // Re-throw the error to be handled by the caller if needed
+            }
+        },
+
+        async updateStatus({ commit }: { commit: Commit }, payload: any) {
+            
+            try {
+                const res = await updateStatus(payload);
                 return res;
             } catch (error) {
                 console.error("Error fetching pickup data:", error);
