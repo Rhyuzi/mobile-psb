@@ -170,10 +170,7 @@ const login = async () => {
   } else {
     errMessage.value = res.message;
     setOpen(true);
-    // setTimeout(() => {
-      loading.dismiss();
-    // }, 1000);
-
+    loading.dismiss();
   }
   } catch (error) {
     console.error(error)

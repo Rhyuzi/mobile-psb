@@ -121,8 +121,7 @@ const seeDetail = (idPickup: any) => {
     router.push("/select-room");
 }
 onIonViewWillEnter(() => {
-  // This function will be executed each time the view is about to enter
-  getPickupOrder()
+    getPickupOrder()
 });
 
 </script>
