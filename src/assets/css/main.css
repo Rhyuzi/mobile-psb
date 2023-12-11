@@ -214,7 +214,7 @@ ion-icon{
   text-overflow: ellipsis;
 }
 .font-black{
-  color: black;
+  color: black !important;
 }
 .item-inner{
   border-style: none !important;
@@ -313,6 +313,25 @@ ion-list{
 #background-content {
   background: aliceblue !important;
 }
-.btn-bottom {
- margin-left: 40px;
+.btn-tabs {
+  color: white !important;
 }
+.refresh-icon {
+  cursor: pointer;
+  transition: transform 0.3s ease; /* Smooth transition */
+}
+
+.refresh-icon.spin {
+  animation: spin 1s linear infinite; /* Spin animation */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.btn-bottom {
+  margin-left: 40px;
+ }
+ .ic-filter{
+  margin-left: 15px;
+ }

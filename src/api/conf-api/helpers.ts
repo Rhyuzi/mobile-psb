@@ -35,8 +35,8 @@ class ConfApiHelper {
     }
 
     async sendApi<T = any>(endpoint: string, method: HttpMethod, data?: any): Promise<T> {
-        // const API_URI = `https://pandusiwibandung.co.id/${endpoint}`
-        const API_URI = `http://localhost/${endpoint}`
+        const API_URI = `https://pandusiwibandung.co.id/${endpoint}`
+        // const API_URI = `http://localhost/${endpoint}`
 
         // if (method === 'post') return await axios.post(API_URI, daata)
         // else return await axios.get(API_URI)

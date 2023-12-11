@@ -2,19 +2,53 @@
     <ion-page>
         <ion-header>
             <ion-toolbar>
+                    <ion-icon id="auto-trigger" class="ic-toolbar ic-filter"
+                        :icon="menuOutline"
+                        slot="start"></ion-icon>
+                    <ion-popover trigger="auto-trigger" size="auto">
+                        <ion-content color="dark">
+                            <ion-list :inset="true">
+                        <ion-item :button="true">
+                            <ion-icon color="danger" slot="start" :icon="listCircle" size="large"></ion-icon>
+                            <ion-label class="font-black">General</ion-label>
+                            <ion-note class="font-black" slot="end">6</ion-note>
+                        </ion-item>
+                        <ion-item :button="true">
+                            <ion-icon color="tertiary" slot="start" :icon="listCircle" size="large"></ion-icon>
+                            <ion-label class="font-black" >Shopping</ion-label>
+                            <ion-note class="font-black" slot="end">15</ion-note>
+                        </ion-item>
+                        <ion-item :button="true">
+                            <ion-icon color="success" slot="start" :icon="listCircle" size="large"></ion-icon>
+                            <ion-label class="font-black" >Cleaning</ion-label>
+                            <ion-note class="font-black" slot="end">3</ion-note>
+                        </ion-item>
+                        <ion-item :button="true">
+                            <ion-icon color="warning" slot="start" :icon="listCircle" size="large"></ion-icon>
+                            <ion-label class="font-black">Reminders</ion-label>
+                            <ion-note class="font-black" slot="end">8</ion-note>
+                        </ion-item>
+                        </ion-list>
+                        </ion-content>
+                    </ion-popover>
+                            
                 <div class="title-header">
                     <p class="font-monospace">Selamat Datang,</p>
                     <p>{{ dataUser.name }}</p>
                 </div>
+                <ion-icon @click="onClickRefresh" class="ic-toolbar refresh-icon"
+                        :icon="refreshOutline"
+                        slot="end"></ion-icon>
                 <ion-icon @click="onClickSearch" class="ic-toolbar"
                         :icon="inSearch.icon"
                         slot="end"></ion-icon>
             </ion-toolbar>
-            <ion-searchbar v-if="isSearch" placeholder="Search Data ..."></ion-searchbar>
+            <ion-searchbar v-if="isSearch" placeholder="Search Data ..." v-model="searchData"></ion-searchbar>
         </ion-header>
         <ion-content :fullscreen="true">
-            <div class="item-pick" v-for="pickup in pickups" :key="pickup.POrderNo">
+            <div class="item-pick" v-for="pickup in onSearchData" :key="pickup.POrderNo">
        <ion-card-content @click="seeDetail(pickup.POrderID)">
+        <!-- <ion-card-content @click="seeDetail(pickup.POrderID)" class="ion-activatable ripple-parent rectangle"></ion-card-content> -->
             <ion-list>
                 <div class="display-flex">
                     <ion-icon class="img-ic"
@@ -73,11 +107,16 @@ import {
     IonThumbnail,
     IonLabel,
     IonAvatar,
-    onIonViewWillEnter
+    onIonViewWillEnter,
+    IonMenu,
+    IonButtons,
+    IonMenuButton,
+    IonPopover,
+    IonNote
 } from '@ionic/vue'
-import { personCircle, searchCircle, wifi, search, close } from 'ionicons/icons'
+import { personCircle, searchCircle, wifi, search, close, refreshOutline, menuOutline, listCircle } from 'ionicons/icons'
 import { useStore } from 'vuex'
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, computed } from 'vue'
 import { ref } from 'vue'
 import { IPickupItem } from '../api/conf-api/interface/dashboard'
 import router from "@/router";
@@ -86,6 +125,7 @@ const ionRouter = useIonRouter()
 
 
 const pickups = ref<IPickupItem[]>([])
+const searchData = ref("")
 const dataUser = JSON.parse(localStorage.user)
 
 // onMounted(async () => {
@@ -95,10 +135,39 @@ const isSearch = ref(false);
 const inSearch = reactive({
     icon: search,
 })
+const onSearchData = computed(() => {
+    const pickupArray = Object.values(pickups.value || {})
+    return pickupArray.filter(data => 
+    data.POrderCustName.toLocaleLowerCase().includes(searchData.value.toLowerCase()) ||
+    data.POrderCustAddr.toLocaleLowerCase().includes(searchData.value.toLowerCase())
+    )
+})
+
+const onClickRefresh = () => {
+    const refreshIcon = document.querySelector('.refresh-icon');
+    refreshIcon!.classList.add('spin');
+    getPickupOrder()
+    setTimeout(() => {
+        refreshIcon!.classList.remove('spin');
+    }, 1000); 
+}
 const getPickupOrder = async () => {
+    const loading = await loadingController.create({
+        message: "Loading...",
+        animated: true,
+        backdropDismiss: false,
+    });
+    loading.present();
     const result = await store.dispatch('pickup/getPickupData');
-    pickups.value = result.data
-    console.debug("After dispatch",pickups.value);
+    if (result.error == false) {
+        pickups.value = result.data
+        loading.dismiss();
+        console.debug("After dispatch",pickups.value);
+    }else{
+        pickups.value = result.data
+        loading.dismiss();
+        console.debug("After dispatch",pickups.value);
+    }
 };
 
 const onClickSearch = () => {
