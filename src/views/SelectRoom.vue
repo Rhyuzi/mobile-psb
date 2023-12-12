@@ -12,6 +12,21 @@
     <ion-content>
       <!-- <ion-label class="font-black">Order</ion-label> -->
 
+      <ion-card-content v-if="pickups?.POrderStatus == '3'">
+        <ion-list class="bg-aquamarine">
+          <div class="content-furniture">
+            <!-- <div class="display-flex">
+              <ion-label class="cust-name font-monoscope">Nama Customer</ion-label>
+            </div>
+            
+            <div class="display-flex font-black">
+              <p> {{ pickups?.POrderCustName }}</p>
+            </div> -->
+            <h2 class="font-black">Pesanan sudah terambil</h2>
+          </div>
+        </ion-list>
+      </ion-card-content>
+
       <ion-card-content>
         <ion-list class="fur-el">
           <div class="content-furniture">
@@ -28,9 +43,6 @@
           </div>
         </ion-list>
       </ion-card-content>
-
-
-
       <ion-card-content>
         <ion-list class="fur-el2">
           <div class="content-furniture">
@@ -115,7 +127,7 @@
         </div>
 
         <div class="desc-detail font-black flex-item">
-          <ion-button color="danger" id="present-alert">Batalkan</ion-button>
+          <ion-button v-if="pickups?.POrderStatus != '3'" color="danger" id="present-alert">Batalkan</ion-button>
         </div>
 
       </div>

@@ -335,3 +335,13 @@ ion-list{
  .ic-filter{
   margin-left: 15px;
  }
+ .arr-back-history {
+  margin-left: 20px;
+ }
+ .title-history {
+  text-align: center;
+  margin-right: 51px;
+ }
+ .bg-aquamarine {
+  background-color: aquamarine;
+ }
