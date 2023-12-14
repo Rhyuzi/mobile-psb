@@ -59,9 +59,7 @@ export default {
     },
     actions: {
         async signIn({ commit }: { commit: Commit }, payload: ISignInParams) {
-            
-            // const { account, password } = payload
-            
+         
             const res = await signIn(payload)
             if (res.error == false) {
                 localStorage.setItem('UserCityDefault', res.data.UserCityDefault)
@@ -79,22 +77,6 @@ export default {
             }
             console.debug('sign in',res)
             return res
-            // if (res.retCode === '0') {
-            //     const { accessToken, account, email, sipAccount, sipPassword } =
-            //         res.data as ISignInResponse
-            //     commit('SET', ['accessToken', accessToken])
-            //     commit('SET', ['account', account])
-            //     commit('SET', ['email', email])
-            //     commit('SET', ['sipAccount', sipAccount])
-            //     commit('SET', ['sipPassword', sipPassword])
-            //     commit('SET', ['isAuth', true])
-
-            //     localStorage.setItem('accessToken', accessToken)
-            //     localStorage.setItem('account', account)
-            //     localStorage.setItem('email', email)
-            //     localStorage.setItem('user', JSON.stringify(res.data))
-            // }
-
         },
         
     }

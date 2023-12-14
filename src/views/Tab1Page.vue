@@ -18,8 +18,8 @@
                     </ion-popover>
                             
                 <div class="title-header">
-                    <p class="font-monospace">Selamat Datang,</p>
-                    <p>{{ dataUser.name }}</p>
+                    <p class="font-monospace font-white">Selamat Datang,</p>
+                    <p class="font-white">{{ dataUser.name }}</p>
                 </div>
                 <ion-icon @click="onClickRefresh" class="ic-toolbar refresh-icon"
                         :icon="refreshOutline"
@@ -108,6 +108,7 @@
     </ion-page>
 </template>
 
+
 <script setup lang="ts">
 import {
     IonSearchbar,
@@ -116,29 +117,14 @@ import {
     IonToolbar,
     IonTitle,
     IonContent,
-    IonButton,
-    IonCard,
     IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonRow,
-    IonCol,
-    IonGrid,
     IonIcon,
-    IonText,
-    IonRippleEffect,
     useIonRouter,
     loadingController,
     IonList,
     IonItem,
-    IonThumbnail,
     IonLabel,
-    IonAvatar,
     onIonViewWillEnter,
-    IonMenu,
-    IonButtons,
-    IonMenuButton,
     IonPopover,
     IonNote,
     IonModal

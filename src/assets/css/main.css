@@ -345,3 +345,9 @@ ion-list{
  .bg-aquamarine {
   background-color: aquamarine;
  }
+ .container-arrive {
+  gap:  4px;
+ }
+ .select-city {
+  padding: 10px;
+ }
