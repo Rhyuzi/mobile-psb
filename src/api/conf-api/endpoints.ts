@@ -8,6 +8,7 @@ const DETAIL_PICKUP_DATA = 'siap/mobile_psb/android_detailpickup.php' // method 
 const UPDATE_STATUS_PICKUP = 'siap/mobile_psb/android_updatestatuskurir.php' // method post
 const PICKUP_HISTORY = 'siap/mobile_psb/android_pickuphistory.php'
 const GET_CITY = 'siap/mobile_psb/android_getcity.php'
+const GET_AWB = 'siap/mobile_psb/android_getawb.php'
 
 export {
     ACCOUNT_LOGIN,   
@@ -15,7 +16,8 @@ export {
     DETAIL_PICKUP_DATA,
     UPDATE_STATUS_PICKUP,
     PICKUP_HISTORY,
-    GET_CITY
+    GET_CITY,
+    GET_AWB
 }
 
 export default {
@@ -24,5 +26,6 @@ export default {
     DETAIL_PICKUP_DATA,
     UPDATE_STATUS_PICKUP,
     PICKUP_HISTORY,
-    GET_CITY
+    GET_CITY,
+    GET_AWB
 }

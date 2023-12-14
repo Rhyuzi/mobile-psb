@@ -112,29 +112,46 @@
 
       <ion-card>
         <ion-card-content>
+          <!-- <table>
+            <tr>
+              <td >No.AWB</td>
+              <td >Pengirim</td>
+              <td >Nama Dituju</td>
+              <td >Kota Tujuan</td>
+            </tr>
+            <tr v-for="awb in dataAwb" :key="awb">
+              <td >{{ awb.ConnoteNo }}</td>
+              <td >{{ awb.ConnoteCustName }}</td>
+              <td >{{ awb.ConnoteRecvName }}</td>
+              <td >{{ awb.ConnoteRecvAddr }}</td>
+            </tr>
+          </table> -->
           <ion-grid>
-            <ion-row>
-              <ion-col>No.AWB</ion-col>
-              <ion-col>Pengirim</ion-col>
-              <ion-col>Nama Dituju</ion-col>
-              <ion-col>Kota Tujuan</ion-col>
+            <ion-row class="header-row">
+              <ion-col size-md="3" size-sm="6" class="column">No.AWB</ion-col>
+              <ion-col size-md="3" size-sm="6" class="column">Pengirim</ion-col>
+              <ion-col size-md="3" size-sm="6" class="column">Nama Dituju</ion-col>
+              <ion-col size-md="3" size-sm="6" class="column">Kota Tujuan</ion-col>
             </ion-row>
-            <ion-row>
-              <ion-col>1</ion-col>
-              <ion-col>2</ion-col>
-              <ion-col>3</ion-col>
-              <ion-col>4</ion-col>
-            </ion-row>
+            <div  v-for="awb in dataAwb" :key="awb">
+              <ion-row>
+                <ion-col size-md="3" size-sm="6" class="column">{{ awb.ConnoteNo }}</ion-col>
+                <ion-col size-md="3" size-sm="6" class="column">{{ awb.ConnoteCustName }}</ion-col>
+                <ion-col size-md="3" size-sm="6" class="column">{{ awb.ConnoteRecvName }}</ion-col>
+                <ion-col size-md="3" size-sm="6" class="column">{{ awb.ConnoteRecvAddr }}</ion-col>
+              </ion-row>
+            </div>
           </ion-grid>
 
-          <!-- <ion-grid>
-            <ion-row>
-              <ion-col>1</ion-col>
-              <ion-col>2</ion-col>
-              <ion-col>3</ion-col>
-              <ion-col>4</ion-col>
-            </ion-row>
-          </ion-grid> -->
+          <!-- <ion-grid class="display-flex">
+    <ion-row>
+      <ion-col class="flex-item" size="12" size-sm="3">1</ion-col>
+      <ion-col class="flex-item" size="12" size-sm="3">2</ion-col>
+      <ion-col class="flex-item" size="12" size-sm="3">3</ion-col>
+      <ion-col class="flex-item" size="12" size-sm="3">4</ion-col>
+    </ion-row>
+  </ion-grid> -->
+
         </ion-card-content>
       </ion-card>
     </ion-content>
@@ -162,7 +179,7 @@ import { ref } from "vue";
 import { onMounted } from "vue"
 import { reactive, computed } from "vue";
 import { useVuelidate } from "@vuelidate/core";
-import { IArrivedItem } from "@/api/conf-api/interface/arrived";
+import { IArrivedItem,IConnoteAWB } from "@/api/conf-api/interface/arrived";
 import { required, maxLength, helpers } from "@vuelidate/validators";
 
 const store = useStore()
@@ -178,6 +195,10 @@ const formAF = ref<HTMLFormElement | null>(null);
 
 onMounted(() => {
   getCity()
+});
+
+const dataAwb = computed(() => {
+  return store.getters['arrive/get']('awb') as IConnoteAWB
 });
 
 const rules = computed(() => {
@@ -240,7 +261,7 @@ const getCity = async () => {
     }
 };
 
-const submitForm = () => {
+const submitForm = async () => {
   v$.value.$validate();
   if (v$.value.$error) {
     const inputs = formAF.value?.querySelectorAll("input");
@@ -248,7 +269,16 @@ const submitForm = () => {
 
     return;
   }
-  console.debug('Kisi kabeh',v$.value.$error)
+  await getAWB()
+  console.debug('Kisi kabeh',dataAwb)
+}
+
+const getAWB = async () => {
+  const param = {
+    noAWB: state.awb
+  }
+  await store.dispatch('arrive/getAWB',param);
+
 }
 
 
@@ -266,5 +296,19 @@ ion-col {
   border: solid 1px #fff;
   color: #fff;
   text-align: center;
+}
+.header-row,
+.data-row {
+  border: 1px solid #ddd; /* Border color */
+}
+
+.column {
+  padding: 10px;
+  text-align: center;
+}
+
+.header-row {
+  background-color: #f2f2f2; /* Header background color */
+  font-weight: bold;
 }
 </style>

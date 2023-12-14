@@ -31,3 +31,7 @@ export async function getPickupHistory(payload: any): Promise<any> {
 export async function getCity(payload: any): Promise<any> {
     return await request(endPoints.GET_CITY, 'post', payload)
 }
+
+export async function getByAWB(payload: any): Promise<any> {
+    return await request(endPoints.GET_AWB, 'post', payload)
+}
