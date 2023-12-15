@@ -170,7 +170,7 @@
   text-overflow: ellipsis;
 }
 ion-card {
-  background-color: white !important;
+  background-color: white ;
   border: 4px solid #ccc;
   border-radius: 10px;
   margin-bottom: 50px;
@@ -351,3 +351,12 @@ ion-list{
  .select-city {
   padding: 10px;
  }
+ .center-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 143px;
+}
+.close-scanner {
+  width: 70%;
+}

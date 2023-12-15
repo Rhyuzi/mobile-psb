@@ -5,8 +5,23 @@
         <ion-title>Akun</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true">
-      <ion-card>
+    <!-- <ion-content class="frame-scanner"> -->
+      <div v-if="isScan" class="frame-scanner" id="frame-scanner">
+
+      </div>
+      <div v-if="isScan" class="center-button" id="center-button">
+        <ion-button
+        class="close-scanner"
+        color="light"
+        shape="round"
+        @click="stopScan"
+        size="default"
+        >BATALKAN</ion-button
+      >
+      </div>
+    <!-- </ion-content> -->
+    <ion-content id="content-af" :fullscreen="true">
+      <ion-card class="form-input">
         <ion-card-content>
           <form action="" ref="formAF">
             <div class="display-flex container-arrive">
@@ -103,8 +118,16 @@
               shape="round"
               @click="submitForm"
               size="default"
-              >Sumbit</ion-button
+              >Masukan Data</ion-button
             >
+            <ion-button
+              color="light"
+              expand="full"
+              shape="round"
+              size="default"
+              @click="scanBarcode"
+              >Scan Barcode</ion-button>
+              
           </form>
         </ion-card-content>
       </ion-card>
@@ -112,49 +135,26 @@
 
       <ion-card>
         <ion-card-content>
-          <!-- <table>
-            <tr>
-              <td >No.AWB</td>
-              <td >Pengirim</td>
-              <td >Nama Dituju</td>
-              <td >Kota Tujuan</td>
-            </tr>
-            <tr v-for="awb in dataAwb" :key="awb">
-              <td >{{ awb.ConnoteNo }}</td>
-              <td >{{ awb.ConnoteCustName }}</td>
-              <td >{{ awb.ConnoteRecvName }}</td>
-              <td >{{ awb.ConnoteRecvAddr }}</td>
-            </tr>
-          </table> -->
-          <ion-grid>
-            <ion-row class="header-row">
-              <ion-col size-md="3" size-sm="6" class="column">No.AWB</ion-col>
-              <ion-col size-md="3" size-sm="6" class="column">Pengirim</ion-col>
-              <ion-col size-md="3" size-sm="6" class="column">Nama Dituju</ion-col>
-              <ion-col size-md="3" size-sm="6" class="column">Kota Tujuan</ion-col>
-            </ion-row>
-            <div  v-for="awb in dataAwb" :key="awb">
-              <ion-row>
-                <ion-col size-md="3" size-sm="6" class="column">{{ awb.ConnoteNo }}</ion-col>
-                <ion-col size-md="3" size-sm="6" class="column">{{ awb.ConnoteCustName }}</ion-col>
-                <ion-col size-md="3" size-sm="6" class="column">{{ awb.ConnoteRecvName }}</ion-col>
-                <ion-col size-md="3" size-sm="6" class="column">{{ awb.ConnoteRecvAddr }}</ion-col>
-              </ion-row>
-            </div>
-          </ion-grid>
-
-          <!-- <ion-grid class="display-flex">
-    <ion-row>
-      <ion-col class="flex-item" size="12" size-sm="3">1</ion-col>
-      <ion-col class="flex-item" size="12" size-sm="3">2</ion-col>
-      <ion-col class="flex-item" size="12" size-sm="3">3</ion-col>
-      <ion-col class="flex-item" size="12" size-sm="3">4</ion-col>
-    </ion-row>
-  </ion-grid> -->
-
+          <Vue3EasyDataTable :headers="headers" :items="dataAwb" />
+          <ion-button
+              color="success"
+              expand="full"
+              shape="round"
+              @click="submitForm"
+              size="default"
+              >Submit</ion-button
+            >
         </ion-card-content>
       </ion-card>
     </ion-content>
+
+    <ion-toast
+      :is-open="isOpen"
+      :message="errMessage"
+      :duration="5000"
+      @didDismiss="setOpen(false)"
+    ></ion-toast>
+
   </ion-page>
 </template>
 
@@ -172,7 +172,8 @@ import {
   IonActionSheet,
   loadingController,
   IonSelect,
-  IonSelectOption
+  IonSelectOption,
+  IonToast
 } from "@ionic/vue";
 import { useStore } from "vuex";
 import { ref } from "vue";
@@ -181,7 +182,20 @@ import { reactive, computed } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { IArrivedItem,IConnoteAWB } from "@/api/conf-api/interface/arrived";
 import { required, maxLength, helpers } from "@vuelidate/validators";
+import Vue3EasyDataTable from 'vue3-easy-data-table';
+import 'vue3-easy-data-table/dist/style.css';
+import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
 
+
+const headers = ref([
+                    { text: "No.AWB", value: "ConnoteNo" },
+                    { text: "Pengirim", value: "ConnoteCustName"},
+                    { text: "Nama Dituju", value: "ConnoteRecvName"},
+                    { text: "Kota Tujuan", value: "ConnoteRecvAddr"},
+                ])
+const isOpen = ref(false);
+const isScan = ref(false);
+const errMessage = ref("");
 const store = useStore()
 const city = ref<IArrivedItem[]>([])
 const state = reactive({
@@ -195,7 +209,19 @@ const formAF = ref<HTMLFormElement | null>(null);
 
 onMounted(() => {
   getCity()
+  // document.querySelector('.center-button ')!.classList.add('hide-comp')
+//   document.querySelector('body')!.classList.add('scanner-active')
+//   document.querySelector('#content-af')!.classList.add('hide-comp')
+//   document.querySelector('#frame-scanner')!.classList.add('frame-scanner')
+//   document.querySelector('#tab-bar')!.classList.add('hide-comp')
 });
+
+const setOpen = (state: boolean) => {
+  isOpen.value = state;
+  if (!state) {
+    errMessage.value = "";
+  }
+};
 
 const dataAwb = computed(() => {
   return store.getters['arrive/get']('awb') as IConnoteAWB
@@ -262,6 +288,8 @@ const getCity = async () => {
 };
 
 const submitForm = async () => {
+  // errMessage.value = "waoasaspjgapsgjoasp";
+  // setOpen(true);
   v$.value.$validate();
   if (v$.value.$error) {
     const inputs = formAF.value?.querySelectorAll("input");
@@ -273,12 +301,51 @@ const submitForm = async () => {
   console.debug('Kisi kabeh',dataAwb)
 }
 
+const scanBarcode = async () => {
+  await BarcodeScanner.checkPermission({ force: true })
+  BarcodeScanner.hideBackground()
+  document.querySelector('body')!.classList.add('scanner-active')
+  document.querySelector('#content-af')!.classList.add('hide-comp')
+  document.querySelector('#tab-bar')!.classList.add('hide-comp')
+  isScan.value = true
+  const result = await BarcodeScanner.startScan()
+  if (result.hasContent) {
+    console.error(result.content); // log the raw scanned content
+    state.awb = result.content
+    isScan.value = false
+    document.querySelector('body')!.classList.remove('scanner-active')
+    document.querySelector('#frame-scanner')!.classList.remove('frame-scanner')
+    document.querySelector('#content-af')!.classList.remove('hide-comp')
+    document.querySelector('#tab-bar')!.classList.remove('hide-comp')
+  }
+}
+
+const stopScan = () => {
+  BarcodeScanner.showBackground();
+  BarcodeScanner.stopScan();
+  isScan.value = false
+  document.querySelector('body')!.classList.remove('scanner-active')
+  document.querySelector('#frame-scanner')!.classList.remove('frame-scanner')
+  document.querySelector('#content-af')!.classList.remove('hide-comp')
+  document.querySelector('#tab-bar')!.classList.remove('hide-comp')
+};
+
 const getAWB = async () => {
   const param = {
     noAWB: state.awb
   }
-  await store.dispatch('arrive/getAWB',param);
-
+  const data = {
+    nomor: state.nomor,
+    asal: state.asal,
+    tanggalInpt: state.tanggal,
+    catatan: state.catatan,
+    noawb: state.awb
+  }
+  const res = await store.dispatch('arrive/getAWB',{param,data});
+  if (res.error == true) {
+    errMessage.value = res.message;
+    setOpen(true);
+  }
 }
 
 
@@ -310,5 +377,21 @@ ion-col {
 .header-row {
   background-color: #f2f2f2; /* Header background color */
   font-weight: bold;
+}
+.scanner-active {
+  --background: transparent !important;
+  --ion-background-color: transparent !important;
+
+  background: transparent !important;
+  background-color: transparent !important;
+}
+.hide-comp {
+  visibility: hidden;
+}
+.frame-scanner {
+  border: solid 6px #fff;
+    height: 41%;
+    width: 80%;
+    margin: 56% 37px 0px;
 }
 </style>

@@ -3,6 +3,7 @@ import {  getPickup,getDetailPickup,updateStatus,getPickupHistory, getCity, getB
 import md5 from 'crypto-js/md5'
 import { State } from 'ionicons/dist/types/stencil-public-runtime'
 import { Commit } from 'vuex'
+import { IPostAwb } from '@/api/conf-api/interface/arrived'
 
 interface State {
     [key: string]: any
@@ -47,19 +48,21 @@ export default {
                 throw error; // Re-throw the error to be handled by the caller if needed
             }
         },
-        async getAWB({ commit }: { commit: Commit }, payload: any) {
+        async getAWB({ commit }: { commit: Commit }, {param, data} : { param: any; data: any }) {
             
-            try {
-                const res = await getByAWB(payload);
+            // try {
+                const res = await getByAWB(param);
                 if (res.error == false) {
-                    commit('PUSH', ['awb', res.data])
+                    const resp = res.data
+                    resp['DataFromInput'] = data
+                    commit('PUSH', ['awb', resp])
+                    console.error('data awbb',resp)
                 }
-                console.error('data awbb',res.data)
                 return res;
-            } catch (error) {
-                console.error("Error fetching pickup data:", error);
-                throw error; // Re-throw the error to be handled by the caller if needed
-            }
+            // } catch (error) {
+            //     console.error("Error fetching pickup data:", error);
+            //     throw error; // Re-throw the error to be handled by the caller if needed
+            // }
         },
         
     }

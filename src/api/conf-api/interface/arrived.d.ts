@@ -105,4 +105,17 @@ export interface IConnoteAWB {
   ID: string;
   ModiBy: string;
   UpdateTime: string;
+  DataFromInput: IPostAwb[]
+}
+
+export interface IPostAwb {
+  nomor: string,
+  asal: string,
+  tanggalInpt: string,
+  catatan: string,
+  noawb: string
+}
+
+export interface Window {
+  $cordovaBarcodeScanner: any; // Adjust the type accordingly
 }
