@@ -13,8 +13,6 @@ class ConfApiHelper {
             data += `${key}=${obj[key]}&`
         }
 
-        console.error('sign', `${data}${bodyParam}`)
-
         if (bodyParam) return sha256(`${data}${bodyParam}`).toString()
         else return sha256(data).toString()
     }
@@ -105,7 +103,6 @@ class ConfApiHelper {
         const publicObj = { accessToken, appID, appSecret, timeStamp }
         const obj = Object.assign({}, publicObj, objParam)
         const sortedObj = sortObject(obj)
-        console.error('bodyParam 1', bodyParam)
         return this.generateSignature(sortedObj, bodyParam)
     }
 

@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-header>
-      <ion-toolbar>
+      <ion-toolbar class="color-white">
         <ion-buttons slot="start">
           <ion-back-button default-href="/"></ion-back-button>
         </ion-buttons>
@@ -43,7 +43,7 @@
           </div>
         </ion-list>
       </ion-card-content>
-      <ion-card-content>
+      <ion-card-content class="color-white">
         <ion-list class="fur-el2">
           <div class="content-furniture">
             <div class="display-flex">

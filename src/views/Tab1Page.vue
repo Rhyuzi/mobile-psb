@@ -139,7 +139,7 @@ const store = useStore()
 const ionRouter = useIonRouter()
 
 
-const pickups = ref<IPickupItem[]>([])
+// const pickups = ref<IPickupItem[]>([])
 const pickupsHistory = ref<IPickupItem[]>([])
 const searchData = ref("")
 const dataUser = JSON.parse(localStorage.user)
@@ -147,16 +147,21 @@ const modal = ref();
 
 onMounted(async () => {
     getPickupHistory()
+    getPickupOrder()
+    console.error("datas",pickups)
 })
+
+const pickups = computed(() => {
+  return store.getters['pickup/get']('pickupsList') as IPickupItem
+});
 const isSearch = ref(false);
 const inSearch = reactive({
     icon: search,
 })
 const onSearchData = computed(() => {
-    const pickupArray = Object.values(pickups.value || {})
+    const pickupArray = Object.values(store.getters['pickup/get']('pickupsList') as IPickupItem || {})
     return pickupArray.filter(data => 
-    data.POrderCustName.toLocaleLowerCase().includes(searchData.value.toLowerCase()) ||
-    data.POrderCustAddr.toLocaleLowerCase().includes(searchData.value.toLowerCase())
+    data.POrderCustName.toLocaleLowerCase().includes(searchData.value.toLowerCase())
     )
 })
 
@@ -184,13 +189,13 @@ const getPickupOrder = async () => {
     loading.present();
     const result = await store.dispatch('pickup/getPickupData');
     if (result.error == false) {
-        pickups.value = result.data
+        // pickups.value = result.data
         loading.dismiss();
-        console.debug("After dispatch",pickups.value);
+        // console.debug("After dispatch",pickups.value);
     }else{
-        pickups.value = result.data
+        // pickups.value = result.data
         loading.dismiss();
-        console.debug("After dispatch",pickups.value);
+        // console.debug("After dispatch",pickups.value);
     }
 };
 
@@ -241,7 +246,8 @@ const seeDetailHistory = (idPickup: any) => {
     router.push("/select-room");
 }
 onIonViewWillEnter(() => {
-    getPickupOrder()
+    console.warn('datassssss',onSearchData)
+    console.warn('datassssss 22',pickups)
 });
 
 </script>

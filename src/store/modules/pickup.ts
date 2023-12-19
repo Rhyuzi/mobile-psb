@@ -22,6 +22,15 @@ export default {
         },
         RESET(state: State) {
             Object.assign(state, initialState)
+        },
+        PUSH: function (state: any, [key, value]: [any, any]) {
+            state[key].push(value)
+        },
+        DELETE_BY_ID(state: any, [key, id]: [any, string]) {
+            const index = state[key].findIndex((item: any) => item.POrderID === id);
+            if (index !== -1) {
+              state[key].splice(index, 1);
+            }
         }
     },
     getters: {
@@ -37,7 +46,7 @@ export default {
                 if (res.error === false) {
                     commit("SET", ["pickupsList", res.data]);
                 }
-                console.debug("data pickup", res.data);
+                console.debug("data pickup", res);
                 return res;
             } catch (error) {
                 console.error("Error fetching pickup data:", error);
@@ -65,6 +74,10 @@ export default {
             
             try {
                 const res = await updateStatus(payload);
+                if (res.error == false) {
+                    commit("DELETE_BY_ID", ["pickupsList", payload.pickup_id]);
+                }
+                // console.log('Update status')
                 return res;
             } catch (error) {
                 console.error("Error fetching pickup data:", error);

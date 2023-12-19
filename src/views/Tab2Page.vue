@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Akun</ion-title>
+        <ion-title class="font-white">Arrived Hub</ion-title>
       </ion-toolbar>
     </ion-header>
     <!-- <ion-content class="frame-scanner"> -->
