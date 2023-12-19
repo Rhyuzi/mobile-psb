@@ -229,22 +229,28 @@ const isOpen = ref(false);
 // })
 
 const getDetailPickUp = async () => {
-  const loading = await loadingController.create({
-        message: "Loading...",
-        animated: true,
-        backdropDismiss: false,
-    });
-    loading.present();
-    const result = await store.dispatch('pickup/getDetailPickup');
-    if (result.error == false) {
-        pickups.value = result.data
-        loading.dismiss();
-        console.debug("After dispatch",pickups.value);
-    }else{
-        pickups.value = result.data
-        loading.dismiss();
-        console.debug("After dispatch",pickups.value);
-    }
+  const dataPickup = Object.values(store.getters['pickup/get']('pickupsList') as IPickupItem || {})
+  const filter = dataPickup.filter(item => item.POrderID == localStorage.idPickup)
+  pickups.value = filter[0]
+  console.error('data pickup', filter)
+  console.error('id pickup', localStorage.idPickup)
+  // pickups.value
+  // const loading = await loadingController.create({
+  //       message: "Loading...",
+  //       animated: true,
+  //       backdropDismiss: false,
+  //   });
+  //   loading.present();
+  //   const result = await store.dispatch('pickup/getDetailPickup');
+  //   if (result.error == false) {
+  //       pickups.value = result.data
+  //       loading.dismiss();
+  //       console.debug("After dispatch",pickups.value);
+  //   }else{
+  //       pickups.value = result.data
+  //       loading.dismiss();
+  //       console.debug("After dispatch",pickups.value);
+  //   }
 };
 
 const updateSetujui = async () => {
@@ -252,6 +258,7 @@ const updateSetujui = async () => {
   const param = {
     pickup_id: pickups.value?.POrderID,
     status: 1,
+    setujui: true
   }
     const result = await store.dispatch('pickup/updateStatus',param);
     message = result.message
@@ -264,6 +271,7 @@ const updateTerambil = async () => {
   const param = {
     pickup_id: pickups.value?.POrderID,
     status: 2,
+    setujui: false
   }
     const result = await store.dispatch('pickup/updateStatus',param);
     message = result.message
@@ -275,7 +283,8 @@ const updateBatalkan = async (ketBatalkan: string) => {
   const param = {
     pickup_id: pickups.value?.POrderID,
     status: 0,
-    keterangan: ketBatalkan
+    keterangan: ketBatalkan,
+    setujui: false
   }
     const result = await store.dispatch('pickup/updateStatus',param);
     message = result.message

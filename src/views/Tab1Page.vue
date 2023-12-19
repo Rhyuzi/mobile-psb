@@ -246,8 +246,8 @@ const seeDetailHistory = (idPickup: any) => {
     router.push("/select-room");
 }
 onIonViewWillEnter(() => {
-    console.warn('datassssss',onSearchData)
-    console.warn('datassssss 22',pickups)
+    // console.warn('datassssss',onSearchData)
+    // console.warn('datassssss 22',pickups)
 });
 
 </script>

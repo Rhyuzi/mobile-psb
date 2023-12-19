@@ -3,6 +3,9 @@ import {  getPickup,getDetailPickup,updateStatus,getPickupHistory } from '@/api/
 import md5 from 'crypto-js/md5'
 import { State } from 'ionicons/dist/types/stencil-public-runtime'
 import { Commit } from 'vuex'
+import { reactive } from 'vue';
+import { IPickupItem } from '@/api/conf-api/interface/dashboard';
+
 
 interface State {
     [key: string]: any
@@ -30,8 +33,19 @@ export default {
             const index = state[key].findIndex((item: any) => item.POrderID === id);
             if (index !== -1) {
               state[key].splice(index, 1);
+              
             }
-        }
+        },
+        UPDATE_STATUS_SETUJUI(state: any, [key, id]: [any, string]) {
+            const index = state[key].findIndex((item: any) => item.POrderID === id);
+            if (index !== -1) {
+                // Directly modify the property using the index and the spread operator
+                state[key][index] = { ...state[key][index], POrderStatus: "2" };
+
+                console.debug('updated', state[key][index]);
+            }
+        },
+        
     },
     getters: {
         get: (state: State) => (key: string) => state[key]
@@ -75,6 +89,11 @@ export default {
             try {
                 const res = await updateStatus(payload);
                 if (res.error == false) {
+                    if (payload.setujui) {
+                        console.debug('disetujui')
+                        commit("UPDATE_STATUS_SETUJUI", ["pickupsList", payload.pickup_id]);
+                        return res
+                    }
                     commit("DELETE_BY_ID", ["pickupsList", payload.pickup_id]);
                 }
                 // console.log('Update status')
