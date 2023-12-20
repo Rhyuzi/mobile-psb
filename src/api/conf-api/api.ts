@@ -35,3 +35,11 @@ export async function getCity(payload: any): Promise<any> {
 export async function getByAWB(payload: any): Promise<any> {
     return await request(endPoints.GET_AWB, 'post', payload)
 }
+
+export async function addTemp(payload: any): Promise<any> {
+    return await request(endPoints.ADD_TEMP, 'post', payload)
+}
+
+export async function saveArrived(payload: any): Promise<any> {
+    return await request(endPoints.SAVE_ARRIVED, 'post', payload)
+}

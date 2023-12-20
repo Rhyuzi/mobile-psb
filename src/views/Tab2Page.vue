@@ -140,7 +140,7 @@
               color="success"
               expand="full"
               shape="round"
-              @click="submitForm"
+              @click="submitData"
               size="default"
               >Submit</ion-button
             >
@@ -301,6 +301,30 @@ const submitForm = async () => {
   console.debug('Kisi kabeh',dataAwb)
 }
 
+const submitData = async () => {
+  const keys = Object.keys(dataAwb.value) as (keyof IConnoteAWB)[];
+
+  for (const key of keys) {
+      console.log(dataAwb.value[key]);
+      const datas = dataAwb.value[key]
+      const data = {
+        username: JSON.parse(localStorage.user).username,
+        cloc: JSON.parse(localStorage.user).UserLocation,
+        aftgl : datas.DataFromInput.tanggalInpt,
+        afdesc: datas.DataFromInput.catatan,
+        aforig: datas.DataFromInput.asal,
+        temp_key : datas.DataFromInput.temp_key,
+        noaf : datas.DataFromInput.nomor
+      }
+      store.dispatch('arrive/saveArrive',data);
+      console.error('parsed asdta', data);
+  }
+    store.dispatch('arrive/resetArrive')
+  // console.debug('submit data', dataAwb.value);
+  // console.debug('submit data keys', keys);
+
+}
+
 const scanBarcode = async () => {
   await BarcodeScanner.checkPermission({ force: true })
   BarcodeScanner.hideBackground()
@@ -339,13 +363,33 @@ const getAWB = async () => {
     asal: state.asal,
     tanggalInpt: state.tanggal,
     catatan: state.catatan,
-    noawb: state.awb
+    noawb: state.awb,
+    temp_key: tempKeyGenerate(JSON.parse(localStorage.user).name)
   }
   const res = await store.dispatch('arrive/getAWB',{param,data});
   if (res.error == true) {
     errMessage.value = res.message;
     setOpen(true);
+  }else{
+    const dataTemp = {
+      userId: JSON.parse(localStorage.user).id,
+      noawb: state.awb,
+      temp_key: data.temp_key
+    }
+    await store.dispatch('arrive/addTemp',dataTemp)
   }
+}
+
+const tempKeyGenerate = (username: string) => {
+  const date = new Date();
+  const date_time = + date.getFullYear() + ""
+      + (date.getMonth()+1) + ""
+      + date.getDate() + ""
+      + date.getHours() + ""
+      + date.getMinutes() + ""
+      + date.getSeconds();
+
+  return username + date_time
 }
 
 
