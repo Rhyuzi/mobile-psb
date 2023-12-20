@@ -42,6 +42,11 @@
               @ion-blur="markTouched"
             ></ion-input>
             
+            <ion-button color="dark" @click="generateCounter">Generate</ion-button>
+            
+            
+            </div>
+            <br>
             <ion-input
               type="date"
               ref="tanggal"
@@ -58,9 +63,7 @@
               "
               v-model="state.tanggal"
               @ion-blur="markTouched"
-            ></ion-input
-            >
-            </div>
+            ></ion-input>
             <br>
             <ion-select 
               ref="Asal"
@@ -227,6 +230,22 @@ const dataAwb = computed(() => {
   return store.getters['arrive/get']('awb') as IConnoteAWB
 });
 
+const generateCounter = async () => {
+  const param = {
+    code: 'AF',
+    location: JSON.parse(localStorage.user).UserLocation
+  }
+  const res = await store.dispatch('arrive/genCounter',param);
+  if (res.error == false) {
+    errMessage.value = res.message;
+    setOpen(true);
+    state.nomor = res.data
+  }else{
+    errMessage.value = res.message;
+    setOpen(true);
+  }
+}
+
 const rules = computed(() => {
   return {
     nomor: {
@@ -316,7 +335,9 @@ const submitData = async () => {
         temp_key : datas.DataFromInput.temp_key,
         noaf : datas.DataFromInput.nomor
       }
-      store.dispatch('arrive/saveArrive',data);
+      const res = await store.dispatch('arrive/saveArrive',data);
+      errMessage.value = res.message;
+      setOpen(true);
       console.error('parsed asdta', data);
   }
     store.dispatch('arrive/resetArrive')
@@ -377,6 +398,11 @@ const getAWB = async () => {
       temp_key: data.temp_key
     }
     await store.dispatch('arrive/addTemp',dataTemp)
+    state.nomor= "",
+    state.tanggal= "",
+    state.asal= "",
+    state.catatan= "",
+    state.awb= ""
   }
 }
 

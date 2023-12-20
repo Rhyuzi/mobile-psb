@@ -43,3 +43,7 @@ export async function addTemp(payload: any): Promise<any> {
 export async function saveArrived(payload: any): Promise<any> {
     return await request(endPoints.SAVE_ARRIVED, 'post', payload)
 }
+
+export async function geneCounter(payload: any): Promise<any> {
+    return await request(endPoints.GENERATE_COUNTER, 'post', payload)
+}
