@@ -12,7 +12,7 @@
     <ion-content>
       <!-- <ion-label class="font-black">Order</ion-label> -->
 
-      <ion-card-content v-if="pickups?.POrderStatus == '3'">
+      <ion-card-content v-if="pickups?.POrderStatus == '3' || history?.POrderStatus == '3'">
         <ion-list class="bg-aquamarine">
           <div class="content-furniture">
             <!-- <div class="display-flex">
@@ -38,7 +38,7 @@
             </div>
             
             <div class="display-flex font-black">
-              <p> {{ pickups?.POrderCustName }}</p>
+              <p> {{ pickups?.POrderCustName || history?.POrderCustName }}</p>
             </div>
           </div>
         </ion-list>
@@ -54,24 +54,24 @@
             </div>
             
             <div class="display-flex">
-              <p>{{ pickups?.POrderIsi }}, {{ pickups?.POrderCustAddr }}</p>           
+              <p>{{ pickups?.POrderIsi || history?.POrderIsi }}, {{ pickups?.POrderCustAddr || history?.POrderCustAddr }}</p>           
             </div>
           <br>
             <div class="display-flex">
               <ion-label class="font-cont-detail">Tanggal dibuat</ion-label>
-              <p class="custom-ellipsis float-right-flex">{{ pickups?.POrderDate }}</p>
+              <p class="custom-ellipsis float-right-flex">{{ pickups?.POrderDate || history?.POrderDate }}</p>
             </div>
             <div class="display-flex">
               <ion-label class="font-cont-detail">Nama Pengirim</ion-label>
-              <p class="custom-ellipsis float-right-flex">{{ pickups?.POrderDEO }}</p>
+              <p class="custom-ellipsis float-right-flex">{{ pickups?.POrderDEO || history?.POrderDEO }}</p>
             </div>
             <div class="display-flex">
               <ion-label class="font-cont-detail">Nama Customer</ion-label>
-              <p class="custom-ellipsis float-right-flex">{{ pickups?.POrderCustName   }}</p>
+              <p class="custom-ellipsis float-right-flex">{{ pickups?.POrderCustName || history?.POrderCustName   }}</p>
             </div>
             <div class="display-flex">
               <ion-label class="font-cont-detail">Nama Pembuat</ion-label>
-              <p class="custom-ellipsis float-right-flex">{{ pickups?.POrderCSO ? pickups?.POrderCSO : '-'   }}</p>
+              <p class="custom-ellipsis float-right-flex">{{ pickups?.POrderCSO ? pickups?.POrderCSO : '-' || history?.POrderCSO ? history?.POrderCSO : '-'   }}</p>
             </div>            
           </div>
         </ion-list>
@@ -89,7 +89,7 @@
             
             <div class="display-flex font-black">
               <!-- <p> {{ pickups?.POrderMemo ? pickups?.POrderMemo : 'Tidak ada memo'   }}</p> -->
-              <p>{{ pickups?.POrderIsi }}</p>
+              <p>{{ pickups?.POrderIsi || history?.POrderIsi }}</p>
             </div>
 
             <div class="display-flex">
@@ -100,12 +100,12 @@
 
             <div class="desc-detail font-black flex-item">
               <h3 class="font-skyblue">QTY</h3>
-              <p>{{ pickups?.POrderQty }}</p>
+              <p>{{ pickups?.POrderQty || history?.POrderQty }}</p>
             </div>
             
             <div class="desc-detail font-black flex-item">
               <h3 class="font-skyblue">Berat</h3>
-              <p>{{ pickups?.POrderWeight }}</p>
+              <p>{{ pickups?.POrderWeight || history?.POrderWeight }}</p>
             </div>
             </div>
             
@@ -127,7 +127,7 @@
         </div>
 
         <div class="desc-detail font-black flex-item">
-          <ion-button v-if="pickups?.POrderStatus != '3'" color="danger" id="present-alert">Batalkan</ion-button>
+          <ion-button v-if="history?.POrderStatus != '3'" color="danger" id="present-alert">Batalkan</ion-button>
         </div>
 
       </div>
@@ -179,6 +179,7 @@ import { IPickupItem } from '../api/conf-api/interface/dashboard'
 
 const store = useStore()
 const pickups = ref<IPickupItem | null>(null);
+const history = ref<IPickupItem | null>(null);
 let message = ""
 
 const alertSubmit = [
@@ -222,6 +223,8 @@ const isOpen = ref(false);
   onIonViewWillEnter(() => {
   // This function will be executed each time the view is about to enter
   getDetailPickUp()
+  getDetailHistory()
+  console.error('id pickup', history.value || pickups.value)
 });
 
 // onMounted(async () => {
@@ -230,10 +233,13 @@ const isOpen = ref(false);
 
 const getDetailPickUp = async () => {
   const dataPickup = Object.values(store.getters['pickup/get']('pickupsList') as IPickupItem || {})
+  // if (dataPickup) {
+  //   dataPickup = Object.values(store.getters['pickup/get']('historyList') as IPickupItem || {})
+  // }
   const filter = dataPickup.filter(item => item.POrderID == localStorage.idPickup)
   pickups.value = filter[0]
-  console.error('data pickup', filter)
-  console.error('id pickup', localStorage.idPickup)
+  // console.error('data pickup', filter)
+  // console.error('id pickup', localStorage.idPickup)
   // pickups.value
   // const loading = await loadingController.create({
   //       message: "Loading...",
@@ -251,6 +257,15 @@ const getDetailPickUp = async () => {
   //       loading.dismiss();
   //       console.debug("After dispatch",pickups.value);
   //   }
+};
+
+const getDetailHistory = async () => {
+  const dataPickup = Object.values(store.getters['pickup/get']('historyList') as IPickupItem || {})
+  // if (dataPickup) {
+  //   dataPickup = Object.values(store.getters['pickup/get']('historyList') as IPickupItem || {})
+  // }
+  const filter = dataPickup.filter(item => item.POrderID == localStorage.idPickup)
+  history.value = filter[0]
 };
 
 const updateSetujui = async () => {

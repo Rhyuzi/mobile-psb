@@ -140,7 +140,7 @@ const ionRouter = useIonRouter()
 
 
 // const pickups = ref<IPickupItem[]>([])
-const pickupsHistory = ref<IPickupItem[]>([])
+// const pickupsHistory = ref<IPickupItem[]>([])
 const searchData = ref("")
 const dataUser = JSON.parse(localStorage.user)
 const modal = ref();
@@ -154,6 +154,11 @@ onMounted(async () => {
 const pickups = computed(() => {
   return store.getters['pickup/get']('pickupsList') as IPickupItem
 });
+
+const pickupsHistory = computed(() => {
+  return store.getters['pickup/get']('historyList') as IPickupItem || {}
+});
+
 const isSearch = ref(false);
 const inSearch = reactive({
     icon: search,
@@ -211,13 +216,13 @@ const getPickupHistory = async () => {
     loading.present();
     const result = await store.dispatch('pickup/pickupHistory',data);
     if (result.error == false) {
-        pickupsHistory.value = result.data
+        // pickupsHistory.value = result.data
         loading.dismiss();
-        console.debug("pickupsHistory",pickupsHistory.value);
+        // console.debug("pickupsHistory",pickupsHistory.value);
     }else{
-        pickupsHistory.value = result.data
+        // pickupsHistory.value = result.data
         loading.dismiss();
-        console.debug("pickupsHistory",pickupsHistory.value);
+        // console.debug("pickupsHistory",pickupsHistory.value);
     }
 };
 

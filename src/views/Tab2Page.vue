@@ -42,7 +42,7 @@
               @ion-blur="markTouched"
             ></ion-input>
             
-            <ion-button color="dark" @click="generateCounter">Generate</ion-button>
+            <ion-button color="dark" @click="randomNo">Generate</ion-button>
             
             
             </div>
@@ -210,13 +210,9 @@ const state = reactive({
 });
 const formAF = ref<HTMLFormElement | null>(null);
 
-onMounted(() => {
+onMounted( async () => {
   getCity()
-  // document.querySelector('.center-button ')!.classList.add('hide-comp')
-//   document.querySelector('body')!.classList.add('scanner-active')
-//   document.querySelector('#content-af')!.classList.add('hide-comp')
-//   document.querySelector('#frame-scanner')!.classList.add('frame-scanner')
-//   document.querySelector('#tab-bar')!.classList.add('hide-comp')
+  console.debug('ge',await generateCounter())
 });
 
 const setOpen = (state: boolean) => {
@@ -237,13 +233,17 @@ const generateCounter = async () => {
   }
   const res = await store.dispatch('arrive/genCounter',param);
   if (res.error == false) {
-    errMessage.value = res.message;
-    setOpen(true);
-    state.nomor = res.data
+    return res.data
   }else{
     errMessage.value = res.message;
     setOpen(true);
   }
+}
+
+const randomNo = async () => {
+  const username = JSON.parse(localStorage.user).username
+  const timestamp = new Date().getTime()
+  state.nomor = username+timestamp
 }
 
 const rules = computed(() => {
@@ -333,7 +333,7 @@ const submitData = async () => {
         afdesc: datas.DataFromInput.catatan,
         aforig: datas.DataFromInput.asal,
         temp_key : datas.DataFromInput.temp_key,
-        noaf : datas.DataFromInput.nomor
+        noaf : await generateCounter()
       }
       const res = await store.dispatch('arrive/saveArrive',data);
       errMessage.value = res.message;

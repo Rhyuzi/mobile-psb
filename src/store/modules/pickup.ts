@@ -9,11 +9,13 @@ import { IPickupItem } from '@/api/conf-api/interface/dashboard';
 
 interface State {
     [key: string]: any
-    pickupsList: any[]
+    pickupsList: any[],
+    historyList: any[]
 }
 
 const initialState: State = {
-    pickupsList: []
+    pickupsList: [],
+    historyList: []
 }
 
 export default {
@@ -107,6 +109,10 @@ export default {
             
             try {
                 const res = await getPickupHistory(payload);
+                if (res.error === false) {
+                    commit("SET", ["historyList", res.data]);
+                    console.error("EhistoryListdata:",  res.data);
+                }
                 return res;
             } catch (error) {
                 console.error("Error fetching pickup data:", error);
