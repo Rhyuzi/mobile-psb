@@ -109,11 +109,12 @@ export interface IConnoteAWB {
 }
 
 export interface IPostAwb {
-  nomor: string,
-  asal: string,
-  tanggalInpt: string,
-  catatan: string,
-  noawb: string
+  nomor: string;
+  asal: string;
+  tanggalInpt: string;
+  catatan: string;
+  temp_key: string;
+  noawb: string;
 }
 
 export interface Window {

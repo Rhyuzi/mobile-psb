@@ -33,10 +33,38 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
+    path: "/arrived-hub",
+    component: () => import("@/views/ArrivedHub.vue"),
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: "/with-courier",
+    component: () => import("@/views/WithCourier.vue"),
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: "/shipment-delivered",
+    component: () => import("@/views/ShipmentDelivered.vue"),
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: "/shipment-delivered/section-city",
+    component: () => import("@/views/components/SectionCity.vue"),
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
     path: "/select-room",
     component: () => import("@/views/SelectRoom.vue"),
     meta: {
-      requireAuth: false,
+      requireAuth: true,
     },
   },
 ];

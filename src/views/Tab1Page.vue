@@ -38,7 +38,7 @@
                         <ion-icon @click="cancel()" class="ic-toolbar arr-back-history"
                                     :icon="arrowBackOutline"
                                     slot="start"></ion-icon>
-                    <ion-title class="title-history">History</ion-title>
+                    <ion-title class="title-history color-white">History</ion-title>
                     <ion-icon @click="getPickupHistory" class="ic-toolbar refresh-icon"
                         :icon="refreshOutline"
                         slot="end"></ion-icon>

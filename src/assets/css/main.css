@@ -363,3 +363,16 @@ ion-list{
 .color-white {
   color: white;
 }
+.color-whites {
+  color: white !important;
+}
+.disp-flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+.border-6{
+  border-radius: 6px;
+}
+.bg-white {
+  background: white;
+}

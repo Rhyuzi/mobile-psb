@@ -44,6 +44,14 @@ export async function saveArrived(payload: any): Promise<any> {
     return await request(endPoints.SAVE_ARRIVED, 'post', payload)
 }
 
+export async function saveWCourier(payload: any): Promise<any> {
+    return await request(endPoints.SAVE_WITH_COURIER, 'post', payload)
+}
+
 export async function geneCounter(payload: any): Promise<any> {
     return await request(endPoints.GENERATE_COUNTER, 'post', payload)
+}
+
+export async function cityOrig(payload: any): Promise<any> {
+    return await request(endPoints.CITY_ORIG, 'post', payload)
 }

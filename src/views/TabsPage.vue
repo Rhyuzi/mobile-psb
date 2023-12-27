@@ -10,7 +10,7 @@
 
         <ion-tab-button tab="tab2" href="/tabs/tab2">
           <ion-icon class="btn-tabs" aria-hidden="true" :icon="personCircleOutline" />
-          <ion-label>Arrived Hub</ion-label>
+          <ion-label>Check Point</ion-label>
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>

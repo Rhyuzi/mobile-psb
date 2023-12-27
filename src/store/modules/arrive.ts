@@ -1,5 +1,5 @@
 /* eslint-disable no-async-promise-executor */
-import {  getPickup,getDetailPickup,updateStatus,getPickupHistory, getCity, getByAWB, addTemp, saveArrived, geneCounter } from '@/api/conf-api/api'
+import {  getPickup,getDetailPickup,updateStatus,getPickupHistory, getCity, getByAWB, addTemp, saveArrived, geneCounter, saveWCourier, cityOrig } from '@/api/conf-api/api'
 import md5 from 'crypto-js/md5'
 import { State } from 'ionicons/dist/types/stencil-public-runtime'
 import { Commit } from 'vuex'
@@ -66,6 +66,17 @@ export default {
                 throw error; // Re-throw the error to be handled by the caller if needed
             }
         },
+
+        async saveWCourier({ commit }: { commit: Commit }, payload: any) {
+            try {
+                const res = await saveWCourier(payload);
+                console.debug("data add temp", res);
+                return res;
+            } catch (error) {
+                console.error("Error fetching pickup data:", error);
+                throw error; // Re-throw the error to be handled by the caller if needed
+            }
+        },
         
         async resetArrive({ commit }: { commit: Commit }) {
             commit('RESET_AWB');
@@ -102,6 +113,22 @@ export default {
             //     console.error("Error fetching pickup data:", error);
             //     throw error; // Re-throw the error to be handled by the caller if needed
             // }
+        },
+
+        async cityOrig({ commit }: { commit: Commit }) {
+            const data = {
+                key: "psb75"
+            };
+            try {
+                const res = await cityOrig(data);
+                // if (res.error === false) {
+                //     commit("SET", ["pickupsList", res.data]);
+                // }
+                return res;
+            } catch (error) {
+                console.error("Error fetching pickup data:", error);
+                throw error; // Re-throw the error to be handled by the caller if needed
+            }
         },
         
     }

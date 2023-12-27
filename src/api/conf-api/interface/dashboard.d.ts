@@ -18,6 +18,7 @@ export interface IMeetListResponse extends ICommonResponse {
 }
 
 export interface IPickupItem {
+length: any;
   POReff: string;
   POrderAss: string;
   POrderCSO: string;
