@@ -69,12 +69,9 @@ export default {
                 throw error; // Re-throw the error to be handled by the caller if needed
             }
         },
-        async getDetailPickup({ commit }: { commit: Commit }) {
-            const data = {
-                pickup_id: localStorage.idPickup
-            };
+        async getDetailPickup({ commit }: { commit: Commit }, payload: any) {
             try {
-                const res = await getDetailPickup(data);
+                const res = await getDetailPickup(payload);
                 // if (res.error === false) {
                 //     commit("SET", ["pickupsList", res.data]);
                 // }

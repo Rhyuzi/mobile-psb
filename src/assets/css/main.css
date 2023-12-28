@@ -376,3 +376,18 @@ ion-list{
 .bg-white {
   background: white;
 }
+.city-origin {
+  margin: 12px 2px;
+}
+.city-origin:hover {
+  background: #737373;
+}
+.content-image {
+  background: gray;
+  height: 285px;
+}
+
+.content-ttd {
+  background: black;
+  height: 285px;
+}

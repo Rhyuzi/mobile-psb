@@ -108,6 +108,27 @@ export interface IConnoteAWB {
   DataFromInput: IPostAwb[]
 }
 
+export interface ICityOrigin{
+  REC_ID: string,
+  POST_CODE: string,
+  PROPINSI: string,
+  KOTA: string,
+  KECAMATAN: string,
+  KELURAHAN: string,
+  COUNTRY_INITIAL: string,
+  CITY_CODE: string,
+  SERVICE_CENTER: string,
+  JENIS: string,
+  ZONA: string,
+  GRUP: string,
+  GRUP_KEY: string,
+  SLA: string,
+  KDPOS_M7: string,
+  CITYCODE_PLIS: string,
+  KDPOS_PLIS: string,
+  REGION: string
+}
+
 export interface IPostAwb {
   nomor: string;
   asal: string;

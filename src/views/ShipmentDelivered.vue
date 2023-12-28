@@ -32,7 +32,12 @@
               v-model="state.nomor"
               @ion-blur="markTouched"
             ></ion-input>
+            
+            <ion-button color="dark" @click="checkAWB">Submit AWB</ion-button>
+            </div>
+            <br>
             <ion-input
+              readonly
               type="date"
               ref="tanggal"
               color="dark"
@@ -49,10 +54,10 @@
               v-model="state.tanggal"
               @ion-blur="markTouched"
             ></ion-input>
-
-            </div>
             <br>
             <ion-input
+              readonly
+              class="font-black"
               type="text"
               ref="namapengirim"
               color="dark"
@@ -60,18 +65,14 @@
               label-placement="floating"
               fill="outline"
               placeholder="Nama Pengirim"
-              :class="v$.asal.$error ? 'ion-invalid font-black' : 'ion-valid font-black'"
-              :error-text="
-                v$.asal.$error
-                  ? v$.asal.$errors[0].$message.toString()
-                  : ''
-              "
-              v-model="state.asal"
-              @ion-blur="markTouched"
+              v-model="state.namapengirim"
             ></ion-input>
             <br>
             
             <ion-input
+              readonly
+              class="font-black"
+              v-model="state.alamatpengirim"
               color="primary"
               label="Alamat Pengirim"
               label-placement="floating"
@@ -80,6 +81,9 @@
             ><br />
 
             <ion-input
+              readonly
+              class="font-black"
+              v-model="state.namadituju"
               color="primary"
               label="Nama Dituju"
               label-placement="floating"
@@ -88,6 +92,9 @@
             ><br />
 
             <ion-input
+              readonly
+              class="font-black"
+              v-model="state.alamatdituju"
               color="primary"
               label="Alamat Dituju"
               label-placement="floating"
@@ -95,15 +102,26 @@
             ></ion-input
             ><br />
 
-            <ion-select label="Tujuan" placeholder="Pilih Tujuan">
-              <ion-select-option value="apple">Apple</ion-select-option>
-              <ion-select-option value="banana">Banana</ion-select-option>
-              <ion-select-option value="orange">Orange</ion-select-option>
-            </ion-select>
+            <!-- <ion-select readonly label="Tujuan" placeholder="Pilih Tujuan" default-href="/shipment-delivered/section-city">
+            </ion-select> -->
+            <ion-input
+              class="font-black"
+              v-model="state.tujuan"
+              color="primary"
+              label="Tujuan"
+              label-placement="floating"
+              fill="outline"
+              readonly
+            ></ion-input
+            >
+            
             <br />
 
             <div class="display-flex container-arrive">
               <ion-input
+                readonly  
+                class="font-black"
+                v-model="state.berat"
                 color="primary"
                 label="Berat (Kg.)"
                 label-placement="floating"
@@ -111,13 +129,19 @@
               ></ion-input
               >
               <ion-input
-              color="primary"
-              label="Koli/Qty"
-              label-placement="floating"
-              fill="outline"
+                readonly
+                class="font-black"
+                v-model="state.koli"
+                color="primary"
+                label="Koli/Qty"
+                label-placement="floating"
+                fill="outline"
             ></ion-input
             >
             <ion-input
+              readonly
+              class="font-black"
+              v-model="state.ketisi"
               color="primary"
               label="Ket.isi"
               label-placement="floating"
@@ -130,23 +154,19 @@
 
             <div class="display-flex container-arrive">
               <ion-input
-                color="primary"
+                readonly
+                class="font-black"
+                v-model="state.namakurir"
+                color="dark"
                 label="Nama Kurir"
                 label-placement="floating"
                 fill="outline"
               ></ion-input
               >
               <ion-input
-                color="primary"
-                label="Lokasi Terima"
-                label-placement="floating"
-                fill="outline"
-              ></ion-input
-              >
-            </div>
-            <br>
-            
-            <ion-input
+              readonly
+              class="font-black"
+              v-model="state.tgldelivery"
               type="date"
               ref="tgldelivery"
               color="dark"
@@ -154,25 +174,71 @@
               label-placement="floating"
               fill="outline"
               placeholder="Tanggal Delivery"
-              :class="v$.tanggal.$error ? 'ion-invalid font-black' : 'ion-valid font-black'"
+            ></ion-input>
+            </div>
+            <br>
+          
+            
+            <ion-select 
+              ref="Lokasi Diterima"
+              color="dark"
+              label="Lokasi Diterima"
+              label-placement="floating"
+              fill="outline"
+              placeholder="Lokasi Diterima"
+              :class="v$.asal.$error ? 'ion-invalid font-black' : 'ion-valid font-black'"
               :error-text="
-                v$.tanggal.$error
-                  ? v$.tanggal.$errors[0].$message.toString()
+                v$.asal.$error
+                  ? v$.asal.$errors[0].$message.toString()
                   : ''
               "
-              v-model="state.tanggal"
+              v-model="state.lokasiditerima"
               @ion-blur="markTouched"
-            ></ion-input><br>
+              >
+              <div v-for="c in city" :key="c.LocationID">
+                <ion-select-option class="font-black" :value="c.DefaultCityNo">{{ c.DefaultCityName }}</ion-select-option>
+              </div>
+            </ion-select>
+            <br>
 
-            <ion-input
+            <!-- <ion-input
+              class="font-black"
+              v-model="state.status"
               color="primary"
               label="Status Penerimaan"
               label-placement="floating"
               fill="outline"
             ></ion-input
-            >
+            > -->
+            <ion-select 
+              ref="Status"
+              color="dark"
+              label="Status"
+              label-placement="floating"
+              fill="outline"
+              placeholder="Masukan Status"
+              :class="v$.asal.$error ? 'ion-invalid font-black' : 'ion-valid font-black'"
+              :error-text="
+                v$.asal.$error
+                  ? v$.asal.$errors[0].$message.toString()
+                  : ''
+              "
+              v-model="state.status"
+              @ion-blur="markTouched"
+              >
+                <ion-select-option class="font-black" value="7">NOT HOME</ion-select-option>
+                <ion-select-option class="font-black" value="8">CLOSE ARRIVAL</ion-select-option>
+                <ion-select-option class="font-black" value="9">NOT ENOUGH TIME</ion-select-option>
+                <ion-select-option class="font-black" value="10">BAD ADDRESS</ion-select-option>
+
+                <ion-select-option class="font-black" value="11">MOVE</ion-select-option>
+                <ion-select-option class="font-black" value="13">OTHER</ion-select-option>
+                <ion-select-option class="font-black" value="14" selected>OK/DITERIMA</ion-select-option>
+            </ion-select>
             <br>
             <ion-input
+              class="font-black"
+              v-model="state.ketpenerima"
               color="primary"
               label="Keterangan Penerimaan"
               label-placement="floating"
@@ -180,6 +246,28 @@
             ></ion-input
             ><br>
 
+            <!-- <input type="file">
+            <br>
+            <br> -->
+            <ion-tab-bar slot="bottom" id="tab-bar">
+              <ion-tab-button tab="tab1" @click="isImage = true">
+                <ion-icon class="btn-tabs" aria-hidden="true" :icon="cameraOutline" />
+                <ion-label>Image</ion-label>
+              </ion-tab-button>
+
+              <ion-tab-button tab="tab2" @click="isImage = false">
+                <ion-icon class="btn-tabs" aria-hidden="true" :icon="personCircleOutline" />
+                <ion-label>Tanda Tangan</ion-label>
+              </ion-tab-button>
+      </ion-tab-bar>
+
+            <div v-if="isImage" class="content-image">
+
+            </div>
+
+            <div v-if="!isImage" class="content-ttd">
+
+            </div>
             
             <ion-button
               color="success"
@@ -190,21 +278,6 @@
               >Masukan Data</ion-button
             >
           </form>
-        </ion-card-content>
-      </ion-card>
-      
-
-      <ion-card>
-        <ion-card-content>
-          <Vue3EasyDataTable :headers="headers" :items="dataAwb" />
-          <ion-button
-              color="success"
-              expand="full"
-              shape="round"
-              @click="submitData"
-              size="default"
-              >Submit</ion-button
-            >
         </ion-card-content>
       </ion-card>
     </ion-content>
@@ -236,7 +309,14 @@ import {
   IonSelectOption,
   IonToast,
   IonButtons,
-  IonBackButton
+  IonBackButton,
+  IonTabBar,
+  IonTabButton,
+  IonTabs,
+  IonLabel,
+  IonIcon
+
+  
 } from "@ionic/vue";
 import { useStore } from "vuex";
 import { ref } from "vue";
@@ -248,6 +328,9 @@ import { required, maxLength, helpers } from "@vuelidate/validators";
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
 import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
+import router from "@/router";
+import { homeOutline, personCircleOutline,cameraOutline } from 'ionicons/icons';
+
 
 
 const headers = ref([
@@ -257,30 +340,71 @@ const headers = ref([
                     { text: "Kota Tujuan", value: "ConnoteRecvAddr"},
                 ])
 const isOpen = ref(false);
-const isScan = ref(false);
+const isImage = ref(true);
 const errMessage = ref("");
 const store = useStore()
 const city = ref<IArrivedItem[]>([])
 const state = reactive({
     nomor: "",
     tanggal: "",
-    asal: JSON.parse(localStorage.user).name,
-    catatan: "",
-    awb: ""
+    namapengirim: "",
+    alamatpengirim: "",
+    namadituju: "",
+    alamatdituju: "",
+    tujuan: "",
+    berat: "",
+    koli: "",
+    namakurir: "",
+    ketisi: "",
+    lokasiditerima: "",
+    tgldelivery: "",
+    status: "",
+    ketpenerima: ""
 });
 const formAF = ref<HTMLFormElement | null>(null);
 
 onMounted( async () => {
   getCity()
-  console.debug('ge',await generateCounter())
+  // console.debug('ge',await generateCounter())
 });
 
+const checkAWB = async () => {
+  const data = {
+    pickup_id: state.nomor
+  };
+  const result = await store.dispatch('pickup/getDetailPickup',data);
+  if (result.error == false) {
+    state.tanggal = result.data.ConnoteDate
+    state.namapengirim = result.data.ConnoteCustName
+    state.alamatpengirim = result.data.ConnoteCustAddr
+    state.namadituju = result.data.ConnoteRecvName
+    state.alamatdituju = result.data.ConnoteRecvAddr
+    state.tujuan = result.data.ConnoteDest
+    state.berat = result.data.ConnoteWeight
+    state.koli = result.data.ConnoteQty
+    state.ketisi = result.data.ConnoteContents
+    state.namakurir = JSON.parse(localStorage.user).name
+    if (result.data.ConnoteDateDeli) {
+      state.tgldelivery = result.data.ConnoteDateDeli.split(' ')[0]
+    }
+    errMessage.value = result.message;
+    setOpen(true);
+  }else{
+    errMessage.value = result.message;
+    setOpen(true);
+  }
+  console.debug('data awb', result.data.ConnoteDateDeli)
+}
 const setOpen = (state: boolean) => {
   isOpen.value = state;
   if (!state) {
     errMessage.value = "";
   }
 };
+
+const toSelectCity = () => {
+  router.push('/shipment-delivered/section-city')
+}
 
 const dataAwb = computed(() => {
   return store.getters['arrive/get']('awb') as IConnoteAWB
@@ -466,17 +590,7 @@ const getAWB = async () => {
   }
 }
 
-const tempKeyGenerate = (username: string) => {
-  const date = new Date();
-  const date_time = + date.getFullYear() + ""
-      + (date.getMonth()+1) + ""
-      + date.getDate() + ""
-      + date.getHours() + ""
-      + date.getMinutes() + ""
-      + date.getSeconds();
 
-  return username + date_time 
-}
 
 
 const logout = () => {

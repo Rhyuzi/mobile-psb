@@ -26,6 +26,7 @@
     "@vuelidate/validators": "^2.0.0-alpha.26",
     "core-js": "^3.6.5",
     "crypto-js": "^4.1.1",
+    "dexie": "^3.2.4",
     "ionicons": "^7.0.0",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6",

@@ -6,21 +6,24 @@
           <ion-back-button default-href="/tabs/tab2"></ion-back-button>
         </ion-buttons>
         <ion-title class="font-white">Select City</ion-title>
+        <!-- <ion-icon @click="onClickSearch" class="ic-toolbar"
+                :icon="search"
+                slot="end"></ion-icon> -->
+        <p style="margin-right: 20px;" slot="end" class="font-white">select</p>
       </ion-toolbar>
     </ion-header>
     <!-- <ion-content class="frame-scanner"> -->
       
     <ion-content id="content-af" :fullscreen="true">
+      <ion-searchbar  placeholder="Search Data ..."></ion-searchbar>
       <ion-card-content>
-      <!-- <ion-list>
-        <div v-for="c in city" :key="c.LocationID">
-        <ion-item>
-          
-          <ion-label>{{ c.DefaultCityName }}</ion-label>
-        </ion-item>
-      </div>
-
-      </ion-list> -->
+    
+        <div v-for="c in city" :key="c.REC_ID">
+          <div class="city-origin">
+            <p>{{ c.KELURAHAN }}, {{ c.KECAMATAN }},{{ c.KOTA }},{{ c.PROPINSI }}</p>
+          </div>
+      </div> 
+      
     </ion-card-content>
     </ion-content>
   </ion-page>
@@ -50,36 +53,65 @@ import { ref } from "vue";
 import { onMounted } from "vue"
 import { reactive, computed } from "vue";
 import { useVuelidate } from "@vuelidate/core";
-import { IArrivedItem,IConnoteAWB } from "@/api/conf-api/interface/arrived";
+import { IArrivedItem,ICityOrigin,IConnoteAWB } from "@/api/conf-api/interface/arrived";
 import { required, maxLength, helpers } from "@vuelidate/validators";
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
-import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
+import { personCircle, searchCircle, wifi, search, close, refreshOutline, menuOutline, listCircle,arrowBackOutline } from 'ionicons/icons'
+
 
 const store = useStore()
-const city = ref<IArrivedItem[]>([])
+const city = ref<ICityOrigin[]>([])
 onMounted( async () => {
-  getCity()
+  dataCity()
+  console.debug('data city', city.value)
 });
 
-const getCity = async () => {
-    const loading = await loadingController.create({
-        message: "Loading...",
-        animated: true,
-        backdropDismiss: false,
-    });
-    loading.present();
-    const result = await store.dispatch('arrive/cityOrig');
-    if (result.error == false) {
-        city.value = result.data
-        loading.dismiss();
-        console.debug("orig dispatch",city.value);
-    }else{
-        city.value = result.data
-        loading.dismiss();
-        console.debug("orig dispatch",city.value);
-    }
-};
+// const city = computed(() => {
+//   dataCity()
+//   return store.getters['arrive/get']('city') as IArrivedItem
+// });
+
+const dataCity = async () => {
+  const loading = await loadingController.create({
+    message: "Loading...",
+    animated: true,
+    backdropDismiss: false,
+  });
+  loading.present();
+  const dbName = 'myDatabase';
+  const objectStoreName = 'CityOrigin';
+
+  const request = indexedDB.open(dbName);
+
+  request.onsuccess = function(event) {
+    
+      const db = (event.target as IDBRequest).result;
+      const transaction = db.transaction(objectStoreName, 'readonly');
+      const objectStore = transaction.objectStore(objectStoreName);
+
+      const getAllRequest = objectStore.getAll();
+
+      getAllRequest.onsuccess = function() {
+          const allData = getAllRequest.result;
+          city.value = allData
+          console.debug('All data in the object store:', city.value);
+          loading.dismiss();
+      };
+
+      getAllRequest.onerror = function(event : any) {
+          console.error('Error getting all data:', event.target.error.message);
+          loading.dismiss();
+      };
+  };
+
+  request.onerror = function(event: any) {
+      console.error('Error opening database:', event.target.error.message);
+      loading.dismiss();
+  };
+}
+
+
 
 </script>
 <style>

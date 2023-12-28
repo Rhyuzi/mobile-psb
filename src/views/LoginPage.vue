@@ -164,9 +164,11 @@ const login = async () => {
   
   const res = await store.dispatch("auth/signIn", state);
   if (res.error === false) {
-    console.error({ res });
-    loading.dismiss();
-    router.push("/tabs/");
+    // const result = await store.dispatch('arrive/cityOrig');
+    // if (result.error == false) {
+      loading.dismiss();
+      router.push("/tabs/");
+    // }
   } else {
     errMessage.value = res.message;
     setOpen(true);

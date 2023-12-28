@@ -4,14 +4,17 @@ import md5 from 'crypto-js/md5'
 import { State } from 'ionicons/dist/types/stencil-public-runtime'
 import { Commit } from 'vuex'
 import { IPostAwb } from '@/api/conf-api/interface/arrived'
+import { createTableCity } from '@/api/conf-api/database'
 
 interface State {
     [key: string]: any
     awb: any[]
+    city: any[]
 }
 
 const initialState: State = {
-    awb: []
+    awb: [],
+    city: []
 }
 
 export default {
@@ -121,9 +124,10 @@ export default {
             };
             try {
                 const res = await cityOrig(data);
-                // if (res.error === false) {
-                //     commit("SET", ["pickupsList", res.data]);
-                // }
+                if (res.error === false) {
+                    createTableCity(res.data)
+                    commit("SET", ["city", res.data]);
+                }
                 return res;
             } catch (error) {
                 console.error("Error fetching pickup data:", error);
