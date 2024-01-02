@@ -55,3 +55,7 @@ export async function geneCounter(payload: any): Promise<any> {
 export async function cityOrig(payload: any): Promise<any> {
     return await request(endPoints.CITY_ORIG, 'post', payload)
 }
+
+export async function addShipment(payload: any): Promise<any> {
+    return await request(endPoints.ADD_SHIPMENT, 'post', payload)
+}

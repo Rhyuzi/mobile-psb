@@ -29,6 +29,7 @@
     "dexie": "^3.2.4",
     "ionicons": "^7.0.0",
     "vue": "^3.2.47",
+    "vue-custom-element": "^3.3.0",
     "vue-router": "^4.1.6",
     "vue3-easy-data-table": "^1.5.47",
     "vuex": "^4.1.0"

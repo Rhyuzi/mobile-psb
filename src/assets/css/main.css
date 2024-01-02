@@ -384,10 +384,10 @@ ion-list{
 }
 .content-image {
   background: gray;
-  height: 285px;
+  height: 375px;
 }
 
 .content-ttd {
-  background: black;
-  height: 285px;
+  /* background: black; */
+  height: 375px;
 }

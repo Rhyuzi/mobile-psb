@@ -180,18 +180,13 @@
           
             
             <ion-select 
+              class="font-black"
               ref="Lokasi Diterima"
               color="dark"
               label="Lokasi Diterima"
               label-placement="floating"
               fill="outline"
               placeholder="Lokasi Diterima"
-              :class="v$.asal.$error ? 'ion-invalid font-black' : 'ion-valid font-black'"
-              :error-text="
-                v$.asal.$error
-                  ? v$.asal.$errors[0].$message.toString()
-                  : ''
-              "
               v-model="state.lokasiditerima"
               @ion-blur="markTouched"
               >
@@ -217,10 +212,10 @@
               label-placement="floating"
               fill="outline"
               placeholder="Masukan Status"
-              :class="v$.asal.$error ? 'ion-invalid font-black' : 'ion-valid font-black'"
+              :class="v$.status.$error ? 'ion-invalid font-black' : 'ion-valid font-black'"
               :error-text="
-                v$.asal.$error
-                  ? v$.asal.$errors[0].$message.toString()
+                v$.status.$error
+                  ? v$.status.$errors[0].$message.toString()
                   : ''
               "
               v-model="state.status"
@@ -255,21 +250,49 @@
                 <ion-label>Image</ion-label>
               </ion-tab-button>
 
-              <ion-tab-button tab="tab2" @click="isImage = false">
+              <ion-tab-button tab="tab2" @click="onSignature">
                 <ion-icon class="btn-tabs" aria-hidden="true" :icon="personCircleOutline" />
                 <ion-label>Tanda Tangan</ion-label>
               </ion-tab-button>
       </ion-tab-bar>
 
             <div v-if="isImage" class="content-image">
-
+              <div style="display: flex;
+                justify-content: center;
+                align-items: center;">
+                <ion-button @click="takePhoto">
+                <ion-icon class="btn-tabs" color="dark" aria-hidden="true" :icon="cameraOutline" />
+                Camera</ion-button>
+                <ion-button @click="takeImagesFile">
+                <ion-icon class="btn-tabs" aria-hidden="true" :icon="documentOutline" />
+                File image</ion-button>
+              </div>
+              
+              <input id="fileInput" type="file" style="display: none" @change="handleFileChange" />
+              <img v-if="photo" :src="photo.webPath" alt="Captured Image" />
+              <img v-if="fileImg" :src="fileImg" alt="Selected Image" />
             </div>
 
             <div v-if="!isImage" class="content-ttd">
-
+              <h1>
+                  <center>Tanda tangan disini</center>
+                </h1>
+                <div class="wrapper">
+                  <canvas v-if="!isSignature" id="signature-pad" class="signature-pad" width=400 height=200></canvas>
+                  <img v-if="isSignature" :src="signatureImg" alt="Signature Image" />
+                </div>
+                <div>
+                  <center>
+                    <button class="save-signature" @click.prevent="saveSignature" id="save">Save</button>
+                    <button class="save-signature" @click.prevent="clearSignature" id="clear">Clear</button>
+                  </center>
+                </div>
             </div>
             
-            <ion-button
+            
+          </form>
+        </ion-card-content>
+        <ion-button
               color="success"
               expand="full"
               shape="round"
@@ -277,8 +300,6 @@
               size="default"
               >Masukan Data</ion-button
             >
-          </form>
-        </ion-card-content>
       </ion-card>
     </ion-content>
 
@@ -329,18 +350,13 @@ import Vue3EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
 import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
 import router from "@/router";
-import { homeOutline, personCircleOutline,cameraOutline } from 'ionicons/icons';
+import { homeOutline, personCircleOutline,cameraOutline, documentOutline } from 'ionicons/icons';
+import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera'
 
 
-
-const headers = ref([
-                    { text: "No.AWB", value: "ConnoteNo" },
-                    { text: "Pengirim", value: "ConnoteCustName"},
-                    { text: "Nama Dituju", value: "ConnoteRecvName"},
-                    { text: "Kota Tujuan", value: "ConnoteRecvAddr"},
-                ])
 const isOpen = ref(false);
 const isImage = ref(true);
+const isSignature = ref(false);
 const errMessage = ref("");
 const store = useStore()
 const city = ref<IArrivedItem[]>([])
@@ -359,14 +375,62 @@ const state = reactive({
     lokasiditerima: "",
     tgldelivery: "",
     status: "",
-    ketpenerima: ""
+    ketpenerima: "",
+    fileImg: ""
 });
+
 const formAF = ref<HTMLFormElement | null>(null);
+// const photo = ref<UserPhoto[]>([]);
+const photo = ref<Photo | null>(null);
+const fileImg = ref<string | null>(null);
+const fileImgOri = ref<File | null>(null);
+const signatureOri = ref<File | null>(null);
+const signatureImg = ref<string | null>(null);
+const fileInputRef = ref<HTMLInputElement | null>(null);
+const canvasRef = ref(null);
 
 onMounted( async () => {
   getCity()
-  // console.debug('ge',await generateCounter())
 });
+
+const onSignature = ()=> {
+  isImage.value = false
+  if (isSignature.value) return 
+  setTimeout(() => {
+    loadCanvas()
+  }, 300);
+}
+const loadCanvas = () => {
+  const signaturePad = new SignaturePad(document.getElementById('signature-pad'), {
+  backgroundColor: 'rgba(255, 255, 255, 0)',
+  penColor: 'rgb(0, 0, 0)'
+});
+}
+const saveSignature = async () => {
+  const canvas = document.getElementById('signature-pad');
+  const data = canvas.toDataURL('image/png');
+
+  const blob = await fetch(data).then(response => response.blob());
+  const fileName = 'signature.png';  // You can set the desired filename
+  const file = new File([blob], fileName, {
+    lastModified: new Date().getTime(),
+    lastModifiedDate: new Date(),
+    size: blob.size,
+    type: blob.type,
+    webkitRelativePath: "",
+  });
+
+  signatureImg.value = data
+  isSignature.value = true
+  signatureOri.value = file
+  console.debug('signature',data)
+};
+
+const clearSignature = () => {
+  const canvas = document.getElementById('signature-pad');
+  const signaturePad = new SignaturePad(canvas);
+  signaturePad.clear();
+};
 
 const checkAWB = async () => {
   const data = {
@@ -401,6 +465,91 @@ const setOpen = (state: boolean) => {
     errMessage.value = "";
   }
 };
+
+const takePhoto = async () => {
+  
+  const capturedPhoto  = await Camera.getPhoto({
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Camera,
+      quality: 100,
+    });
+    photo.value = capturedPhoto
+    console.debug("captuerd", capturedPhoto.webPath)
+    const convertToFile = convertToBlobAndFile(capturedPhoto);
+    // fileImgOri.value = capturedPhoto.webPath
+    console.debug("captuerd", convertToFile)
+    fileImgOri.value = await convertToFile
+}
+
+const convertToBlobAndFile = async(result : any) => {
+  // Create a Blob from the image URL
+  const blob = await fetch(result.webPath).then(response => response.blob());
+
+  // Create a File-like object
+  const fileName = result.path.split('/').pop();
+  const file = new File([blob], fileName, {
+    lastModified: new Date().getTime(),
+    lastModifiedDate: new Date(),
+    size: blob.size,
+    type: blob.type,
+    webkitRelativePath: "",
+  });
+
+  return file;
+}
+
+const takeImagesFile = () => {
+  const fileInput = document.getElementById('fileInput');
+      if (fileInput) {
+        fileInput.click();
+      }
+}
+
+const convertToBase64 = (file: string | Blob | File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      resolve(reader.result as string);
+    };
+
+    reader.onerror = (error) => {
+      reject(error);
+    };
+
+    // Check if the provided file is a string (file URL)
+    if (typeof file === 'string') {
+      fetch(file)
+        .then((response) => response.blob())
+        .then((blob) => reader.readAsDataURL(blob))
+        .catch(reject);
+    } else {
+      // If it's a Blob or File, read as Data URL directly
+      reader.readAsDataURL(file);
+    }
+  });
+};
+
+const handleFileChange = (event: Event) => {
+  const fileInput = event.target as HTMLInputElement;
+      const file = fileInput.files && fileInput.files[0];
+
+      if (file) {
+        // Update selected file name
+        fileImg.value = file.name;
+
+        // Optionally, you can display an image preview (if it's an image)
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            fileImg.value = reader.result as string;
+          };
+          reader.readAsDataURL(file);
+        }
+        fileImgOri.value = file
+        photo.value = null
+      }
+}
 
 const toSelectCity = () => {
   router.push('/shipment-delivered/section-city')
@@ -446,8 +595,8 @@ const rules = computed(() => {
         maxLength(16)
       ),
     },
-    asal: {
-      required: helpers.withMessage("Asal harus diisi", required),
+    status: {
+      required: helpers.withMessage("Status harus diisi", required),
       maxlength: helpers.withMessage(
         "Username tidak boleh lebih dari 64 karakter",
         maxLength(64)
@@ -491,107 +640,51 @@ const getCity = async () => {
 };
 
 const submitForm = async () => {
-  // errMessage.value = "waoasaspjgapsgjoasp";
-  // setOpen(true);
-  v$.value.$validate();
-  if (v$.value.$error) {
-    const inputs = formAF.value?.querySelectorAll("input");
-    inputs?.forEach((input) => input.focus());
-
-    return;
-  }
-  await getAWB()
-  console.debug('Kisi kabeh',dataAwb)
-}
-
-const submitData = async () => {
-  const keys = Object.keys(dataAwb.value) as (keyof IConnoteAWB)[];
-
-  for (const key of keys) {
-      console.log(dataAwb.value[key]);
-      const datas = dataAwb.value[key] 
-      const data = {
-        username: JSON.parse(localStorage.user).username,
-        cloc: JSON.parse(localStorage.user).UserLocation,
-        wctgl : datas.DataFromInput.tanggalInpt,
-        wcdesc: datas.DataFromInput.catatan,
-        wckurir: JSON.parse(localStorage.user).pegawai_id,
-        temp_key : datas.DataFromInput.temp_key,
-        nowc : await generateCounter()
-      }
-      const res = await store.dispatch('arrive/saveWCourier',data);
-      errMessage.value = res.message;
-      setOpen(true);
-      console.error('parsed asdta', data);
-  }
-    store.dispatch('arrive/resetArrive')
-  // console.debug('submit data', dataAwb.value);
-  // console.debug('submit data keys', keys);
-
-}
-
-const scanBarcode = async () => {
-  await BarcodeScanner.checkPermission({ force: true })
-  BarcodeScanner.hideBackground()
-  document.querySelector('body')!.classList.add('scanner-active')
-  document.querySelector('#content-af')!.classList.add('hide-comp')
-  document.querySelector('#tab-bar')!.classList.add('hide-comp')
-  isScan.value = true
-  const result = await BarcodeScanner.startScan()
-  if (result.hasContent) {
-    console.error(result.content); // log the raw scanned content
-    state.awb = result.content
-    isScan.value = false
-    document.querySelector('body')!.classList.remove('scanner-active')
-    document.querySelector('#frame-scanner')!.classList.remove('frame-scanner')
-    document.querySelector('#content-af')!.classList.remove('hide-comp')
-    document.querySelector('#tab-bar')!.classList.remove('hide-comp')
-  }
-}
-
-const stopScan = () => {
-  BarcodeScanner.showBackground();
-  BarcodeScanner.stopScan();
-  isScan.value = false
-  document.querySelector('body')!.classList.remove('scanner-active')
-  document.querySelector('#frame-scanner')!.classList.remove('frame-scanner')
-  document.querySelector('#content-af')!.classList.remove('hide-comp')
-  document.querySelector('#tab-bar')!.classList.remove('hide-comp')
-};
-
-const getAWB = async () => {
-  const param = {
-    noAWB: state.awb
-  }
-  const data = {
-    nomor: state.nomor,
-    asal: state.asal,
-    tanggalInpt: state.tanggal,
-    catatan: state.catatan,
-    noawb: state.awb,
-    temp_key: tempKeyGenerate(JSON.parse(localStorage.user).name)
-  }
-  const res = await store.dispatch('arrive/getAWB',{param,data});
-  if (res.error == true) {
+  const loading = await loadingController.create({
+        message: "Loading...",
+        animated: true,
+        backdropDismiss: false,
+    });
+  loading.present();
+  const formData = new FormData();
+  formData.append('no_connote', state.nomor);
+  formData.append('username', JSON.parse(localStorage.user).username);
+  formData.append('cloc', state.lokasiditerima);
+  formData.append('tglstatus', state.tgldelivery);
+  formData.append('status', state.status);
+  formData.append('cbkurir', JSON.parse(localStorage.user).pegawai_id);
+  formData.append('ketstatus', state.ketpenerima);
+  formData.append('cbloc', state.lokasiditerima);
+  formData.append('signatureImg', signatureOri.value);
+  formData.append('fileImg', fileImgOri.value);
+  const res = await store.dispatch('arrive/addShipment',formData)
+  if (res.error == false) {
+    state.nomor = ""
+    state.tanggal = ""
+    state.namapengirim = ""
+    state.alamatpengirim =""
+    state.namadituju= ""
+    state.alamatdituju= ""
+    state.tujuan= ""
+    state.berat= ""
+    state.koli= ""
+    state.namakurir= ""
+    state.ketisi= ""
+    state.lokasiditerima= ""
+    state.tgldelivery= ""
+    state.status= ""
+    state.ketpenerima= ""
+    state.fileImg= ""
     errMessage.value = res.message;
     setOpen(true);
-  }else{
-    const dataTemp = {
-      userId: JSON.parse(localStorage.user).id,
-      noawb: state.awb,
-      temp_key: data.temp_key
-    }
-    await store.dispatch('arrive/addTemp',dataTemp)
-    state.nomor= "",
-    state.tanggal= "",
-    state.asal= "",
-    state.catatan= "",
-    state.awb= ""
+    loading.dismiss();
+  } else {
+    errMessage.value = res.message;
+    setOpen(true);
+    loading.dismiss();
   }
+  console.debug('Kisi kabeh',res)
 }
-
-
-
 
 const logout = () => {
   localStorage.clear();
@@ -602,40 +695,9 @@ const logout = () => {
 .alert-radio-label.sc-ion-alert-md { 
   color: black !important;
 }
-ion-col {
-  background-color: #135d54;
-  border: solid 1px #fff;
-  color: #fff;
-  text-align: center;
-}
-.header-row,
-.data-row {
-  border: 1px solid #ddd; /* Border color */
-}
-
-.column {
-  padding: 10px;
-  text-align: center;
-}
-
-.header-row {
-  background-color: #f2f2f2; /* Header background color */
-  font-weight: bold;
-}
-.scanner-active {
-  --background: transparent !important;
-  --ion-background-color: transparent !important;
-
-  background: transparent !important;
-  background-color: transparent !important;
-}
-.hide-comp {
-  visibility: hidden;
-}
-.frame-scanner {
-  border: solid 6px #fff;
-    height: 41%;
-    width: 80%;
-    margin: 56% 37px 0px;
+.save-signature {
+  margin: 20px;
+  height: 47px;
+  width: 91px;
 }
 </style>

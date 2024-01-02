@@ -1,5 +1,5 @@
 /* eslint-disable no-async-promise-executor */
-import {  getPickup,getDetailPickup,updateStatus,getPickupHistory, getCity, getByAWB, addTemp, saveArrived, geneCounter, saveWCourier, cityOrig } from '@/api/conf-api/api'
+import {  getPickup,getDetailPickup,updateStatus,getPickupHistory, getCity, getByAWB, addTemp, saveArrived, geneCounter, saveWCourier, cityOrig, addShipment } from '@/api/conf-api/api'
 import md5 from 'crypto-js/md5'
 import { State } from 'ionicons/dist/types/stencil-public-runtime'
 import { Commit } from 'vuex'
@@ -128,6 +128,18 @@ export default {
                     createTableCity(res.data)
                     commit("SET", ["city", res.data]);
                 }
+                return res;
+            } catch (error) {
+                console.error("Error fetching pickup data:", error);
+                throw error; // Re-throw the error to be handled by the caller if needed
+            }
+        },
+
+        async addShipment({ commit }: { commit: Commit }, payload: any) {
+            
+            try {
+                const res = await addShipment(payload);
+                console.warn("add shipmenrttt", res);
                 return res;
             } catch (error) {
                 console.error("Error fetching pickup data:", error);

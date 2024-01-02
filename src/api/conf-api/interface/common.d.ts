@@ -21,3 +21,8 @@ export interface ICount {
     totalCount: number
     totalPageCount: number
 }
+
+export interface UserPhoto {
+    filepath: string;
+    webviewPath?: string;
+}

@@ -3,6 +3,7 @@ interface Window {
 }
 
 interface MyDatabase extends Dexie {
+  version: any;
   cityOrigin: Dexie.Table<CityOrigin, number>;
 }
 
@@ -11,3 +12,4 @@ interface CityOrigin {
   name: string;
   // Add any other properties you have in your CityOrigin object
 }
+
