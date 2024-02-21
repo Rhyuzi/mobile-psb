@@ -23,7 +23,7 @@
       >
       </div>
     <!-- </ion-content> -->
-    <ion-content id="content-af" :fullscreen="true">
+    <ion-content id="content-wc" :fullscreen="true">
       <ion-card class="form-input">
         <ion-card-content>
           <form action="" ref="formAF">
@@ -36,7 +36,7 @@
               fill="outline"
               placeholder="Nomor"
               :class="v$.nomor.$error ? 'ion-invalid font-black' : 'ion-valid font-black'"
-              :error-text="
+              :error-text=" 
                 v$.nomor.$error
                   ? v$.nomor.$errors[0].$message.toString()
                   : ''
@@ -45,7 +45,7 @@
               @ion-blur="markTouched"
             ></ion-input>
             
-            <ion-button color="dark" @click="randomNo">Generate</ion-button>
+            <!-- <ion-button color="dark" @click="randomNo">Generate</ion-button> -->
             
             
             </div>
@@ -216,7 +216,6 @@ const formAF = ref<HTMLFormElement | null>(null);
 
 onMounted( async () => {
   getCity()
-  console.debug('ge',await generateCounter())
 });
 
 const setOpen = (state: boolean) => {
@@ -314,18 +313,29 @@ const submitForm = async () => {
   // errMessage.value = "waoasaspjgapsgjoasp";
   // setOpen(true);
   v$.value.$validate();
+  if (!state.nomor) randomNo()
   if (v$.value.$error) {
     const inputs = formAF.value?.querySelectorAll("input");
     inputs?.forEach((input) => input.focus());
 
     return;
   }
-  await getAWB()
+  if (state.awb.includes(",")) {
+    const splitted = state.awb.split(',')
+    for (const index in splitted) {
+      const value = splitted[index];
+      await getAWB(value)
+      console.debug('awb', value);
+    }
+    return
+  }
+  await getAWB(state.awb)
   console.debug('Kisi kabeh',dataAwb)
 }
 
 const submitData = async () => {
   const keys = Object.keys(dataAwb.value) as (keyof IConnoteAWB)[];
+
 
   for (const key of keys) {
       console.log(dataAwb.value[key]);
@@ -339,12 +349,16 @@ const submitData = async () => {
         temp_key : datas.DataFromInput.temp_key,
         nowc : await generateCounter()
       }
+  
       const res = await store.dispatch('arrive/saveWCourier',data);
       errMessage.value = res.message;
+      // if (!res.error){
+      // }
       setOpen(true);
       console.error('parsed asdta', data);
   }
-    store.dispatch('arrive/resetArrive')
+  store.dispatch('arrive/resetArrive')
+    
   // console.debug('submit data', dataAwb.value);
   // console.debug('submit data keys', keys);
 
@@ -354,17 +368,19 @@ const scanBarcode = async () => {
   await BarcodeScanner.checkPermission({ force: true })
   BarcodeScanner.hideBackground()
   document.querySelector('body')!.classList.add('scanner-active')
-  document.querySelector('#content-af')!.classList.add('hide-comp')
+  document.querySelector('#content-wc')!.classList.add('hide-comp')
   document.querySelector('#tab-bar')!.classList.add('hide-comp')
   isScan.value = true
   const result = await BarcodeScanner.startScan()
   if (result.hasContent) {
-    console.error(result.content); // log the raw scanned content
-    state.awb = result.content
+    // console.error(result.content); // log the raw scanned content
+    // const updatedAwb = state.awb ? `${state.awb},${result.content}` : `${result.content},`;
+    const updatedAwb = state.awb ? `${state.awb},${result.content}` : `${result.content}`;
+    state.awb = updatedAwb;
     isScan.value = false
     document.querySelector('body')!.classList.remove('scanner-active')
     document.querySelector('#frame-scanner')!.classList.remove('frame-scanner')
-    document.querySelector('#content-af')!.classList.remove('hide-comp')
+    document.querySelector('#content-wc')!.classList.remove('hide-comp')
     document.querySelector('#tab-bar')!.classList.remove('hide-comp')
   }
 }
@@ -375,21 +391,21 @@ const stopScan = () => {
   isScan.value = false
   document.querySelector('body')!.classList.remove('scanner-active')
   document.querySelector('#frame-scanner')!.classList.remove('frame-scanner')
-  document.querySelector('#content-af')!.classList.remove('hide-comp')
+  document.querySelector('#content-wc')!.classList.remove('hide-comp')
   document.querySelector('#tab-bar')!.classList.remove('hide-comp')
 };
 
-const getAWB = async () => {
+const getAWB = async (awb: string) => {
   const param = {
-    noAWB: state.awb
+    noAWB: awb
   }
   const data = {
     nomor: state.nomor,
     asal: state.asal,
     tanggalInpt: state.tanggal,
     catatan: state.catatan,
-    noawb: state.awb,
-    temp_key: tempKeyGenerate(JSON.parse(localStorage.user).name)
+    noawb: awb,
+    temp_key: `${tempKeyGenerate(JSON.parse(localStorage.user).name)}`
   }
   const res = await store.dispatch('arrive/getAWB',{param,data});
   if (res.error == true) {
@@ -398,28 +414,22 @@ const getAWB = async () => {
   }else{
     const dataTemp = {
       userId: JSON.parse(localStorage.user).id,
-      noawb: state.awb,
+      noawb: awb,
       temp_key: data.temp_key
     }
+    console.error('temmpikk', dataTemp)
     await store.dispatch('arrive/addTemp',dataTemp)
-    state.nomor= "",
-    state.tanggal= "",
-    state.asal= "",
+    // state.nomor= "",
+    // state.tanggal= "",
+    // state.asal= "",
     state.catatan= "",
     state.awb= ""
   }
 }
 
 const tempKeyGenerate = (username: string) => {
-  const date = new Date();
-  const date_time = + date.getFullYear() + ""
-      + (date.getMonth()+1) + ""
-      + date.getDate() + ""
-      + date.getHours() + ""
-      + date.getMinutes() + ""
-      + date.getSeconds();
-
-  return username + date_time 
+  const timestamp = Date.now();
+  return username + timestamp;
 }
 
 

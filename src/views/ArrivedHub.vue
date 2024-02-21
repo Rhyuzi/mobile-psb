@@ -218,7 +218,6 @@ const formAF = ref<HTMLFormElement | null>(null);
 
 onMounted( async () => {
   getCity()
-  console.debug('ge',await generateCounter())
 });
 
 const setOpen = (state: boolean) => {
