@@ -3,7 +3,14 @@
     <ion-header>
       <ion-toolbar>
         <ion-title class="font-white">Check Point</ion-title>
+        <ion-icon @click="onClickSearch" class="ic-toolbar"
+                        :icon="inSearch.icon"
+                        slot="end"></ion-icon>
       </ion-toolbar>
+      <div v-if="isSearch"  class="display-flex">
+        <ion-searchbar placeholder="Search Data ..." v-model="searchValue"></ion-searchbar>
+        <ion-button class="margin-12" @click="searchCheckPoint">Cari</ion-button>
+      </div>
     </ion-header>
     <!-- <ion-content class="frame-scanner"> -->
       
@@ -32,7 +39,12 @@
       </div> -->
     </ion-content>
 
-  
+    <ion-toast
+      :is-open="isOpen"
+      :message="errMessage"
+      :duration="5000"
+      @didDismiss="setOpen(false)"
+    ></ion-toast>
   </ion-page>
 </template>
 
@@ -52,7 +64,8 @@ import {
   IonSelect,
   IonSelectOption,
   IonToast,
-  IonIcon
+  IonIcon,
+  IonSearchbar
 } from "@ionic/vue";
 import { useStore } from "vuex";
 import { ref } from "vue";
@@ -64,9 +77,23 @@ import { required, maxLength, helpers } from "@vuelidate/validators";
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
 import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
-import { locationOutline,menuOutline } from 'ionicons/icons';
+import { locationOutline,menuOutline, search, close } from 'ionicons/icons';
 import router from "@/router";
 
+const isOpen = ref(false);
+const errMessage = ref("");
+const store = useStore()
+const searchValue = ref("")
+const isSearch = ref(false);
+const inSearch = reactive({
+    icon: search,
+})
+const setOpen = (state: boolean) => {
+  isOpen.value = state;
+  if (!state) {
+    errMessage.value = "";
+  }
+};
 const toArrived = () => {
   router.push("/arrived-hub");
 }
@@ -74,11 +101,43 @@ const toWithCourier = () => {
   router.push("/with-courier");
 }
 
+const searchCheckPoint = async () => {
+  const data = {
+    pickup_id:searchValue.value
+  };
+  const result = await store.dispatch('pickup/getCheckPoint',data);
+  if (!result.error) {
+    searchValue.value = ''
+    router.push("/checkpoint");
+    return
+  }
+  errMessage.value = result.message;
+  setOpen(true);
+}
+
+
+const onClickSearch = () => {
+    if (!isSearch.value) {
+        inSearch.icon = close;
+        setOpenSearch(true)
+    } else {
+        inSearch.icon = search;
+        setOpenSearch(false)
+    }
+}
+
+const setOpenSearch = (state: boolean) => {
+    isSearch.value = state;
+};
+
 const toShipment = () => {
   router.push("/shipment-delivered");
 }
 </script>
 <style>
+.margin-12{
+  margin: 12px;
+}
 .flex-item-menu {
   flex: 1;
   min-width: 50%;

@@ -180,7 +180,7 @@ ion-card {
   background-color: aliceblue;
 }
 ion-searchbar{
-  /* background-color: #bfbebe; */
+  background-color: #bfbebe;
   color: black;
 }
 .sc-ion-searchbar-md-h {
@@ -390,4 +390,17 @@ ion-list{
 .content-ttd {
   /* background: black; */
   height: 375px;
+}
+.font-size-14 {
+  font-size: 14px;
+}
+.checkpoint-desc {
+  margin-left: 26px;
+}
+.transform-180{
+  transform: rotate(180deg);
+}
+.icon-checkpoint {
+  font-size: 26px;
+  max-width: 11%;
 }

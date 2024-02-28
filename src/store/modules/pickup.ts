@@ -1,5 +1,5 @@
 /* eslint-disable no-async-promise-executor */
-import {  getPickup,getDetailPickup,updateStatus,getPickupHistory } from '@/api/conf-api/api'
+import {  getPickup,getDetailPickup,updateStatus,getPickupHistory, getCheckPoint } from '@/api/conf-api/api'
 import md5 from 'crypto-js/md5'
 import { State } from 'ionicons/dist/types/stencil-public-runtime'
 import { Commit } from 'vuex'
@@ -10,12 +10,14 @@ import { IPickupItem } from '@/api/conf-api/interface/dashboard';
 interface State {
     [key: string]: any
     pickupsList: any[],
-    historyList: any[]
+    historyList: any[],
+    checkPointList: any[],
 }
 
 const initialState: State = {
     pickupsList: [],
-    historyList: []
+    historyList: [],
+    checkPointList: []
 }
 
 export default {
@@ -82,7 +84,20 @@ export default {
                 throw error; // Re-throw the error to be handled by the caller if needed
             }
         },
-
+        async getCheckPoint({ commit }: { commit: Commit }, payload: any) {
+            try {
+                const res = await getCheckPoint(payload);
+                commit("SET", ["checkPointList", res.data]);
+                // if (res.error === false) {
+                //     commit("SET", ["pickupsList", res.data]);
+                // }
+                // console.debug("data pickup", res.data);
+                return res;
+            } catch (error) {
+                console.error("Error fetching pickup data:", error);
+                throw error; // Re-throw the error to be handled by the caller if needed
+            }
+        },
         async updateStatus({ commit }: { commit: Commit }, payload: any) {
             
             try {

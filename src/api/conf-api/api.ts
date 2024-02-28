@@ -59,3 +59,6 @@ export async function cityOrig(payload: any): Promise<any> {
 export async function addShipment(payload: any): Promise<any> {
     return await request(endPoints.ADD_SHIPMENT, 'post', payload)
 }
+export async function getCheckPoint(payload: any): Promise<any> {
+    return await request(endPoints.PICKUP_CHECKPOINT, 'post', payload)
+}

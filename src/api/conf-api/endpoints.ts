@@ -15,6 +15,7 @@ const GENERATE_COUNTER = 'siap/mobile_psb/counter_api.php'
 const SAVE_WITH_COURIER = 'siap/mobile_psb/android_savewithcourier.php'
 const CITY_ORIG = 'siap/mobile_psb/android_gettujuan.php'
 const ADD_SHIPMENT = 'siap/mobile_psb/android_addshipment.php'
+const PICKUP_CHECKPOINT = 'siap/mobile_psb/android_pickupcheckpoint.php'
 
 // const ACCOUNT_LOGIN = 'siapx/mobile_psb/android_login.php' // method post
 // const PICKUP_DATA = 'siapx/mobile_psb/android_getpickuporder.php' // method post
@@ -29,6 +30,7 @@ const ADD_SHIPMENT = 'siap/mobile_psb/android_addshipment.php'
 // const SAVE_WITH_COURIER = 'siapx/mobile_psb/android_savewithcourier.php'
 // const CITY_ORIG = 'siapx/mobile_psb/android_gettujuan.php'
 // const ADD_SHIPMENT = 'siapx/mobile_psb/android_addshipment.php'
+// const PICKUP_CHECKPOINT = 'siapx/mobile_psb/android_pickupcheckpoint.php'
 
 export {
     ACCOUNT_LOGIN,   
@@ -43,7 +45,8 @@ export {
     GENERATE_COUNTER,
     SAVE_WITH_COURIER,
     CITY_ORIG,
-    ADD_SHIPMENT
+    ADD_SHIPMENT,
+    PICKUP_CHECKPOINT
 }
 
 export default {
@@ -59,5 +62,6 @@ export default {
     GENERATE_COUNTER,
     SAVE_WITH_COURIER,
     CITY_ORIG,
-    ADD_SHIPMENT
+    ADD_SHIPMENT,
+    PICKUP_CHECKPOINT
 }

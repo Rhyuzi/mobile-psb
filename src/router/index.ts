@@ -67,6 +67,13 @@ const routes: Array<RouteRecordRaw> = [
       requireAuth: true,
     },
   },
+  {
+    path: "/checkpoint",
+    component: () => import("@/views/DetCheckPoint.vue"),
+    meta: {
+      requireAuth: true,
+    },
+  },
 ];
 
 const router = createRouter({
