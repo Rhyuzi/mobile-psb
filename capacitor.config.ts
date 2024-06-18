@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
-  appName: 'mobile-psb',
+  appName: 'mobile-psb-courier',
   webDir: 'dist',
   server: {
     androidScheme: 'https'

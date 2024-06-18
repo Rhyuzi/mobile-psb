@@ -5,7 +5,7 @@
         <ion-buttons slot="start">
           <ion-back-button default-href="/"></ion-back-button>
         </ion-buttons>
-        <ion-title>Detail Pick</ion-title>
+        <ion-title>Detail POD</ion-title>
       </ion-toolbar>
     </ion-header>
 

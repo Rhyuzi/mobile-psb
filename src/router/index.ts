@@ -27,6 +27,14 @@ const routes: Array<RouteRecordRaw> = [
         path: "tab2",
         component: () => import("@/views/Tab2Page.vue"),
       },
+      {
+        path: "tab3",
+        component: () => import("@/views/ArrivedHub.vue"),
+      },
+      {
+        path: "tab4",
+        component: () => import("@/views/WithCourier.vue"),
+      },
     ],
     meta: {
       requireAuth: true,
@@ -35,6 +43,13 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/arrived-hub",
     component: () => import("@/views/ArrivedHub.vue"),
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: "/POD",
+    component: () => import("@/views/POD.vue"),
     meta: {
       requireAuth: true,
     },

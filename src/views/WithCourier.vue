@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons class="color-whites" slot="start">
-          <ion-back-button default-href="/tabs/tab2"></ion-back-button>
+          <ion-back-button default-href="/tabs/tab1"></ion-back-button>
         </ion-buttons>
         <ion-title class="font-white">With Courier</ion-title>
       </ion-toolbar>
@@ -35,12 +35,6 @@
               label-placement="floating"
               fill="outline"
               placeholder="Nomor"
-              :class="v$.nomor.$error ? 'ion-invalid font-black' : 'ion-valid font-black'"
-              :error-text=" 
-                v$.nomor.$error
-                  ? v$.nomor.$errors[0].$message.toString()
-                  : ''
-              "
               v-model="state.nomor"
               @ion-blur="markTouched"
             ></ion-input>
@@ -251,13 +245,6 @@ const randomNo = async () => {
 
 const rules = computed(() => {
   return {
-    nomor: {
-      required: helpers.withMessage("Nomor harus diisi", required),
-      maxlength: helpers.withMessage(
-        "Username tidak boleh lebih dari 64 karakter",
-        maxLength(64)
-      ),
-    },
     tanggal: {
       required: helpers.withMessage("Tanggal harus diisi", required),
       maxlength: helpers.withMessage(

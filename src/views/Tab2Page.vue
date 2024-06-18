@@ -3,9 +3,7 @@
     <ion-header>
       <ion-toolbar>
         <ion-title class="font-white">Check Point</ion-title>
-        <ion-icon @click="onClickSearch" class="ic-toolbar"
-                        :icon="inSearch.icon"
-                        slot="end"></ion-icon>
+        
       </ion-toolbar>
       <div v-if="isSearch"  class="display-flex">
         <ion-searchbar placeholder="Search Data ..." v-model="searchValue"></ion-searchbar>

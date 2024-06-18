@@ -1,109 +1,50 @@
 <template>
     <ion-page>
         <ion-header>
-            <ion-toolbar>
-                    <ion-icon id="auto-trigger" class="ic-toolbar ic-filter"
+            <ion-toolbar class="display-fl">
+                <!-- <ion-icon id="auto-trigger" class="ic-toolbar ic-filter"
                         :icon="menuOutline"
-                        slot="start"></ion-icon>
-                    <ion-popover trigger="auto-trigger" :dismiss-on-select="true">
-                        <ion-content color="dark">
-                            <ion-list :inset="true">
-                        <ion-item :button="true" @click="openHistory" id="open-modal" expand="block">
-                            <ion-icon color="tertiary" slot="start" :icon="listCircle" size="large"></ion-icon>
-                            <ion-label class="font-black" >History</ion-label>
-                            <ion-note class="font-black" slot="end">{{ pickupsHistory.length }}</ion-note>
-                        </ion-item>
-                        </ion-list>
-                        </ion-content>
-                    </ion-popover>
-                            
-                <div class="title-header">
-                    <p class="font-monospace font-white">Selamat Datang,</p>
-                    <p class="font-white">{{ dataUser.name }}</p>
+                        slot="start"></ion-icon> -->
+
+                <div class="display-fl">
+                    <img src="../assets/image/logo-pandu.png" class="logo-header-home" alt="">
+                    <div class="title-header">
+                        <p class="font-monospace font-white">Selamat Datang,</p>
+                        <p class="font-white">{{ dataUser.name }}</p>
+                    </div>
+
                 </div>
-                <ion-icon @click="onClickRefresh" class="ic-toolbar refresh-icon"
-                        :icon="refreshOutline"
-                        slot="end"></ion-icon>
-                <ion-icon @click="onClickSearch" class="ic-toolbar"
-                        :icon="inSearch.icon"
-                        slot="end"></ion-icon>
+
             </ion-toolbar>
-            <ion-searchbar v-if="isSearch" placeholder="Search Data ..." v-model="searchData"></ion-searchbar>
         </ion-header>
         <ion-content :fullscreen="true">
-            
-            <ion-modal ref="modal" trigger="open-modal">
-                <ion-header>
-                    <ion-toolbar>
-                        <ion-icon @click="cancel()" class="ic-toolbar arr-back-history"
-                                    :icon="arrowBackOutline"
-                                    slot="start"></ion-icon>
-                    <ion-title class="title-history color-white">History</ion-title>
-                    <ion-icon @click="getPickupHistory" class="ic-toolbar refresh-icon"
-                        :icon="refreshOutline"
-                        slot="end"></ion-icon>
-                    </ion-toolbar>
-                </ion-header>
-                <ion-content class="ion-padding">
-                    <div class="item-pick" v-for="pickup in pickupsHistory" :key="pickup.POrderNo">
-                <ion-card-content @click="seeDetailHistory(pickup.POrderID)">
-                    <ion-list>
-                            <div class="display-flex">
-                                <ion-icon class="img-ic"
-                                    :icon="personCircle"
-                                    color="secondary"
-                                    slot="start"></ion-icon>
-                                <ion-label class="cust-name font-monospace">{{ pickup.POrderCustName }}</ion-label>
-                                <p class="font-black float-right-flex font-none">{{ pickup.POrderDate }}</p>
-                            </div>
-                            <div class="display-flex">
-                                <p class="font-black pick-addr custom-ellipsis font-bold">{{ pickup.POrderCustAddr }}</p>
-                            </div>
-                            <p class="font-black margin-memo font-bold">{{ pickup.POrderIsi }}</p>
-                        
-
-                            <div class="display-flex">
-                                <p class="font-black cont-qty">{{ pickup.POrderQty }} qty</p>
-                                <ion-icon class="img-ic float-right-flex"
-                                :icon="personCircle"
-                                color="secondary"
-                                slot="start"></ion-icon>
-                                <ion-label class="cust-name font-monospace">{{ pickup.POrderDEO }}</ion-label>
-                            </div>
-                        </ion-list>
-                    </ion-card-content>
-                </div> 
-                </ion-content>
-            </ion-modal>
-
-    <div class="item-pick" v-for="pickup in onSearchData" :key="pickup.POrderNo">
-       <ion-card-content @click="seeDetail(pickup.POrderID)">
-         <ion-list>
-                <div class="display-flex">
-                    <ion-icon class="img-ic"
-                        :icon="personCircle"
-                        color="secondary"
-                        slot="start"></ion-icon>
-                    <ion-label class="cust-name font-monospace">{{ pickup.POrderCustName }}</ion-label>
-                    <p class="font-black float-right-flex font-none">{{ pickup.POrderDate }}</p>
+            <ion-content class="ion-padding">
+                <div class="display-fl align-center">
+                    <h5>{{ dataUser.name }}</h5>
+                    <img src="../assets/image/psb-logo-head.png" class="margin-left-auto img-user-icon" alt="">
                 </div>
-                <div class="display-flex">
-                    <p class="font-black pick-addr custom-ellipsis font-bold">{{ pickup.POrderCustAddr }}</p>
+                <div class="content-pickup">
+                    <div class="display-fl align-center">
+                        <p>PENJEMPUTAN (Pick-Up)</p>
+                        <p class="margin-left-auto label-kg">(0 kg)</p>
+                    </div>
+                    <div class="display-fl align-center">
+                        <button class="btn-pickup">0</button>
+                        <button class="btn-pickup margin-left-auto">0</button>
+                    </div>
                 </div>
-                <p class="font-black margin-memo font-bold">{{ pickup.POrderIsi }}</p>
-               
 
-                <div class="display-flex">
-                    <p class="font-black cont-qty">{{ pickup.POrderQty }} qty</p>
-                    <ion-icon class="img-ic float-right-flex"
-                    :icon="personCircle"
-                    color="secondary"
-                    slot="start"></ion-icon>
-                    <ion-label class="cust-name font-monospace">{{ pickup.POrderDEO }}</ion-label>
+                <div class="content-pickup">
+                    <div class="display-fl align-center">
+                        <p>PENGANTARAN (Delivery)</p>
+                        <p class="margin-left-auto label-kg">({{ calculateTotalPOrderWeight(pickups)+calculateTotalPOrderWeight(pickupsHistory) }} kg)</p>
+                    </div>
+                    <div class="display-fl align-center">
+                        <button @click="toPodReq" class="btn-pickup" :class="{ 'background-blue color-white': pickups.length !== 0 }">{{ pickups.length }}</button>
+                        <button @click="toPodHist" class="btn-pickup margin-left-auto">{{ pickupsHistory.length }}</button>
+                    </div>
                 </div>
-            </ion-list>
-        </ion-card-content>
-    </div>  
+            </ion-content>
         </ion-content>
     </ion-page>
 </template>
@@ -129,7 +70,7 @@ import {
     IonNote,
     IonModal
 } from '@ionic/vue'
-import { personCircle, searchCircle, wifi, search, close, refreshOutline, menuOutline, listCircle,arrowBackOutline } from 'ionicons/icons'
+import { personCircle, searchCircle, wifi, search, close, refreshOutline, menuOutline, listCircle, arrowBackOutline } from 'ionicons/icons'
 import { useStore } from 'vuex'
 import { onMounted, reactive, computed } from 'vue'
 import { ref } from 'vue'
@@ -148,15 +89,15 @@ const modal = ref();
 onMounted(async () => {
     getPickupHistory()
     getPickupOrder()
-    console.error("datas",pickups)
+    console.error("datas", pickups)
 })
 
 const pickups = computed(() => {
-  return store.getters['pickup/get']('pickupsList') as IPickupItem
+    return store.getters['pickup/get']('pickupsList') as IPickupItem
 });
 
 const pickupsHistory = computed(() => {
-  return store.getters['pickup/get']('historyList') as IPickupItem || {}
+    return store.getters['pickup/get']('historyList') as IPickupItem || {}
 });
 
 const isSearch = ref(false);
@@ -165,8 +106,8 @@ const inSearch = reactive({
 })
 const onSearchData = computed(() => {
     const pickupArray = Object.values(store.getters['pickup/get']('pickupsList') as IPickupItem || {})
-    return pickupArray.filter(data => 
-    data.POrderCustName.toLocaleLowerCase().includes(searchData.value.toLowerCase())
+    return pickupArray.filter(data =>
+        data.POrderCustName.toLocaleLowerCase().includes(searchData.value.toLowerCase())
     )
 })
 
@@ -174,7 +115,7 @@ const cancel = () => modal.value.$el.dismiss();
 
 const openHistory = () => {
     modal.value.$el.present()
-    console.debug('History',modal.value.$el)
+    console.debug('History', modal.value.$el)
 }
 
 const onClickRefresh = () => {
@@ -183,7 +124,7 @@ const onClickRefresh = () => {
     getPickupOrder()
     setTimeout(() => {
         refreshIcon!.classList.remove('spin');
-    }, 1000); 
+    }, 1000);
 }
 const getPickupOrder = async () => {
     const loading = await loadingController.create({
@@ -196,11 +137,11 @@ const getPickupOrder = async () => {
     if (result.error == false) {
         // pickups.value = result.data
         loading.dismiss();
-        // console.debug("After dispatch",pickups.value);
-    }else{
+        console.debug("After dispatch",result);
+    } else {
         // pickups.value = result.data
         loading.dismiss();
-        // console.debug("After dispatch",pickups.value);
+        console.debug("After dispatch",result);
     }
 };
 
@@ -214,12 +155,12 @@ const getPickupHistory = async () => {
         backdropDismiss: false,
     });
     loading.present();
-    const result = await store.dispatch('pickup/pickupHistory',data);
+    const result = await store.dispatch('pickup/pickupHistory', data);
     if (result.error == false) {
         // pickupsHistory.value = result.data
         loading.dismiss();
         // console.debug("pickupsHistory",pickupsHistory.value);
-    }else{
+    } else {
         // pickupsHistory.value = result.data
         loading.dismiss();
         // console.debug("pickupsHistory",pickupsHistory.value);
@@ -242,7 +183,7 @@ const setOpenSearch = (state: boolean) => {
 
 const seeDetail = (idPickup: any) => {
     localStorage.setItem("idPickup", idPickup)
-    console.debug('idPickup',idPickup)
+    console.debug('idPickup', idPickup)
     router.push("/select-room");
 }
 const seeDetailHistory = (idPickup: any) => {
@@ -254,5 +195,28 @@ onIonViewWillEnter(() => {
     // console.warn('datassssss',onSearchData)
     // console.warn('datassssss 22',pickups)
 });
+
+const calculateTotalPOrderWeight = (orders:any) => {
+    let totalWeight = 0;
+
+    // Iterate through each order
+    orders.forEach(order => {
+        // Convert POrderWeight to a number and add to totalWeight
+        totalWeight += parseFloat(order.POrderWeight);
+    });
+
+    return totalWeight;
+}
+
+const toPodReq = () => {
+    localStorage.setItem('segment-pod','request')
+    router.push("/pod");
+}
+
+const toPodHist = () => {
+    localStorage.setItem('segment-pod','history')
+    router.push("/pod");
+}
+
 
 </script>
