@@ -2,9 +2,9 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-buttons class="color-whites" slot="start">
+        <!-- <ion-buttons class="color-whites" slot="start">
           <ion-back-button default-href="/tabs/tab1"></ion-back-button>
-        </ion-buttons>
+        </ion-buttons> -->
         <ion-title class="font-white">With Courier</ion-title>
       </ion-toolbar>
     </ion-header>

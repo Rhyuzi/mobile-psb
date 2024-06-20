@@ -122,8 +122,13 @@ const modal = ref();
 const selectedSegment = ref('request');
 
 onMounted(async () => {
-    getPickupHistory()
-    getPickupOrder()
+    if (pickups.value.length == 0) {
+        getPickupOrder()
+    }
+
+    if (pickupsHistory.value.length == 0) {
+        getPickupHistory()
+    }
     if (localStorage.getItem('segment-pod')) {
         if (localStorage.getItem('segment-pod') == 'history') {
             selectedSegment.value = 'history'

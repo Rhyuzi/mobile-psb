@@ -1,6 +1,7 @@
 import sha256 from 'crypto-js/sha256'
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
 import { sortObject } from '@/utils/object'
+import config from './config'
 
 type ObjectWithAccessToken = { accessToken?: string } & Record<string, string>
 type HttpMethod = 'get' | 'post'
@@ -34,14 +35,12 @@ class ConfApiHelper {
 
     async sendApi<T = any>(endpoint: string, method: HttpMethod, data?: any): Promise<T> {
         const API_URI = `https://pandusiwibandung.co.id/${endpoint}`
-        // const API_URI = `http://localhost/${endpoint}`
-
-        // if (method === 'post') return await axios.post(API_URI, daata)
-        // else return await axios.get(API_URI)
-
         const requestConfig: AxiosRequestConfig = {
             url: API_URI,
             method,
+            headers: {
+                'api-key': config.API_KEY
+            }
         }
 
         if (method === 'post') requestConfig.data = data

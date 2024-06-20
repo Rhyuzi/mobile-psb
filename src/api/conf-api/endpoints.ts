@@ -2,20 +2,20 @@
 
 
 // ACCOUNT RELATED INTERFACE
-const ACCOUNT_LOGIN = 'siap/mobile_psb/android_login.php' // method post
-const PICKUP_DATA = 'siap/mobile_psb/android_getpickuporder.php' // method post
-const DETAIL_PICKUP_DATA = 'siap/mobile_psb/android_detailpickup.php' // method post
-const UPDATE_STATUS_PICKUP = 'siap/mobile_psb/android_updatestatuskurir.php' // method post
-const PICKUP_HISTORY = 'siap/mobile_psb/android_pickuphistory.php'
-const GET_CITY = 'siap/mobile_psb/android_getcity.php'
-const GET_AWB = 'siap/mobile_psb/android_getawb.php'
-const ADD_TEMP = 'siap/mobile_psb/android_addtemp.php'
-const SAVE_ARRIVED = 'siap/mobile_psb/android_savearrived.php'
-const GENERATE_COUNTER = 'siap/mobile_psb/counter_api.php'
-const SAVE_WITH_COURIER = 'siap/mobile_psb/android_savewithcourier.php'
-const CITY_ORIG = 'siap/mobile_psb/android_gettujuan.php'
-const ADD_SHIPMENT = 'siap/mobile_psb/android_addshipment.php'
-const PICKUP_CHECKPOINT = 'siap/mobile_psb/android_pickupcheckpoint.php'
+const ACCOUNT_LOGIN = 'api/auth/login.php' // method post
+const PICKUP_DATA = 'api/pickup/getpickuporder.php' // method post
+const DETAIL_PICKUP_DATA = 'api/pickup/detailpickup.php' // method post
+const UPDATE_STATUS_PICKUP = 'api/pickup/updatestatuskurir.php' // method post
+const PICKUP_HISTORY = 'api/pickup/pickuphistory.php'
+const GET_CITY = 'api/master/getcity.php'
+const GET_AWB = 'api/pickup/getawb.php'
+const ADD_TEMP = 'api/temporary/addtemp.php'
+const SAVE_ARRIVED = 'api/arrive/savearrived.php'
+const GENERATE_COUNTER = 'api/temporary/counter_api.php'
+const SAVE_WITH_COURIER = 'api/wc/savewithcourier.php'
+const CITY_ORIG = 'api/master/gettujuan.php'
+const ADD_SHIPMENT = 'api/shipment/addshipment.php'
+const PICKUP_CHECKPOINT = 'api/pickup/pickupcheckpoint.php'
 
 // const ACCOUNT_LOGIN = 'siapx/mobile_psb/android_login.php' // method post
 // const PICKUP_DATA = 'siapx/mobile_psb/android_getpickuporder.php' // method post

@@ -10,112 +10,40 @@
     </ion-header>
 
     <ion-content>
-      <!-- <ion-label class="font-black">Order</ion-label> -->
-
-      <ion-card-content v-if="pickups?.POrderStatus == '3' || history?.POrderStatus == '3'">
-        <ion-list class="bg-aquamarine">
-          <div class="content-furniture">
-            <!-- <div class="display-flex">
-              <ion-label class="cust-name font-monoscope">Nama Customer</ion-label>
-            </div>
-            
-            <div class="display-flex font-black">
-              <p> {{ pickups?.POrderCustName }}</p>
-            </div> -->
-            <h2 class="font-black">Pesanan sudah terambil</h2>
-          </div>
-        </ion-list>
-      </ion-card-content>
-
-      <ion-card-content>
-        <ion-list class="fur-el">
-          <div class="content-furniture">
-            <div class="display-flex">
-              <ion-label class="cust-name font-monoscope">Nama Customer</ion-label>
-              <!-- <ion-icon class="ic-chev-detail-black float-right-flex font-black"
-                :icon="chevronDown"
-                slot="end"></ion-icon> -->
-            </div>
-            
-            <div class="display-flex font-black">
-              <p> {{ pickups?.POrderCustName || history?.POrderCustName }}</p>
-            </div>
-          </div>
-        </ion-list>
-      </ion-card-content>
-      <ion-card-content class="color-white">
-        <ion-list class="fur-el2">
-          <div class="content-furniture">
-            <div class="display-flex">
-              <ion-label size="large" class="font-monoscope">Detail Data</ion-label>
-              <!-- <ion-icon class="ic-chev-detail float-right-flex"
-                :icon="chevronDown"
-                slot="end"></ion-icon> -->
-            </div>
-            
-            <div class="display-flex">
-              <p>{{ pickups?.POrderIsi || history?.POrderIsi }}, {{ pickups?.POrderCustAddr || history?.POrderCustAddr }}</p>           
-            </div>
-          <br>
-            <div class="display-flex">
-              <ion-label class="font-cont-detail">Tanggal dibuat</ion-label>
-              <p class="custom-ellipsis float-right-flex">{{ pickups?.POrderDate || history?.POrderDate }}</p>
-            </div>
-            <div class="display-flex">
-              <ion-label class="font-cont-detail">Nama Pengirim</ion-label>
-              <p class="custom-ellipsis float-right-flex">{{ pickups?.POrderDEO || history?.POrderDEO }}</p>
-            </div>
-            <div class="display-flex">
-              <ion-label class="font-cont-detail">Nama Customer</ion-label>
-              <p class="custom-ellipsis float-right-flex">{{ pickups?.POrderCustName || history?.POrderCustName   }}</p>
-            </div>
-            <div class="display-flex">
-              <ion-label class="font-cont-detail">Nama Pembuat</ion-label>
-              <p class="custom-ellipsis float-right-flex">{{ pickups?.POrderCSO ? pickups?.POrderCSO : '-' || history?.POrderCSO ? history?.POrderCSO : '-'   }}</p>
-            </div>            
-          </div>
-        </ion-list>
-      </ion-card-content>
-
-      <ion-card-content>
-        <ion-list class="fur-el">
-          <div class="content-furniture">
-            <div class="display-flex">
-              <ion-label size="large" class="cust-name font-monoscope">Detail Barang</ion-label>
-              <!-- <ion-icon class="ic-chev-detail-black float-right-flex font-black"
-                :icon="chevronDown"
-                slot="end"></ion-icon> -->
-            </div>
-            
-            <div class="display-flex font-black">
-              <!-- <p> {{ pickups?.POrderMemo ? pickups?.POrderMemo : 'Tidak ada memo'   }}</p> -->
-              <p>{{ pickups?.POrderIsi || history?.POrderIsi }}</p>
-            </div>
-
-            <div class="display-flex">
-              <!-- <div class="desc-detail font-black flex-item">
-                <h3 class="font-skyblue">ISI</h3>
-                <p>{{ pickups?.POrderIsi }}</p>
-            </div> -->
-
-            <div class="desc-detail font-black flex-item">
-              <h3 class="font-skyblue">QTY</h3>
-              <p>{{ pickups?.POrderQty || history?.POrderQty }}</p>
-            </div>
-            
-            <div class="desc-detail font-black flex-item">
-              <h3 class="font-skyblue">Berat</h3>
-              <p>{{ pickups?.POrderWeight || history?.POrderWeight }}</p>
-            </div>
-            </div>
-            
-
-           
-
-          </div>
-        </ion-list>
-      </ion-card-content>
-
+      <ion-list lines="none">
+        <ion-item :button="true">
+          <ion-label><strong>Customer</strong></ion-label>
+          <ion-label>{{ pickups?.POrderCustName || history?.POrderCustName }}</ion-label>
+        </ion-item>
+        <ion-item :button="true">
+          <ion-label><strong>Nama Pengirim</strong></ion-label>
+          <ion-label>{{ pickups?.POrderDEO || history?.POrderDEO }}</ion-label>
+        </ion-item>
+        <ion-item :button="true">
+          <ion-label><strong>Alamat Customer</strong></ion-label>
+          <ion-label>{{ pickups?.POrderCustAddr || history?.POrderCustAddr }}</ion-label>
+        </ion-item>
+        <ion-item :button="true">
+          <ion-label><strong>No Telp Cust</strong></ion-label>
+          <ion-label>{{ pickups?.CustTelp || history?.CustTelp }}</ion-label>
+        </ion-item>
+        <ion-item :button="true">
+          <ion-label><strong>Tanggal</strong></ion-label>
+          <ion-label>{{ pickups?.POrderDate || history?.POrderDate }}</ion-label>
+        </ion-item>
+        <ion-item :button="true">
+          <ion-label><strong>Isi</strong></ion-label>
+          <ion-label>{{ pickups?.POrderIsi || history?.POrderIsi }}</ion-label>
+        </ion-item>
+        <ion-item :button="true">
+          <ion-label><strong>Qty</strong></ion-label>
+          <ion-label>{{ pickups?.POrderQty || history?.POrderQty }}</ion-label>
+        </ion-item>
+        <ion-item :button="true">
+          <ion-label><strong>Berat</strong></ion-label>
+          <ion-label>{{ pickups?.POrderWeight || history?.POrderWeight }}</ion-label>
+        </ion-item>
+      </ion-list>
       <div class="display-flex btn-bottom">
 
         <div v-if="pickups?.POrderStatus == '1'" class="desc-detail font-black flex-item">

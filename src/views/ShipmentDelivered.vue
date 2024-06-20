@@ -597,17 +597,9 @@ const rules = computed(() => {
     },
     status: {
       required: helpers.withMessage("Status harus diisi", required),
-      maxlength: helpers.withMessage(
-        "Username tidak boleh lebih dari 64 karakter",
-        maxLength(64)
-      ),
     },
-    awb: {
-      required: helpers.withMessage("AWB harus diisi", required),
-      maxlength: helpers.withMessage(
-        "Username tidak boleh lebih dari 64 karakter",
-        maxLength(64)
-      ),
+    lokasiditerima: {
+      required: helpers.withMessage("Lokasi diterima harus diisi", required),
     },
   };
 });
@@ -640,6 +632,20 @@ const getCity = async () => {
 };
 
 const submitForm = async () => {
+  v$.value.$validate();
+   if (v$.value.$error) {
+    const inputs = formAF.value?.querySelectorAll("input");
+    inputs?.forEach((input) => input.focus());
+    if (state.status == '') {
+      errMessage.value = "Status harus diisi";
+      setOpen(true);
+    }
+    if (state.lokasiditerima == '') {
+      errMessage.value = "Lokasi Diterima harus diisi";
+      setOpen(true);
+    }
+    return;
+  }
   const loading = await loadingController.create({
         message: "Loading...",
         animated: true,
@@ -675,6 +681,12 @@ const submitForm = async () => {
     state.status= ""
     state.ketpenerima= ""
     state.fileImg= ""
+    fileImgOri.value=""
+    signatureOri.value=""
+    fileImg.value=""
+    signatureImg.value =""
+    photo.value=""
+    isSignature.value = false
     errMessage.value = res.message;
     setOpen(true);
     loading.dismiss();
