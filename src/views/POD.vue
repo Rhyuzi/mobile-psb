@@ -12,21 +12,21 @@
                     slot="end"></ion-icon>
                 <ion-icon @click="onClickSearch" class="ic-toolbar" :icon="inSearch.icon" slot="end"></ion-icon>
             </ion-toolbar>
-            <ion-searchbar v-if="isSearch" placeholder="Search Data ..." v-model="searchData"></ion-searchbar>
+            <ion-searchbar class="bg-menu-bar" v-if="isSearch" placeholder="Search Data ..." v-model="searchData"></ion-searchbar>
             <ion-segment value="default" class="segment-main">
-                <ion-segment-button @click="selectedSegment = 'request'" value="request" class="color-white"
-                    :class="{ 'segment-button-checked': selectedSegment == 'request' }">
+                <ion-segment-button @click="state.selectedSegment = 'request'" value="request" class="color-white"
+                    :class="{ 'segment-button-checked': state.selectedSegment == 'request' }">
                     <ion-label>Request</ion-label>
                 </ion-segment-button>
-                <ion-segment-button @click="selectedSegment = 'history'" value="history" class="color-white"
-                    :class="{ 'segment-button-checked': selectedSegment == 'history' }">
+                <ion-segment-button @click="state.selectedSegment = 'history'" value="history" class="color-white"
+                    :class="{ 'segment-button-checked': state.selectedSegment == 'history' }">
                     <ion-label>History</ion-label>
                 </ion-segment-button>
             </ion-segment>
         </ion-header>
         <ion-content :fullscreen="true">
-            <div v-if="selectedSegment == 'history'">
-                <div class="item-pick" v-for="pickup in pickupsHistory" :key="pickup.POrderNo">
+            <div v-if="state.selectedSegment == 'history'">
+                <div class="item-pick" v-for="pickup in onSearchDataHistory" :key="pickup.POrderNo">
                     <ion-card-content @click="seeDetail(pickup.POrderID)">
                         <ion-list>
                             <div class="display-flex">
@@ -52,7 +52,7 @@
                 </div>
             </div>
 
-            <div v-if="selectedSegment == 'request'">
+            <div v-if="state.selectedSegment == 'request'">
                 <div class="item-pick" v-for="pickup in onSearchData" :key="pickup.POrderNo">
                     <ion-card-content @click="seeDetail(pickup.POrderID)">
                         <ion-list>
@@ -102,7 +102,10 @@ import {
     IonPopover,
     IonNote,
     IonModal,
-    IonBackButton
+    IonBackButton,
+    IonSegment,
+    IonSegmentButton,
+    IonButtons
 } from '@ionic/vue'
 import { personCircle, searchCircle, wifi, search, close, refreshOutline, menuOutline, listCircle, arrowBackOutline } from 'ionicons/icons'
 import { useStore } from 'vuex'
@@ -116,10 +119,14 @@ const ionRouter = useIonRouter()
 
 // const pickups = ref<IPickupItem[]>([])
 // const pickupsHistory = ref<IPickupItem[]>([])
+const state = reactive({
+    selectedSegment: 'request', // Mulai dengan request sebagai default
+
+});
 const searchData = ref("")
 const dataUser = JSON.parse(localStorage.user)
 const modal = ref();
-const selectedSegment = ref('request');
+// const selectedSegment = ref('request');
 
 onMounted(async () => {
     if (pickups.value.length == 0) {
@@ -131,9 +138,9 @@ onMounted(async () => {
     }
     if (localStorage.getItem('segment-pod')) {
         if (localStorage.getItem('segment-pod') == 'history') {
-            selectedSegment.value = 'history'
+            state.selectedSegment = 'history'
         } else {
-            selectedSegment.value = 'request'
+            state.selectedSegment = 'request'
         }
     }
 })
@@ -152,6 +159,13 @@ const inSearch = reactive({
 })
 const onSearchData = computed(() => {
     const pickupArray = Object.values(store.getters['pickup/get']('pickupsList') as IPickupItem || {})
+    return pickupArray.filter(data =>
+        data.POrderCustName.toLocaleLowerCase().includes(searchData.value.toLowerCase())
+    )
+})
+
+const onSearchDataHistory = computed(() => {
+    const pickupArray = Object.values(store.getters['pickup/get']('historyList') as IPickupItem || {})
     return pickupArray.filter(data =>
         data.POrderCustName.toLocaleLowerCase().includes(searchData.value.toLowerCase())
     )

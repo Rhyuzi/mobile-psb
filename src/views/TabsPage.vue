@@ -83,7 +83,23 @@
 </template>
 
 <script setup lang="ts">
-import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage, IonRouterOutlet, menuController } from '@ionic/vue';
+import {
+  IonTabBar,
+  IonTabButton, 
+  IonTabs, 
+  IonLabel, 
+  IonIcon, 
+  IonPage, 
+  IonRouterOutlet, 
+  menuController, 
+  IonMenu,
+  IonHeader,
+  IonToolbar,
+  IonItem,
+  IonList,
+  IonTitle,
+  IonContent
+} from '@ionic/vue';
 import { homeOutline, personCircleOutline, ellipsisVertical, menuOutline, personCircle, exitOutline, cubeOutline } from 'ionicons/icons';
 import router from "@/router";
 
@@ -137,6 +153,7 @@ const logout = () => {
   background: #073C7A;
   cursor: pointer;
 }
+
 ion-item.hover-menu-item:hover {
   background-color: #073C7A;
   cursor: pointer;

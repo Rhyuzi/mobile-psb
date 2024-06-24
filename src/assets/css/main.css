@@ -427,6 +427,7 @@ ion-list {
 .disp-flex {
   display: flex;
   flex-wrap: wrap;
+  
 }
 
 .border-6 {
@@ -519,4 +520,7 @@ ion-list {
 .hover-menu-item:hover {
   background-color: #073C7A;
   cursor: pointer;
+}
+.bg-menu-bar {
+  background: var(--ion-tab-bar-background);
 }
