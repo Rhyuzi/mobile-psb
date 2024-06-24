@@ -360,8 +360,9 @@ const scanBarcode = async () => {
   isScan.value = true
   const result = await BarcodeScanner.startScan()
   if (result.hasContent) {
-    console.error(result.content); // log the raw scanned content
-    state.awb = result.content
+    // console.error(result.content); // log the raw scanned content
+    const updatedAwb = state.awb ? `${state.awb},${result.content}` : `${result.content}`;
+    state.awb = updatedAwb
     isScan.value = false
     document.querySelector('body')!.classList.remove('scanner-active')
     document.querySelector('#frame-scanner')!.classList.remove('frame-scanner')
