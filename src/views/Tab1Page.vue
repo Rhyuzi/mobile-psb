@@ -25,7 +25,7 @@
                 </div>
                 <div class="content-pickup">
                     <div class="display-fl align-center">
-                        <p>PENJEMPUTAN (Pick-Up)</p>
+                        <p>PENGANTARAN (Delivery)</p>
                         <p class="margin-left-auto label-kg">(0 kg)</p>
                     </div>
                     <div class="display-fl align-center">
@@ -36,7 +36,7 @@
 
                 <div class="content-pickup">
                     <div class="display-fl align-center">
-                        <p>PENGANTARAN (Delivery)</p>
+                        <p>PENJEMPUTAN (Pick-Up)</p>
                         <p class="margin-left-auto label-kg">({{ calculateTotalPOrderWeight(pickups)+calculateTotalPOrderWeight(pickupsHistory) }} kg)</p>
                     </div>
                     <div class="display-fl align-center">
@@ -202,9 +202,9 @@ const calculateTotalPOrderWeight = (orders:any) => {
     // Iterate through each order
     orders.forEach(order => {
         // Convert POrderWeight to a number and add to totalWeight
+        if (!order.POrderWeight) return
         totalWeight += parseFloat(order.POrderWeight);
     });
-
     return totalWeight;
 }
 

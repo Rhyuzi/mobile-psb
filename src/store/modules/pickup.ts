@@ -64,7 +64,7 @@ export default {
                 if (res.error === false) {
                     commit("SET", ["pickupsList", res.data]);
                 }
-                console.debug("data pickup", res);
+                // console.debug("data pickup", res);
                 return res;
             } catch (error) {
                 console.error("Error fetching pickup data:", error);
@@ -104,7 +104,7 @@ export default {
                 const res = await updateStatus(payload);
                 if (res.error == false) {
                     if (payload.setujui) {
-                        console.debug('disetujui')
+                        // console.debug('disetujui')
                         commit("UPDATE_STATUS_SETUJUI", ["pickupsList", payload.pickup_id]);
                         return res
                     }
@@ -123,7 +123,7 @@ export default {
                 const res = await getPickupHistory(payload);
                 if (res.error === false) {
                     commit("SET", ["historyList", res.data]);
-                    console.error("EhistoryListdata:",  res.data);
+                    // console.error("EhistoryListdata:",  res.data);
                 }
                 return res;
             } catch (error) {

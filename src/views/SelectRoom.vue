@@ -47,7 +47,7 @@
       <div class="display-flex btn-bottom">
 
         <div v-if="pickups?.POrderStatus == '1'" class="desc-detail font-black flex-item">
-          <ion-button color="success" @click="updateSetujui">Setuju</ion-button>
+          <ion-button color="success" @click="updateSetujui">Terima</ion-button>
         </div>
 
         <div v-if="pickups?.POrderStatus == '2'" class="desc-detail font-black flex-item">
@@ -55,7 +55,7 @@
         </div>
 
         <div class="desc-detail font-black flex-item">
-          <ion-button v-if="history?.POrderStatus != '3'" color="danger" id="present-alert">Batalkan</ion-button>
+          <ion-button v-if="history?.POrderStatus != '3' && pickups?.POrderStatus == '1'" color="danger" id="present-alert">Tolak</ion-button>
         </div>
 
       </div>
