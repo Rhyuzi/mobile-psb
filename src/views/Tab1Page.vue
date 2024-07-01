@@ -27,7 +27,7 @@
                     <div class="display-fl align-center">
                         <p>PENGANTARAN (Delivery)</p>
                         <p class="margin-left-auto label-kg">({{
-                            calculateTotalDeliveryWeight(countDeliveryReq) +calculateTotalDeliveryWeight(countDeliveryHist) }} kg)</p>
+                            calculateTotalDeliveryWeight(countDeliveryReq) }} kg)</p>
                     </div>
                     <div class="display-fl align-center">
                         <button @click="toDelReq" class="btn-pickup">{{ countDeliveryReq.length }}</button>
@@ -39,7 +39,7 @@
                     <div class="display-fl align-center">
                         <p>PENJEMPUTAN (Pick-Up)</p>
                         <p class="margin-left-auto label-kg">({{
-                            calculateTotalPOrderWeight(pickups) +calculateTotalPOrderWeight(pickupsHistory) }} kg)</p>
+                            calculateTotalPOrderWeight(pickups) }} kg)</p>
                     </div>
                     <div class="display-fl align-center">
                         <button @click="toPodReq" class="btn-pickup"
@@ -95,6 +95,7 @@ onMounted(async () => {
     getPickupHistory()
     getPickupOrder()
     getDelivery()
+    getDeliveryHistory()
     console.error("datas", pickups)
 })
 
@@ -115,12 +116,6 @@ const isSearch = ref(false);
 const inSearch = reactive({
     icon: search,
 })
-const onSearchData = computed(() => {
-    const pickupArray = Object.values(store.getters['pickup/get']('pickupsList') as IPickupItem || {})
-    return pickupArray.filter(data =>
-        data.POrderCustName.toLocaleLowerCase().includes(searchData.value.toLowerCase())
-    )
-})
 
 const countDeliveryReq = computed(() => {
     const deliveryArr = Object.values(store.getters['arrive/get']('delivery') as IDeliveryOrder || {})
@@ -134,14 +129,8 @@ const countDeliveryReq = computed(() => {
 })
 
 const countDeliveryHist = computed(() => {
-    const deliveryArr = Object.values(store.getters['arrive/get']('delivery') as IDeliveryOrder || {})
-    const now = new Date();
-
-    const year = now.getFullYear();
-    const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-indexed
-    const day = now.getDate().toString().padStart(2, '0');
-    const formattedDate = `${year}-${month}-${day}`;
-    return deliveryArr.filter(data => data.dlvdate != formattedDate)
+    return store.getters['arrive/get']('deliveryHist') as IDeliveryOrder || {}
+   
 })
 
 const cancel = () => modal.value.$el.dismiss();
@@ -171,6 +160,28 @@ const getDelivery = async () => {
     });
     loading.present();
     const result = await store.dispatch('arrive/getDelivery', data);
+    if (result.error == false) {
+        // pickupsHistory.value = result.data
+        loading.dismiss();
+        // console.debug("pickupsHistory",pickupsHistory.value);
+    } else {
+        // pickupsHistory.value = result.data
+        loading.dismiss();
+        // console.debug("pickupsHistory",pickupsHistory.value);
+    }
+};
+
+const getDeliveryHistory = async () => {
+    const data = {
+        courier_id: localStorage.pegawai_id
+    };
+    const loading = await loadingController.create({
+        message: "Loading...",
+        animated: true,
+        backdropDismiss: false,
+    });
+    loading.present();
+    const result = await store.dispatch('arrive/getDeliveryHistory', data);
     if (result.error == false) {
         // pickupsHistory.value = result.data
         loading.dismiss();

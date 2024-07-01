@@ -51,6 +51,9 @@ export async function saveWCourier(payload: any): Promise<any> {
 export async function getDelivery(payload: any): Promise<any> {
     return await request(endPoints.GET_DELIVERY, 'post', payload)
 }
+export async function getDeliveryHistory(payload: any): Promise<any> {
+    return await request(endPoints.GET_DELIVERY_HISTORY, 'post', payload)
+}
 
 export async function geneCounter(payload: any): Promise<any> {
     return await request(endPoints.GENERATE_COUNTER, 'post', payload)

@@ -151,6 +151,9 @@ onMounted(async () => {
     if (delivery.value.length == 0) {
         getDelivery()
     }
+    if (deliveryHist.value.length == 0) {
+        getDeliveryHistory()
+    }
     if (localStorage.getItem('segment-delivery')) {
         if (localStorage.getItem('segment-delivery') == 'history') {
             state.selectedSegment = 'history'
@@ -163,6 +166,10 @@ onMounted(async () => {
 
 const delivery = computed(() => {
     return store.getters['arrive/get']('delivery') as IDeliveryOrder
+});
+
+const deliveryHist = computed(() => {
+    return store.getters['arrive/get']('deliveryHist') as IDeliveryOrder
 });
 
 
@@ -190,7 +197,7 @@ const filteredHistoryDelivery = computed(() => {
     const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-indexed
     const day = now.getDate().toString().padStart(2, '0');
     const formattedDate = `${year}-${month}-${day}`;
-    const pickupArray = Object.values(store.getters['arrive/get']('delivery') as IDeliveryOrder || {})
+    const pickupArray = Object.values(store.getters['arrive/get']('deliveryHist') as IDeliveryOrder || {})
     return pickupArray.filter(data => data.dlvdate != formattedDate &&
         data.connotecustname.toLocaleLowerCase().includes(searchData.value.toLowerCase())
     )
@@ -234,6 +241,28 @@ const getDelivery = async () => {
     }
 };
 
+const getDeliveryHistory = async () => {
+    const data = {
+        courier_id: localStorage.pegawai_id
+    };
+    const loading = await loadingController.create({
+        message: "Loading...",
+        animated: true,
+        backdropDismiss: false,
+    });
+    loading.present();
+    const result = await store.dispatch('arrive/getDeliveryHistory', data);
+    if (result.error == false) {
+        // pickupsHistory.value = result.data
+        loading.dismiss();
+        // console.debug("pickupsHistory",pickupsHistory.value);
+    } else {
+        // pickupsHistory.value = result.data
+        loading.dismiss();
+        // console.debug("pickupsHistory",pickupsHistory.value);
+    }
+};
+
 const onClickSearch = () => {
     if (!isSearch.value) {
         inSearch.icon = close;
@@ -255,7 +284,7 @@ const seeDetail = (idPickup: any) => {
 }
 
 const totalPages = computed(() => {
-    const totalItems = Object.values(store.getters['arrive/get']('delivery')).length;
+    const totalItems = Object.values(store.getters['arrive/get']('deliveryHist')).length;
     return Math.ceil(totalItems / itemsPerPage);
 });
 
