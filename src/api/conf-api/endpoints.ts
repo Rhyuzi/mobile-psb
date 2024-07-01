@@ -13,6 +13,7 @@ const ADD_TEMP = 'api/temporary/addtemp.php'
 const SAVE_ARRIVED = 'api/arrive/savearrived.php'
 const GENERATE_COUNTER = 'api/temporary/counter_api.php'
 const SAVE_WITH_COURIER = 'api/wc/savewithcourier.php'
+const GET_DELIVERY = 'api/wc/getdelivery.php'
 const CITY_ORIG = 'api/master/gettujuan.php'
 const ADD_SHIPMENT = 'api/shipment/addshipment.php'
 const PICKUP_CHECKPOINT = 'api/pickup/pickupcheckpoint.php'
@@ -44,6 +45,7 @@ export {
     SAVE_ARRIVED,
     GENERATE_COUNTER,
     SAVE_WITH_COURIER,
+    GET_DELIVERY,
     CITY_ORIG,
     ADD_SHIPMENT,
     PICKUP_CHECKPOINT
@@ -61,6 +63,7 @@ export default {
     SAVE_ARRIVED,
     GENERATE_COUNTER,
     SAVE_WITH_COURIER,
+    GET_DELIVERY,
     CITY_ORIG,
     ADD_SHIPMENT,
     PICKUP_CHECKPOINT

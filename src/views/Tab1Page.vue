@@ -26,22 +26,27 @@
                 <div class="content-pickup">
                     <div class="display-fl align-center">
                         <p>PENGANTARAN (Delivery)</p>
-                        <p class="margin-left-auto label-kg">(0 kg)</p>
+                        <p class="margin-left-auto label-kg">({{
+                            calculateTotalDeliveryWeight(countDeliveryReq) +calculateTotalDeliveryWeight(countDeliveryHist) }} kg)</p>
                     </div>
                     <div class="display-fl align-center">
-                        <button class="btn-pickup">0</button>
-                        <button class="btn-pickup margin-left-auto">0</button>
+                        <button @click="toDelReq" class="btn-pickup">{{ countDeliveryReq.length }}</button>
+                        <button @click="toDelHist" class="btn-pickup margin-left-auto"> {{ countDeliveryHist.length }}</button>
                     </div>
                 </div>
 
                 <div class="content-pickup">
                     <div class="display-fl align-center">
                         <p>PENJEMPUTAN (Pick-Up)</p>
-                        <p class="margin-left-auto label-kg">({{ calculateTotalPOrderWeight(pickups)+calculateTotalPOrderWeight(pickupsHistory) }} kg)</p>
+                        <p class="margin-left-auto label-kg">({{
+                            calculateTotalPOrderWeight(pickups) +calculateTotalPOrderWeight(pickupsHistory) }} kg)</p>
                     </div>
                     <div class="display-fl align-center">
-                        <button @click="toPodReq" class="btn-pickup" :class="{ 'background-blue color-white': pickups.length !== 0 }">{{ pickups.length }}</button>
-                        <button @click="toPodHist" class="btn-pickup margin-left-auto">{{ pickupsHistory.length }}</button>
+                        <button @click="toPodReq" class="btn-pickup"
+                            :class="{ 'background-blue color-white': pickups.length !== 0 }">{{ pickups.length
+                            }}</button>
+                        <button @click="toPodHist" class="btn-pickup margin-left-auto">{{ pickupsHistory.length
+                            }}</button>
                     </div>
                 </div>
             </ion-content>
@@ -74,7 +79,7 @@ import { personCircle, searchCircle, wifi, search, close, refreshOutline, menuOu
 import { useStore } from 'vuex'
 import { onMounted, reactive, computed } from 'vue'
 import { ref } from 'vue'
-import { IPickupItem } from '../api/conf-api/interface/dashboard'
+import { IPickupItem, IDeliveryOrder } from '../api/conf-api/interface/dashboard'
 import router from "@/router";
 const store = useStore()
 const ionRouter = useIonRouter()
@@ -89,12 +94,18 @@ const modal = ref();
 onMounted(async () => {
     getPickupHistory()
     getPickupOrder()
+    getDelivery()
     console.error("datas", pickups)
 })
 
 const pickups = computed(() => {
     return store.getters['pickup/get']('pickupsList') as IPickupItem
 });
+
+const delivery = computed(() => {
+    return store.getters['arrive/get']('delivery') as IDeliveryOrder
+});
+
 
 const pickupsHistory = computed(() => {
     return store.getters['pickup/get']('historyList') as IPickupItem || {}
@@ -109,6 +120,28 @@ const onSearchData = computed(() => {
     return pickupArray.filter(data =>
         data.POrderCustName.toLocaleLowerCase().includes(searchData.value.toLowerCase())
     )
+})
+
+const countDeliveryReq = computed(() => {
+    const deliveryArr = Object.values(store.getters['arrive/get']('delivery') as IDeliveryOrder || {})
+    const now = new Date();
+
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-indexed
+    const day = now.getDate().toString().padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+    return deliveryArr.filter(data => data.dlvdate == formattedDate)
+})
+
+const countDeliveryHist = computed(() => {
+    const deliveryArr = Object.values(store.getters['arrive/get']('delivery') as IDeliveryOrder || {})
+    const now = new Date();
+
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-indexed
+    const day = now.getDate().toString().padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+    return deliveryArr.filter(data => data.dlvdate != formattedDate)
 })
 
 const cancel = () => modal.value.$el.dismiss();
@@ -126,6 +159,29 @@ const onClickRefresh = () => {
         refreshIcon!.classList.remove('spin');
     }, 1000);
 }
+
+const getDelivery = async () => {
+    const data = {
+        courier_id: localStorage.pegawai_id
+    };
+    const loading = await loadingController.create({
+        message: "Loading...",
+        animated: true,
+        backdropDismiss: false,
+    });
+    loading.present();
+    const result = await store.dispatch('arrive/getDelivery', data);
+    if (result.error == false) {
+        // pickupsHistory.value = result.data
+        loading.dismiss();
+        // console.debug("pickupsHistory",pickupsHistory.value);
+    } else {
+        // pickupsHistory.value = result.data
+        loading.dismiss();
+        // console.debug("pickupsHistory",pickupsHistory.value);
+    }
+};
+
 const getPickupOrder = async () => {
     const loading = await loadingController.create({
         message: "Loading...",
@@ -137,11 +193,11 @@ const getPickupOrder = async () => {
     if (result.error == false) {
         // pickups.value = result.data
         loading.dismiss();
-        console.debug("After dispatch",result);
+        console.debug("After dispatch", result);
     } else {
         // pickups.value = result.data
         loading.dismiss();
-        console.debug("After dispatch",result);
+        console.debug("After dispatch", result);
     }
 };
 
@@ -196,7 +252,7 @@ onIonViewWillEnter(() => {
     // console.warn('datassssss 22',pickups)
 });
 
-const calculateTotalPOrderWeight = (orders:any) => {
+const calculateTotalPOrderWeight = (orders: any) => {
     let totalWeight = 0;
 
     // Iterate through each order
@@ -208,14 +264,36 @@ const calculateTotalPOrderWeight = (orders:any) => {
     return totalWeight;
 }
 
+const calculateTotalDeliveryWeight = (orders: any) => {
+    let totalWeight = 0;
+
+    // Iterate through each order
+    orders.forEach(order => {
+        // Convert POrderWeight to a number and add to totalWeight
+        if (!order.connoteweight) return
+        totalWeight += parseFloat(order.connoteweight);
+    });
+    return totalWeight;
+}
+
 const toPodReq = () => {
-    localStorage.setItem('segment-pod','request')
+    localStorage.setItem('segment-pod', 'request')
     router.push("/pod");
 }
 
 const toPodHist = () => {
-    localStorage.setItem('segment-pod','history')
+    localStorage.setItem('segment-pod', 'history')
     router.push("/pod");
+}
+
+const toDelReq = () => {
+    localStorage.setItem('segment-delivery', 'request')
+    router.push("/delivery");
+}
+
+const toDelHist = () => {
+    localStorage.setItem('segment-delivery', 'history')
+    router.push("/delivery");
 }
 
 

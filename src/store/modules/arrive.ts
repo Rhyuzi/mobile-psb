@@ -1,5 +1,5 @@
 /* eslint-disable no-async-promise-executor */
-import {  getPickup,getDetailPickup,updateStatus,getPickupHistory, getCity, getByAWB, addTemp, saveArrived, geneCounter, saveWCourier, cityOrig, addShipment } from '@/api/conf-api/api'
+import { getPickup, getDetailPickup, updateStatus, getPickupHistory, getDelivery, getCity, getByAWB, addTemp, saveArrived, geneCounter, saveWCourier, cityOrig, addShipment } from '@/api/conf-api/api'
 import md5 from 'crypto-js/md5'
 import { State } from 'ionicons/dist/types/stencil-public-runtime'
 import { Commit } from 'vuex'
@@ -10,11 +10,13 @@ interface State {
     [key: string]: any
     awb: any[]
     city: any[]
+    delivery: any[]
 }
 
 const initialState: State = {
     awb: [],
-    city: []
+    city: [],
+    delivery: []
 }
 
 export default {
@@ -48,7 +50,7 @@ export default {
                 throw error; // Re-throw the error to be handled by the caller if needed
             }
         },
-        
+
         async genCounter({ commit }: { commit: Commit }, payload: any) {
             try {
                 const res = await geneCounter(payload);
@@ -80,7 +82,19 @@ export default {
                 throw error; // Re-throw the error to be handled by the caller if needed
             }
         },
-        
+
+        async getDelivery({ commit }: { commit: Commit }, payload: any) {
+            try {
+                const res = await getDelivery(payload);
+                console.debug("data delivery", res);
+                commit("SET", ["delivery", res.data]);
+                return res;
+            } catch (error) {
+                console.error("Error fetching pickup data:", error);
+                throw error; // Re-throw the error to be handled by the caller if needed
+            }
+        },
+
         async resetArrive({ commit }: { commit: Commit }) {
             commit('RESET_AWB');
         },
@@ -101,17 +115,17 @@ export default {
                 throw error; // Re-throw the error to be handled by the caller if needed
             }
         },
-        async getAWB({ commit }: { commit: Commit }, {param, data} : { param: any; data: any }) {
-            
+        async getAWB({ commit }: { commit: Commit }, { param, data }: { param: any; data: any }) {
+
             // try {
-                const res = await getByAWB(param);
-                if (res.error == false) {
-                    const resp = res.data
-                    resp['DataFromInput'] = data
-                    commit('PUSH', ['awb', resp])
-                    console.error('data awbb',resp)
-                }
-                return res;
+            const res = await getByAWB(param);
+            if (res.error == false) {
+                const resp = res.data
+                resp['DataFromInput'] = data
+                commit('PUSH', ['awb', resp])
+                console.error('data awbb', resp)
+            }
+            return res;
             // } catch (error) {
             //     console.error("Error fetching pickup data:", error);
             //     throw error; // Re-throw the error to be handled by the caller if needed
@@ -136,7 +150,7 @@ export default {
         },
 
         async addShipment({ commit }: { commit: Commit }, payload: any) {
-            
+
             try {
                 const res = await addShipment(payload);
                 console.warn("add shipmenrttt", res);
@@ -146,6 +160,6 @@ export default {
                 throw error; // Re-throw the error to be handled by the caller if needed
             }
         },
-        
+
     }
 }

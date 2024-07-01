@@ -391,6 +391,10 @@ const canvasRef = ref(null);
 
 onMounted( async () => {
   getCity()
+  if (localStorage.getItem('shipment-delivered')) {
+    state.nomor = localStorage.getItem('shipment-delivered')
+  }
+  console.debug('shipment-delivered', localStorage.getItem('shipment-delivered'))
 });
 
 const onSignature = ()=> {

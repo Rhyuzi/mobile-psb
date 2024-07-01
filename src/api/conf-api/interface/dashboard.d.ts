@@ -58,3 +58,19 @@ length: any;
   ip_address: string;
   POrderID: string;
 }
+
+
+export interface IDeliveryOrder {
+  length: any;
+  connotecustname: string;
+  connotedate: string;
+  connoteno: string;
+  connoteweight: string;
+  destination: string;
+  dlvcarier: string;
+  dlvdate: string;
+  dlvno: string;
+  origin: string;
+  pegawainama: string;
+  servicename: string;
+}

@@ -69,6 +69,13 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
+    path: "/delivery",
+    component: () => import("@/views/DeliveryOrder.vue"),
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
     path: "/shipment-delivered/section-city",
     component: () => import("@/views/components/SectionCity.vue"),
     meta: {
