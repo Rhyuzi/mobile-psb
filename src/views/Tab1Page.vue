@@ -141,10 +141,18 @@ onMounted(async () => {
 
 const handleRefresh =  async(event: CustomEvent) => {
     loaded.value = false
-    await getPickupHistory()
-    await getPickupOrder()
-    await getDelivery()
-    await getDeliveryHistory()
+    if (pickups.value.length == 0) {
+        await getPickupOrder()
+    }
+    if (pickupsHistory.value.length == 0) {
+        await getPickupHistory()
+    }
+    if (countDeliveryReq.value.length == 0) {
+        await getDelivery()
+    }
+    if (countDeliveryHist.value.length == 0) {
+        await getDeliveryHistory()
+    }
     loaded.value = true
     event.target?.complete();
 };

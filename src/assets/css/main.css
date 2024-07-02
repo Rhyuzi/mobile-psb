@@ -183,7 +183,7 @@ ion-card {
 
 .item-pick {
   /* background-color: #bfbebe; */
-  background-color: aliceblue;
+  background: lightgray;
 }
 
 ion-searchbar {
@@ -523,4 +523,15 @@ ion-list {
 }
 .bg-menu-bar {
   background: var(--ion-tab-bar-background);
+}
+.centered-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Adjust height as needed */
+}
+
+.centered-text > div {
+  text-align: center;
+  font-size: 24px; /* Adjust font size as needed */
 }

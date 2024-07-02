@@ -54,6 +54,9 @@
             </div>
 
             <div v-if="state.selectedSegment == 'request'" class="main-request">
+                <div v-if="onSearchData.length == 0" class="centered-text">
+                    <div>Tidak Ada Data POD</div>
+                </div>
                 <div class="item-pick" v-for="pickup in onSearchData" :key="pickup.POrderNo">
                     <ion-card-content @click="seeDetail(pickup.POrderID)">
                         <ion-list>
@@ -290,6 +293,7 @@ onIonViewWillEnter(() => {
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
     z-index: 1000;
 }
+
 .main-history {
     margin-bottom: 100px;
 }

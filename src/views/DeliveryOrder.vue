@@ -54,6 +54,9 @@
             </div>
 
             <div v-if="state.selectedSegment == 'request'" class="main-request">
+                <div v-if="onSearchData.length == 0" class="centered-text">
+                    <div>Tidak Ada Data Delivery</div>
+                </div>
                 <div class="item-pick" v-for="del in onSearchData" :key="del">
                     <ion-card-content @click="toShipment(del.connoteno)">
                         <ion-list>
