@@ -108,7 +108,10 @@ import {
     IonLabel,
     onIonViewWillEnter,
     IonRefresher,
-    IonRefresherContent
+    IonRefresherContent,
+    IonListHeader,
+    IonSkeletonText,
+    IonThumbnail
 } from '@ionic/vue'
 import { personCircle, searchCircle, wifi, search, close, refreshOutline, menuOutline, listCircle, arrowBackOutline } from 'ionicons/icons'
 import { useStore } from 'vuex'
