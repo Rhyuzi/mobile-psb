@@ -247,7 +247,7 @@ const getDelivery = async () => {
 const getDeliveryHistory = async () => {
     const data = {
         courier_id: localStorage.pegawai_id
-    };
+    }; 
     const loading = await loadingController.create({
         message: "Loading...",
         animated: true,
@@ -312,6 +312,13 @@ const toShipment = (connoteno: any) => {
 }
 
 .main-history {
-    margin-bottom: 100px;
+    margin-bottom: 62px;
+    background: lightgray;
+}
+
+.main-request {
+    overflow-x: hidden;
+    height: 100%;
+    background: lightgray;
 }
 </style>

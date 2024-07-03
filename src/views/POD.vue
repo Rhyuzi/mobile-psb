@@ -295,6 +295,13 @@ onIonViewWillEnter(() => {
 }
 
 .main-history {
-    margin-bottom: 100px;
+    margin-bottom: 62px;
+    background: lightgray;
+}
+
+.main-request {
+    overflow-x: hidden;
+    height: 100%;
+    background: lightgray;
 }
 </style>

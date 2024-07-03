@@ -131,16 +131,6 @@ const dataUser = JSON.parse(localStorage.user)
 const modal = ref();
 
 onMounted(async () => {
-    await getPickupHistory()
-    await getPickupOrder()
-    await getDelivery()
-    await getDeliveryHistory()
-    loaded.value = true
-    console.error("datas", pickups)
-})
-
-const handleRefresh =  async(event: CustomEvent) => {
-    loaded.value = false
     if (pickups.value.length == 0) {
         await getPickupOrder()
     }
@@ -153,6 +143,16 @@ const handleRefresh =  async(event: CustomEvent) => {
     if (countDeliveryHist.value.length == 0) {
         await getDeliveryHistory()
     }
+    loaded.value = true
+    console.error("datas", pickups)
+})
+
+const handleRefresh =  async(event: CustomEvent) => {
+    loaded.value = false
+    await getPickupHistory()
+    await getPickupOrder()
+    await getDelivery()
+    await getDeliveryHistory()
     loaded.value = true
     event.target?.complete();
 };
@@ -323,7 +323,7 @@ onIonViewWillEnter(() => {
 
 const calculateTotalPOrderWeight = (orders: any) => {
     let totalWeight = 0;
-
+    console.error('order', orders)
     // Iterate through each order
     orders.forEach(order => {
         // Convert POrderWeight to a number and add to totalWeight
