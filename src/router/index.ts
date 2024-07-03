@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
 import TabsPage from "../views/TabsPage.vue";
+import TabsPageMarketing from "../views/marketing/TabsPageM.vue";
 import store from "@/store";
 
 const routes: Array<RouteRecordRaw> = [
@@ -41,6 +42,23 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
+    path: "/marketing/tabs/",
+    component: TabsPageMarketing,
+    children: [
+      {
+        path: "",
+        redirect: "marketing/tabs/tab1",
+      },
+      {
+        path: "tab1",
+        component: () => import("@/views/marketing/Tab1PageM.vue"),
+      },
+    ],
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
     path: "/arrived-hub",
     component: () => import("@/views/ArrivedHub.vue"),
     meta: {
@@ -50,6 +68,13 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/POD",
     component: () => import("@/views/POD.vue"),
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: "/marketing/prospek",
+    component: () => import("@/views/marketing/ProspekData.vue"),
     meta: {
       requireAuth: true,
     },
@@ -85,6 +110,13 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/select-room",
     component: () => import("@/views/SelectRoom.vue"),
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: "/marketing/detail-prospek",
+    component: () => import("@/views/marketing/DetailProspek.vue"),
     meta: {
       requireAuth: true,
     },

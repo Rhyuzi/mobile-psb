@@ -427,7 +427,7 @@ ion-list {
 .disp-flex {
   display: flex;
   flex-wrap: wrap;
-  
+
 }
 
 .border-6 {
@@ -502,36 +502,55 @@ ion-list {
   color: #073C7A;
   border: 2px solid #333;
 }
+
 .label-kg {
   font-size: 10px;
 }
+
 .background-blue {
   background: #073C7A;
 }
+
 .color-white {
   color: #f2f4f5;
 }
+
 .segment-main {
   background: #3385c4;
 }
+
 .menu-more {
   color: black !important;
 }
+
 .hover-menu-item:hover {
   background-color: #073C7A;
   cursor: pointer;
 }
+
 .bg-menu-bar {
   background: var(--ion-tab-bar-background);
 }
+
 .centered-text {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Adjust height as needed */
+  height: 100vh;
+  /* Adjust height as needed */
 }
 
-.centered-text > div {
+.centered-text>div {
   text-align: center;
-  font-size: 24px; /* Adjust font size as needed */
+  font-size: 24px;
+  /* Adjust font size as needed */
+}
+
+.font-size-14 {
+  font-size: 14px;
+}
+
+.wrap-text {
+  white-space: normal !important;
+  word-break: break-word !important;
 }

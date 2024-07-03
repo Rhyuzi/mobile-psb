@@ -1,6 +1,6 @@
 'use strict'
 
-
+const MAIN_URL_MARKETING_PROSPEK = 'https://pandusiwibandung.co.id/mpsb/data/images/prospek/'
 // ACCOUNT RELATED INTERFACE
 const ACCOUNT_LOGIN = 'api/auth/login.php' // method post
 const PICKUP_DATA = 'api/pickup/getpickuporder.php' // method post
@@ -18,6 +18,10 @@ const GET_DELIVERY_HISTORY = 'api/wc/getdeliveryhistory.php'
 const CITY_ORIG = 'api/master/gettujuan.php'
 const ADD_SHIPMENT = 'api/shipment/addshipment.php'
 const PICKUP_CHECKPOINT = 'api/pickup/pickupcheckpoint.php'
+
+//marketing
+const GET_PROSPEK = 'api/marketing/getprospek.php'
+const GET_KUNJUNGAN = 'api/marketing/getkunjungan.php'
 
 // const ACCOUNT_LOGIN = 'siapx/mobile_psb/android_login.php' // method post
 // const PICKUP_DATA = 'siapx/mobile_psb/android_getpickuporder.php' // method post
@@ -50,7 +54,10 @@ export {
     GET_DELIVERY_HISTORY,
     CITY_ORIG,
     ADD_SHIPMENT,
-    PICKUP_CHECKPOINT
+    PICKUP_CHECKPOINT,
+    GET_PROSPEK,
+    GET_KUNJUNGAN,
+    MAIN_URL_MARKETING_PROSPEK
 }
 
 export default {
@@ -69,5 +76,8 @@ export default {
     GET_DELIVERY_HISTORY,
     CITY_ORIG,
     ADD_SHIPMENT,
-    PICKUP_CHECKPOINT
+    PICKUP_CHECKPOINT,
+    GET_PROSPEK,
+    GET_KUNJUNGAN,
+    MAIN_URL_MARKETING_PROSPEK
 }

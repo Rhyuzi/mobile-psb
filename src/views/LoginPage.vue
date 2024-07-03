@@ -167,7 +167,7 @@ const login = async () => {
     // const result = await store.dispatch('arrive/cityOrig');
     // if (result.error == false) {
       loading.dismiss();
-      router.push("/tabs/");
+      // router.push("/tabs/");
     // }
   } else {
     errMessage.value = res.message;

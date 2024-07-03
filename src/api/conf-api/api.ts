@@ -69,3 +69,11 @@ export async function addShipment(payload: any): Promise<any> {
 export async function getCheckPoint(payload: any): Promise<any> {
     return await request(endPoints.PICKUP_CHECKPOINT, 'post', payload)
 }
+
+// marketing
+export async function getProspek(payload: any): Promise<any> {
+    return await request(endPoints.GET_PROSPEK, 'post', payload)
+}
+export async function getKunjungan(payload: any): Promise<any> {
+    return await request(endPoints.GET_KUNJUNGAN, 'post', payload)
+}

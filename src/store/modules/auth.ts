@@ -1,11 +1,12 @@
 /* eslint-disable no-async-promise-executor */
-import {  signIn } from '@/api/conf-api/api'
+import { signIn } from '@/api/conf-api/api'
 import {
     IAccountResponse,
     ISignInParams,
     ISignInResponse
 } from '@/api/conf-api/interface/account'
 import { ICommonResponse } from '@/api/conf-api/interface/common'
+import router from '@/router'
 import md5 from 'crypto-js/md5'
 import { State } from 'ionicons/dist/types/stencil-public-runtime'
 import { Commit } from 'vuex'
@@ -59,7 +60,7 @@ export default {
     },
     actions: {
         async signIn({ commit }: { commit: Commit }, payload: ISignInParams) {
-         
+
             const res = await signIn(payload)
             if (res.error == false) {
                 localStorage.setItem('UserCityDefault', res.data.UserCityDefault)
@@ -73,11 +74,23 @@ export default {
                 localStorage.setItem('admin', JSON.stringify(res.data))
                 localStorage.setItem('user', JSON.stringify(res.data))
                 commit('SET', ['isAuth', true])
+                const role = res.data.group_id
 
+                switch (role) {
+                    case '6':
+                        router.push("/marketing/tabs/");
+                        break;
+                    case '7':
+                        router.push("/tabs/");
+                        break;
+
+                    default:
+                        break;
+                }
             }
-            console.debug('sign in',res)
+            console.debug('sign in', res)
             return res
         },
-        
+
     }
 }
