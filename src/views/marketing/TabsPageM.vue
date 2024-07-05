@@ -57,12 +57,12 @@
           <ion-label>Home</ion-label>
         </ion-tab-button>
 
-        <ion-tab-button tab="tab3" href="/tabs/tab3">
+        <ion-tab-button tab="tab3" href="/marketing/tabs/tab2">
           <ion-icon class="btn-tabs" aria-hidden="true" :icon="person" />
           <ion-label>Prospek</ion-label>
         </ion-tab-button>
 
-        <ion-tab-button tab="tab4" href="/tabs/tab4">
+        <ion-tab-button tab="tab4" href="/marketing/tabs/tab3">
           <ion-icon class="btn-tabs" aria-hidden="true" :icon="personOutline" />
           <ion-label>Kunjungan Sales</ion-label>
         </ion-tab-button>
