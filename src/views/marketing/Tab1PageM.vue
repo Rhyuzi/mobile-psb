@@ -76,8 +76,8 @@
                             <!-- <button @click="toPodReq" class="btn-pickup"
                                 :class="{ 'background-blue color-white': pickups.length !== 0 }">{{ pickups.length
                                 }}</button> -->
-                            <button @click="toProspek" class="btn-pickup">{{ countKunjunganNow }}</button>
-                            <button @click="toProspekHist" class="btn-pickup margin-left-auto">{{ countKunjunganOld
+                            <button @click="toKunjReq" class="btn-pickup">{{ countKunjunganNow }}</button>
+                            <button @click="toKunjHist" class="btn-pickup margin-left-auto">{{ countKunjunganOld
                                 }}</button>
                         </div>
                     </div>
@@ -257,14 +257,14 @@ const toProspekHist = () => {
     router.push("/marketing/prospek");
 }
 
-const toDelReq = () => {
-    localStorage.setItem('segment-delivery', 'request')
-    router.push("/delivery");
+const toKunjReq = () => {
+    localStorage.setItem('segment-kunjungan', 'request')
+    router.push("/marketing/kunjungan");
 }
 
-const toDelHist = () => {
-    localStorage.setItem('segment-delivery', 'history')
-    router.push("/delivery");
+const toKunjHist = () => {
+    localStorage.setItem('segment-kunjungan', 'history')
+    router.push("/marketing/kunjungan");
 }
 
 

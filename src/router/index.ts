@@ -74,7 +74,14 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/marketing/prospek",
-    component: () => import("@/views/marketing/ProspekData.vue"),
+    component: () => import("@/views/marketing/prospek/ProspekData.vue"),
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: "/marketing/kunjungan",
+    component: () => import("@/views/marketing/kunjungan/KunjunganData.vue"),
     meta: {
       requireAuth: true,
     },
@@ -116,7 +123,14 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/marketing/detail-prospek",
-    component: () => import("@/views/marketing/DetailProspek.vue"),
+    component: () => import("@/views/marketing/prospek/DetailProspek.vue"),
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: "/marketing/detail-kunjungan",
+    component: () => import("@/views/marketing/kunjungan/DetailKunjungan.vue"),
     meta: {
       requireAuth: true,
     },
@@ -140,17 +154,15 @@ router.beforeEach((to, from, next) => {
     store.commit("auth/SET", ["isAuth", true]);
   }
 
-  // if (localStorage.getItem("account") && localStorage.getItem("email")) {
-  //   const account = localStorage.getItem("account");
-  //   const email = localStorage.getItem("email");
-
-  //   store.commit("auth/SET", ["account", account]);
-  //   store.commit("auth/SET", ["email", email]);
-  // }
-
   const auth = store.getters["auth/get"]('isAuth');
+  const group = localStorage.getItem("group_id");
+
   if ((to.path === "/login" || to.path === "/") && auth) {
-    next({ path: "/tabs/" });
+    if (group === '6') {
+      next({ path: "/marketing/tabs/" });
+    } else {
+      next({ path: "/tabs/" });
+    }
   } else if (to.matched.some((record) => record.meta.requireAuth)) {
     if (!auth) {
       next({

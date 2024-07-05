@@ -6,7 +6,7 @@
                     <ion-back-button default-href="/marketing/tabs"></ion-back-button>
                 </ion-buttons>
                 <div class="title-header">
-                    <h3 class="font-monospace font-white">Data Prospek</h3>
+                    <h3 class="font-monospace font-white">Data Kunjungan</h3>
                 </div>
                 <ion-icon @click="onClickRefresh" class="ic-toolbar refresh-icon" :icon="refreshOutline"
                     slot="end"></ion-icon>
@@ -27,26 +27,26 @@
         </ion-header>
         <ion-content :fullscreen="true">
             <div v-if="state.selectedSegment == 'history'" class="main-history">
-                <div class="item-pick" v-for="pros in paginatedHistoryData" :key="pros.GuestID">
-                    <ion-card-content @click="seeDetail(pros.GuestID)">
+                <div class="item-pick" v-for="pros in paginatedHistoryData" :key="pros.VisitID">
+                    <ion-card-content @click="seeDetail(pros.VisitID)">
                         <ion-list>
                             <div class="display-flex">
                                 <ion-icon class="img-ic" :icon="personCircle" color="secondary" slot="start"></ion-icon>
-                                <ion-label class="cust-name font-monospace">{{ pros.GuestName }}</ion-label>
-                                <p class="font-black float-right-flex font-none">{{ pros.GuestCreate }}</p>
+                                <ion-label class="cust-name font-monospace">{{ pros.VisitGuestName }}</ion-label>
+                                <p class="font-black float-right-flex font-none">{{ pros.VisitCreateTime }}</p>
                             </div>
                             <div class="display-flex">
-                                <p class="font-black pick-addr custom-ellipsis font-bold">{{ pros.GuestAddr
+                                <p class="font-black pick-addr custom-ellipsis font-bold">{{ pros.VisitAreaKirim
                                     }}</p>
                             </div>
-                            <p class="font-black margin-memo font-bold">{{ pros.GuestContactTelp1 }}</p>
+                            <p class="font-black margin-memo font-bold">{{ pros.VisitMemo }}</p>
 
 
                             <div class="display-flex">
-                                <p class="font-black cont-qty">{{ pros.GuestContactName1 }} qty</p>
+                                <p class="font-black cont-qty">{{ pros.VisitStatusName }}</p>
                                 <ion-icon class="img-ic float-right-flex" :icon="personCircle" color="secondary"
                                     slot="start"></ion-icon>
-                                <ion-label class="cust-name font-monospace">{{ pros.GuestResponBy }}</ion-label>
+                                <ion-label class="cust-name font-monospace">{{ pros.VisitCreateBy }}</ion-label>
                             </div>
                         </ion-list>
                     </ion-card-content>
@@ -55,28 +55,28 @@
 
             <div v-if="state.selectedSegment == 'request'" class="main-request">
                 <div v-if="onSearchData.length == 0" class="centered-text">
-                    <div>Tidak Ada Data Prospek Hari Ini</div>
+                    <div class="font-size-14">Tidak Ada Data Kunjungan Hari Ini</div>
                 </div>
-                <div class="item-pick" v-for="pros in onSearchData" :key="pros.GuestID">
-                    <ion-card-content @click="seeDetail(pros.GuestID)">
+                <div class="item-pick" v-for="pros in onSearchData" :key="pros.VisitID">
+                    <ion-card-content @click="seeDetail(pros.VisitID)">
                         <ion-list>
                             <div class="display-flex">
                                 <ion-icon class="img-ic" :icon="personCircle" color="secondary" slot="start"></ion-icon>
-                                <ion-label class="cust-name font-monospace">{{ pros.GuestName }}</ion-label>
-                                <p class="font-black float-right-flex font-none">{{ pros.GuestCreate }}</p>
+                                <ion-label class="cust-name font-monospace">{{ pros.VisitGuestName }}</ion-label>
+                                <p class="font-black float-right-flex font-none">{{ pros.VisitCreateTime }}</p>
                             </div>
                             <div class="display-flex">
-                                <p class="font-black pick-addr custom-ellipsis font-bold">{{ pros.GuestAddr
+                                <p class="font-black pick-addr custom-ellipsis font-bold">{{ pros.VisitAreaKirim
                                     }}</p>
                             </div>
-                            <p class="font-black margin-memo font-bold">{{ pros.GuestContactTelp1 }}</p>
+                            <p class="font-black margin-memo font-bold">{{ pros.VisitMemo }}</p>
 
 
                             <div class="display-flex">
-                                <p class="font-black cont-qty">{{ pros.GuestContactName1 }} qty</p>
+                                <p class="font-black cont-qty">{{ pros.VisitStatusName }}</p>
                                 <ion-icon class="img-ic float-right-flex" :icon="personCircle" color="secondary"
                                     slot="start"></ion-icon>
-                                <ion-label class="cust-name font-monospace">{{ pros.GuestResponBy }}</ion-label>
+                                <ion-label class="cust-name font-monospace">{{ pros.VisitCreateBy }}</ion-label>
                             </div>
                         </ion-list>
                     </ion-card-content>
@@ -120,7 +120,7 @@ import { personCircle, searchCircle, wifi, search, close, refreshOutline, menuOu
 import { useStore } from 'vuex'
 import { onMounted, reactive, computed } from 'vue'
 import { ref } from 'vue'
-import { IPickupItem, GuestbookData } from '../../api/conf-api/interface/dashboard'
+import { VisitData } from '../../../api/conf-api/interface/dashboard'
 import router from "@/router";
 const store = useStore()
 const ionRouter = useIonRouter()
@@ -146,12 +146,12 @@ const nextPage = () => {
     }
 };
 onMounted(async () => {
-    if (prospek.value.length == 0) {
-        getProspek()
+    if (kunjungan.value.length == 0) {
+        getKunjungan()
     }
 
-    if (localStorage.getItem('segment-prospek')) {
-        if (localStorage.getItem('segment-prospek') == 'history') {
+    if (localStorage.getItem('segment-kunjungan')) {
+        if (localStorage.getItem('segment-kunjungan') == 'history') {
             state.selectedSegment = 'history'
         } else {
             state.selectedSegment = 'request'
@@ -160,8 +160,8 @@ onMounted(async () => {
     console.error('totalPages', totalPages.value)
 })
 
-const prospek = computed(() => {
-    return store.getters['marketing/get']('prospekList') as GuestbookData
+const kunjungan = computed(() => {
+    return store.getters['marketing/get']('kunjunganList') as VisitData
 });
 
 const isSearch = ref(false);
@@ -169,7 +169,7 @@ const inSearch = reactive({
     icon: search,
 })
 const onSearchData = computed(() => {
-    const pickupArray = Object.values(store.getters['marketing/get']('prospekList') as GuestbookData || {})
+    const pickupArray = Object.values(store.getters['marketing/get']('kunjunganList') as VisitData || {})
     const now = new Date();
 
     // Format current date to match with GuestCreate date format
@@ -178,15 +178,15 @@ const onSearchData = computed(() => {
     const day = now.getDate().toString().padStart(2, '0');
     const formattedDate = `${year}-${month}-${day}`;
     return pickupArray.filter(data => {
-        const guestCreateDate = data.GuestCreate.split(' ')[0];
-        return guestCreateDate === formattedDate && data.GuestName.toLocaleLowerCase().includes(searchData.value.toLowerCase());
+        const guestCreateDate = data.VisitCreateTime.split(' ')[0];
+        return guestCreateDate === formattedDate && data.VisitGuestName.toLocaleLowerCase().includes(searchData.value.toLowerCase());
     })
 })
 
 const filteredHistoryData = computed(() => {
-    const pickupArray = Object.values(store.getters['marketing/get']('prospekList') as GuestbookData || {})
+    const pickupArray = Object.values(store.getters['marketing/get']('kunjunganList') as VisitData || {})
     return pickupArray.filter(data =>
-        data.GuestName.toLocaleLowerCase().includes(searchData.value.toLowerCase())
+        data.VisitGuestName.toLocaleLowerCase().includes(searchData.value.toLowerCase())
     )
 })
 
@@ -199,19 +199,19 @@ const paginatedHistoryData = computed(() => {
 const onClickRefresh = () => {
     const refreshIcon = document.querySelector('.refresh-icon');
     refreshIcon!.classList.add('spin');
-    getProspek()
+    getKunjungan()
     setTimeout(() => {
         refreshIcon!.classList.remove('spin');
     }, 1000);
 }
-const getProspek = async () => {
+const getKunjungan = async () => {
     const loading = await loadingController.create({
         message: "Loading...",
         animated: true,
         backdropDismiss: false,
     });
     loading.present();
-    const result = await store.dispatch('marketing/getProspekData');
+    const result = await store.dispatch('marketing/getKunjungan');
     if (result.error == false) {
         // pickups.value = result.data
         loading.dismiss();
@@ -222,7 +222,6 @@ const getProspek = async () => {
         console.debug("After dispatch", result);
     }
 };
-
 
 const onClickSearch = () => {
     if (!isSearch.value) {
@@ -239,13 +238,13 @@ const setOpenSearch = (state: boolean) => {
 };
 
 const totalPages = computed(() => {
-    const totalItems = Object.values(store.getters['marketing/get']('prospekList') as GuestbookData || []).length;
+    const totalItems = Object.values(store.getters['marketing/get']('kunjunganList') as VisitData || []).length;
     return Math.ceil(totalItems / itemsPerPage);
 });
 
-const seeDetail = (idProspek: any) => {
-    localStorage.setItem("idProspek", idProspek)
-    router.push("/marketing/detail-prospek");
+const seeDetail = (idKunjungan: any) => {
+    localStorage.setItem("idKunjungan", idKunjungan)
+    router.push("/marketing/detail-kunjungan");
 }
 
 onIonViewWillEnter(() => {

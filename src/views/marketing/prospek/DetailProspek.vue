@@ -70,15 +70,15 @@
                 <div style="margin-left: 20px;">
                     <ion-item :button="true">
                         <ion-label><strong>Express</strong></ion-label>
-                        <ion-label class="font-size-14">{{ prospek?.GuestPotency1 }}</ion-label>
+                        <ion-label class="font-size-14">{{ custom.convertToRP(prospek?.GuestPotency1) }}</ion-label>
                     </ion-item>
                     <ion-item :button="true">
                         <ion-label><strong>Cargo</strong></ion-label>
-                        <ion-label class="font-size-14">{{ prospek?.GuestPotency2 }}</ion-label>
+                        <ion-label class="font-size-14">{{ custom.convertToRP(prospek?.GuestPotency2) }}</ion-label>
                     </ion-item>
                     <ion-item :button="true">
                         <ion-label><strong>Trucking</strong></ion-label>
-                        <ion-label class="font-size-14">{{ prospek?.GuestPotency3 }}</ion-label>
+                        <ion-label class="font-size-14">{{ custom.convertToRP(prospek?.GuestPotency3) }}</ion-label>
                     </ion-item>
                 </div>
                 <ion-item :button="true">
@@ -143,9 +143,10 @@ import { useStore } from 'vuex'
 import { onMounted, computed } from 'vue'
 import { ref } from 'vue'
 import router from "@/router";
-import { GuestbookData } from '../../api/conf-api/interface/dashboard'
+import { GuestbookData } from '../../../api/conf-api/interface/dashboard'
 import { MAIN_URL_MARKETING_PROSPEK } from "@/api/conf-api/endpoints";
-
+import CustomTS from "@/custom/custom";
+const custom = new CustomTS()
 const store = useStore()
 onIonViewWillEnter(() => {
     // This function will be executed each time the view is about to enter
