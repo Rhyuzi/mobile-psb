@@ -40,6 +40,28 @@
         </ion-list>
 
         <ion-list lines="none" style="margin-top: 4px;">
+          <ion-item>
+            <ion-label>CHECK POINT</ion-label>
+          </ion-item>
+          <ion-item :button="true" @click="navigateToPOD()">
+            <ion-icon :icon="cubeOutline" class="menu-more" color="secondary" slot="start"></ion-icon>
+            <ion-label>POD</ion-label>
+          </ion-item>
+          <ion-item :button="true" @click="navigateToArrivedFacility()">
+            <ion-icon :icon="cubeOutline" class="menu-more" color="secondary" slot="start"></ion-icon>
+            <ion-label>Arrived Facility</ion-label>
+          </ion-item>
+          <ion-item :button="true" class="hover-menu-item" @click="navigateToWithCourier()">
+            <ion-icon :icon="cubeOutline" class="menu-more" color="secondary" slot="start"></ion-icon>
+            <ion-label>With Courier</ion-label>
+          </ion-item>
+          <ion-item :button="true" class="hover-menu-item" @click="navigateToShipmentDelivered()">
+            <ion-icon :icon="cubeOutline" class="menu-more" color="secondary" slot="start"></ion-icon>
+            <ion-label>Shipment Delivered</ion-label>
+          </ion-item>
+        </ion-list>
+
+        <ion-list lines="none" style="margin-top: 4px;">
           <ion-item :button="true" class="hover-menu-item" @click="logout()">
             <ion-icon :icon="exitOutline" class="menu-more" color="secondary" slot="start"></ion-icon>
             <ion-label>Logout</ion-label>
@@ -103,6 +125,8 @@ import {
 import { homeOutline, personCircleOutline, ellipsisVertical, menuOutline, personCircle, exitOutline, cubeOutline } from 'ionicons/icons';
 import router from "@/router";
 
+
+const group = localStorage.group_id
 const closeMenu = async () => {
   const menu = 'end';
   const isOpen = await menuController.isOpen(menu);

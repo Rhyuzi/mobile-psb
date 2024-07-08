@@ -19,23 +19,23 @@
 
         <ion-list lines="none" style="margin-top: 4px;">
           <ion-item>
-            <ion-label>CHECK POINT</ion-label>
+            <ion-label>Menu Utama</ion-label>
           </ion-item>
-          <ion-item :button="true" @click="navigateToPOD()">
-            <ion-icon :icon="cubeOutline" class="menu-more" color="secondary" slot="start"></ion-icon>
-            <ion-label>POD</ion-label>
+          <ion-item :button="true" @click="navigateToProspek()">
+            <ion-icon :icon="person" class="menu-more" color="secondary" slot="start"></ion-icon>
+            <ion-label>Prospek</ion-label>
           </ion-item>
-          <ion-item :button="true" @click="navigateToArrivedFacility()">
-            <ion-icon :icon="cubeOutline" class="menu-more" color="secondary" slot="start"></ion-icon>
-            <ion-label>Arrived Facility</ion-label>
+          <ion-item :button="true" class="hover-menu-item" @click="navigateToKunjungan()">
+            <ion-icon :icon="personOutline" class="menu-more" color="secondary" slot="start"></ion-icon>
+            <ion-label>Kunjungan Sales</ion-label>
           </ion-item>
-          <ion-item :button="true" class="hover-menu-item" @click="navigateToWithCourier()">
+          <ion-item :button="true" class="hover-menu-item" @click="navigateToDataProspek()">
             <ion-icon :icon="cubeOutline" class="menu-more" color="secondary" slot="start"></ion-icon>
-            <ion-label>With Courier</ion-label>
+            <ion-label>Data Prospek</ion-label>
           </ion-item>
-          <ion-item :button="true" class="hover-menu-item" @click="navigateToShipmentDelivered()">
+          <ion-item :button="true" class="hover-menu-item" @click="navigateToDataKunjungan()">
             <ion-icon :icon="cubeOutline" class="menu-more" color="secondary" slot="start"></ion-icon>
-            <ion-label>Shipment Delivered</ion-label>
+            <ion-label>Data Kunjungan</ion-label>
           </ion-item>
         </ion-list>
 
@@ -119,25 +119,26 @@ const navigateToProfile = () => {
   // Implement navigation to Profile page
 };
 
-const navigateToArrivedFacility = () => {
-  router.push("/tabs/tab3");
+const navigateToProspek = () => {
+  router.push("/marketing/tabs/tab2");
   closeMenu();
 };
 
-const navigateToWithCourier = () => {
-  router.push("/tabs/tab4");
+const navigateToKunjungan = () => {
+  router.push("/marketing/tabs/tab3");
   closeMenu();
 };
 
-const navigateToShipmentDelivered = () => {
-  router.push("/shipment-delivered");
+const navigateToDataProspek = () => {
+  router.push("/marketing/prospek");
   closeMenu();
 };
 
-const navigateToPOD = () => {
-  router.push("/pod");
+const navigateToDataKunjungan = () => {
+  router.push("/marketing/kunjungan");
   closeMenu();
 };
+
 
 const logout = () => {
   localStorage.clear()

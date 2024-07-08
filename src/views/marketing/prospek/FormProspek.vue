@@ -137,8 +137,7 @@
                                 ? v$.usiatagihan.$errors[0].$message.toString()
                                 : ''
                                 " @ion-blur="markTouched"></ion-input><br />
-                        <ion-input v-model="state.files" @change="handleFileChange" type="file" color="primary"
-                            accept="image/*"
+                        <ion-input @change="handleFileChange" type="file" color="primary" accept="image/*"
                             :class="v$.files.$error ? 'ion-invalid font-black' : 'ion-valid font-black'" :error-text="v$.files.$error
                                 ? v$.files.$errors[0].$message.toString()
                                 : ''
@@ -222,7 +221,7 @@ const state = reactive({
     namapickeu: "",
     telppickeu: "",
     usiatagihan: "",
-    files: null
+    files: null as File | null
 
 });
 const latitude = ref();
@@ -242,9 +241,9 @@ const setOpen = (state: boolean) => {
     }
 };
 
-const handleFileChange = (event: { target: { files: any; }; }) => {
-    console.error('event', event)
-    const files = event.target.files;
+const handleFileChange = (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    const files = target.files;
     if (files && files[0]) {
         state.files = files[0]; // Store the first selected file
     } else {
@@ -422,7 +421,7 @@ const submitForm = async () => {
     const formData = new FormData();
 
     // Append each field to the FormData object
-    formData.append('username', JSON.parse(localStorage.user).username);
+    formData.append('username', JSON.parse(localStorage.user).username.toUpperCase());
     formData.append('loc', localStorage.UserLocation);
     formData.append('name', state.nama);
     formData.append('telp', state.telp);
@@ -453,8 +452,8 @@ const submitForm = async () => {
 
     const save = await store.dispatch('marketing/saveProspek', formData);
     if (save.error == false) {
-        getProspek()
         clearFrom()
+        getProspek()
         loading.dismiss();
     } else {
         loading.dismiss();
@@ -473,26 +472,7 @@ const submitForm = async () => {
 }
 
 const clearFrom = () => {
-        state.nama = ''
-        state.alamat = ''
-        state.telp = ''
-        state.komoditi = ''
-        state.areakirim = ''
-        state.bgexp = ''
-        state.bgcar = ''
-        state.bgtruck = ''
-        state.ktexp = ''
-        state.ktcar = ''
-        state.kttruck = ''
-        state.areapickup = ''
-        state.namapicord = ''
-        state.telppicord = ''
-        state.namapickeu = ''
-        state.telppickeu = ''
-        state.usiatagihan = ''
-        state.files = null
-        latitude.value = ""
-        longitude.value = ""
+    location.reload()
 
 }
 
@@ -532,5 +512,11 @@ const getProspek = async () => {
     /* Red background color */
     --color: white;
     /* Text color */
+}
+
+.alert-radio-label {
+    font-size: 11px !important;
+    white-space: normal !important;
+    word-break: break-word !important;
 }
 </style>
