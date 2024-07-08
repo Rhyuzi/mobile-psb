@@ -22,6 +22,8 @@ const PICKUP_CHECKPOINT = 'api/pickup/pickupcheckpoint.php'
 //marketing
 const GET_PROSPEK = 'api/marketing/getprospek.php'
 const GET_KUNJUNGAN = 'api/marketing/getkunjungan.php'
+const GET_KOMODITI = "api/master/getkomoditi.php"
+const SAVE_PROSPEK = 'api/marketing/saveprospek.php'
 
 // const ACCOUNT_LOGIN = 'siapx/mobile_psb/android_login.php' // method post
 // const PICKUP_DATA = 'siapx/mobile_psb/android_getpickuporder.php' // method post
@@ -57,7 +59,9 @@ export {
     PICKUP_CHECKPOINT,
     GET_PROSPEK,
     GET_KUNJUNGAN,
-    MAIN_URL_MARKETING_PROSPEK
+    MAIN_URL_MARKETING_PROSPEK,
+    GET_KOMODITI,
+    SAVE_PROSPEK
 }
 
 export default {
@@ -79,5 +83,7 @@ export default {
     PICKUP_CHECKPOINT,
     GET_PROSPEK,
     GET_KUNJUNGAN,
-    MAIN_URL_MARKETING_PROSPEK
+    MAIN_URL_MARKETING_PROSPEK,
+    GET_KOMODITI,
+    SAVE_PROSPEK
 }

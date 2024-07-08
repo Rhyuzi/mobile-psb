@@ -119,9 +119,9 @@ export default {
             };
             try {
                 const res = await getCity(data);
-                // if (res.error === false) {
-                //     commit("SET", ["pickupsList", res.data]);
-                // }
+                if (res.error === false) {
+                    commit("SET", ["city", res.data]);
+                }
                 console.debug("data city", res.data);
                 return res;
             } catch (error) {

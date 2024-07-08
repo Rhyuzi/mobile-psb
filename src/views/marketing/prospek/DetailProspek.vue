@@ -111,7 +111,7 @@
                     <strong>Gambar</strong>
                 </ion-item>
                 <ion-item>
-                    <img :src="urlGambar(prospek?.GuestPicture1)"
+                    <img :src="prospek?.GuestPicture1"
                         alt="prospek-gambar">
                 </ion-item>
             </ion-list>

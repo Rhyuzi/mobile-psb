@@ -45,10 +45,11 @@
                                 ? v$.nama.$errors[0].$message.toString()
                                 : ''
                                 " @ion-blur="markTouched">
-                            <ion-select-option class="font-black" value="c.DefaultCityNo">PERCETAKAN</ion-select-option>
-                            <ion-select-option class="font-black" value="c.DefaultCityNo">PERCETAKAN</ion-select-option>
-                            <ion-select-option class="font-black" value="c.DefaultCityNo">PERCETAKAN</ion-select-option>
-                        </ion-select>
+                            <div v-for="k in komoditi" :key="k.id">
+                                <ion-select-option class="font-black" :value="k.id">{{ k.CB_Nama
+                                    }}</ion-select-option>
+                            </div>
+                        </ion-select><br>
 
                         <ion-input v-model="state.areakirim" color="primary" label="Area Kiriman"
                             label-placement="floating" fill="outline"
@@ -98,9 +99,10 @@
                                 ? v$.areapickup.$errors[0].$message.toString()
                                 : ''
                                 " @ion-blur="markTouched">
-                            <ion-select-option class="font-black" value="c.DefaultCityNo">PERCETAKAN</ion-select-option>
-                            <ion-select-option class="font-black" value="c.DefaultCityNo">PERCETAKAN</ion-select-option>
-                            <ion-select-option class="font-black" value="c.DefaultCityNo">PERCETAKAN</ion-select-option>
+                            <div v-for="c in citys" :key="c.LocationID">
+                                <ion-select-option class="font-black" :value="c.DefaultCityNo">{{ c.DefaultCityName
+                                    }}</ion-select-option>
+                            </div>
                         </ion-select><br />
                         <ion-label>PIC Order</ion-label>
                         <div class="display-flex">
@@ -133,6 +135,12 @@
                             :class="v$.usiatagihan.$error ? 'ion-invalid font-black' : 'ion-valid font-black'"
                             :error-text="v$.usiatagihan.$error
                                 ? v$.usiatagihan.$errors[0].$message.toString()
+                                : ''
+                                " @ion-blur="markTouched"></ion-input><br />
+                        <ion-input v-model="state.files" @change="handleFileChange" type="file" color="primary"
+                            accept="image/*"
+                            :class="v$.files.$error ? 'ion-invalid font-black' : 'ion-valid font-black'" :error-text="v$.files.$error
+                                ? v$.files.$errors[0].$message.toString()
                                 : ''
                                 " @ion-blur="markTouched"></ion-input><br />
                         <ion-button @click="getLocation">Get Location</ion-button>
@@ -171,7 +179,8 @@ import {
     IonSelectOption,
     IonToast,
     IonButtons,
-    IonBackButton
+    IonBackButton,
+    toastController
 } from "@ionic/vue";
 import { useStore } from "vuex";
 import { ref } from "vue";
@@ -180,7 +189,8 @@ import { reactive, computed } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { IArrivedItem, IConnoteAWB } from "@/api/conf-api/interface/arrived";
 import { required, maxLength, helpers, numeric } from "@vuelidate/validators";
-
+import router from "@/router";
+import { Geolocation } from "@capacitor/geolocation";
 
 
 const headers = ref([
@@ -211,7 +221,8 @@ const state = reactive({
     telppicord: "",
     namapickeu: "",
     telppickeu: "",
-    usiatagihan: ""
+    usiatagihan: "",
+    files: null
 
 });
 const latitude = ref();
@@ -219,7 +230,8 @@ const longitude = ref();
 const formAF = ref<HTMLFormElement | null>(null);
 
 onMounted(async () => {
-    getCity()
+    await getCity()
+    await getKomoditi()
     // state.tanggal = formatDate(new Date());
 });
 
@@ -230,25 +242,44 @@ const setOpen = (state: boolean) => {
     }
 };
 
-const getLocation = () => {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                latitude.value = position.coords.latitude;
-                longitude.value = position.coords.longitude;
-                console.log(`Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`);
-            },
-            (err) => {
-                console.error(`Error: ${err.message}`);
-            }
-        );
+const handleFileChange = (event: { target: { files: any; }; }) => {
+    console.error('event', event)
+    const files = event.target.files;
+    if (files && files[0]) {
+        state.files = files[0]; // Store the first selected file
     } else {
-        console.error('Geolocation is not supported by this browser.');
+        state.files = null;
     }
 };
 
-const dataAwb = computed(() => {
-    return store.getters['arrive/get']('awb') as IConnoteAWB
+const getLocation = async () => {
+    try {
+        const permissionStatus = await Geolocation.checkPermissions();
+
+        if (permissionStatus.location === 'denied') {
+            // Request permission if it's denied
+            const requestPermission = await Geolocation.requestPermissions();
+            if (requestPermission.location === 'denied') {
+                console.error('Geolocation permission denied.');
+                return;
+            }
+        }
+
+        const position = await Geolocation.getCurrentPosition();
+        latitude.value = position.coords.latitude;
+        longitude.value = position.coords.longitude;
+        console.log(`Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`);
+    } catch (err) {
+        console.error(`Error: ${err.message}`);
+    }
+};
+
+const citys = computed(() => {
+    return store.getters['arrive/get']('city')
+});
+
+const komoditi = computed(() => {
+    return store.getters['marketing/get']('komoditiLists')
 });
 
 const rules = computed(() => {
@@ -293,6 +324,9 @@ const rules = computed(() => {
         },
         usiatagihan: {
             numeric: helpers.withMessage("Harus angka", numeric),
+        },
+        files: {
+            required: helpers.withMessage("Gambar harus diisi", required),
         },
     };
 });
@@ -341,9 +375,26 @@ const getCity = async () => {
     }
 };
 
+const getKomoditi = async () => {
+    const loading = await loadingController.create({
+        message: "Loading...",
+        animated: true,
+        backdropDismiss: false,
+    });
+    loading.present();
+    const result = await store.dispatch('marketing/getKomoditi');
+    if (result.error == false) {
+        city.value = result.data
+        loading.dismiss();
+        console.debug("After dispatch", city.value);
+    } else {
+        city.value = result.data
+        loading.dismiss();
+        console.debug("After dispatch", city.value);
+    }
+};
+
 const submitForm = async () => {
-    // errMessage.value = "waoasaspjgapsgjoasp";
-    // setOpen(true);
     v$.value.$validate();
     if (v$.value.$error) {
         const inputs = formAF.value?.querySelectorAll("input");
@@ -351,43 +402,135 @@ const submitForm = async () => {
 
         return;
     }
+    if (latitude.value == undefined && longitude.value == undefined) {
+        const toast = await toastController.create({
+            message: 'Harap get lokasi terlebih dahulu',
+            duration: 1500,
+            position: "top",
+            cssClass: 'toast-error'
+        });
 
-    console.debug('Kisi kabeh', dataAwb)
-}
+        return await toast.present();
 
-const submitData = async () => {
-    const keys = Object.keys(dataAwb.value) as (keyof IConnoteAWB)[];
-
-
-    for (const key of keys) {
-        console.log(dataAwb.value[key]);
-        const datas = dataAwb.value[key]
-        const data = {
-            username: JSON.parse(localStorage.user).username,
-            cloc: JSON.parse(localStorage.user).UserLocation,
-            wctgl: datas.DataFromInput.tanggalInpt,
-            wcdesc: datas.DataFromInput.catatan,
-            wckurir: JSON.parse(localStorage.user).pegawai_id,
-            temp_key: datas.DataFromInput.temp_key,
-            nowc: await generateCounter()
-        }
-
-        const res = await store.dispatch('arrive/saveWCourier', data);
-        errMessage.value = res.message;
-        // if (!res.error){
-        // }
-        setOpen(true);
-        console.error('parsed asdta', data);
     }
-    store.dispatch('arrive/resetArrive')
+    const loading = await loadingController.create({
+        message: "Loading...",
+        animated: true,
+        backdropDismiss: false,
+    });
+    loading.present();
+    const formData = new FormData();
 
-    // console.debug('submit data', dataAwb.value);
-    // console.debug('submit data keys', keys);
+    // Append each field to the FormData object
+    formData.append('username', JSON.parse(localStorage.user).username);
+    formData.append('loc', localStorage.UserLocation);
+    formData.append('name', state.nama);
+    formData.append('telp', state.telp);
+    formData.append('addr', state.alamat);
+    formData.append('guestloc', state.areapickup);
+    formData.append('komoditi', state.komoditi);
+    formData.append('map-loc', `${latitude.value}, ${longitude.value}`);
+    formData.append('potency1', state.bgexp);
+    formData.append('potency2', state.bgcar);
+    formData.append('potency3', state.bgtruck);
+    formData.append('contactname1', state.namapicord);
+    formData.append('contactname2', state.namapickeu);
+    formData.append('contacttlp1', state.telppicord);
+    formData.append('contacttlp2', state.telppickeu);
+    formData.append('payperiode', state.usiatagihan);
+    formData.append('kompetitor1', state.ktexp);
+    formData.append('kompetitor2', state.ktcar);
+    formData.append('kompetitor3', state.kttruck);
+    formData.append('areakirim', state.areakirim);
+
+    // Append the file if it exists
+    if (state.files) {
+        formData.append('file-img', state.files);
+    }
+
+    formData.append('pegawai_id', localStorage.pegawai_id);
+
+
+    const save = await store.dispatch('marketing/saveProspek', formData);
+    if (save.error == false) {
+        getProspek()
+        clearFrom()
+        loading.dismiss();
+    } else {
+        loading.dismiss();
+    }
+    const toast = await toastController.create({
+        message: save.error ? save.message : 'Berhasil menambah data prospek',
+        duration: 1500,
+        position: "top",
+        cssClass: save.error ? 'toast-error' : 'toast-success'
+    });
+
+    await toast.present();
+
+
+    // console.debug('Kisi kabeh', data)
+}
+
+const clearFrom = () => {
+        state.nama = ''
+        state.alamat = ''
+        state.telp = ''
+        state.komoditi = ''
+        state.areakirim = ''
+        state.bgexp = ''
+        state.bgcar = ''
+        state.bgtruck = ''
+        state.ktexp = ''
+        state.ktcar = ''
+        state.kttruck = ''
+        state.areapickup = ''
+        state.namapicord = ''
+        state.telppicord = ''
+        state.namapickeu = ''
+        state.telppickeu = ''
+        state.usiatagihan = ''
+        state.files = null
+        latitude.value = ""
+        longitude.value = ""
 
 }
 
-const logout = () => {
-    localStorage.clear();
-    location.reload();
+const getProspek = async () => {
+    const loading = await loadingController.create({
+        message: "Loading...",
+        animated: true,
+        backdropDismiss: false,
+    });
+    loading.present();
+    const result = await store.dispatch('marketing/getProspekData');
+    if (result.error == false) {
+        // pickups.value = result.data
+        loading.dismiss();
+        console.debug("After dispatch", result);
+    } else {
+        // pickups.value = result.data
+        loading.dismiss();
+        console.debug("After dispatch", result);
+    }
 };
 </script>
+<style>
+.alert-radio-label.sc-ion-alert-md {
+    color: black !important;
+}
+
+.toast-success {
+    --background: #4CAF50;
+    /* Green background color */
+    --color: white;
+    /* Text color */
+}
+
+.toast-error {
+    --background: #F44336;
+    /* Red background color */
+    --color: white;
+    /* Text color */
+}
+</style>

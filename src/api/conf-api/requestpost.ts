@@ -4,17 +4,30 @@ import ConfApiHelper from './helpers'
 const helpers = new ConfApiHelper()
 
 export default async (endPoint: string, method: 'post' | 'get', payload?: any) => {
-    const timeStamp = (new Date).getTime()
-    
-    const obj_param = {}
-    const body_param = sha256(JSON.stringify(payload))
-    const source_signature = helpers.applySign2(obj_param, timeStamp, body_param)
+    const timeStamp = Date.now()
 
-    const public_param = helpers.publicParam2(timeStamp)
+    let objParam = {}
 
-    const param = ''
-    const signature = '&signature='+source_signature;
-    const url = endPoint + '?' + public_param + param + signature;
+    let sourceSignature = ''
+    let params = ''
 
-    return await helpers.sendApi(url, method, payload)
+    if (method === 'get') {
+        if (payload) {
+            objParam = payload
+            params = helpers.createParams(payload)
+        }
+
+        sourceSignature = helpers.applySign(objParam, timeStamp, '')
+    } else if (method === 'post') {
+        const bodyParam = sha256(JSON.stringify(payload))
+        sourceSignature = helpers.applySign(objParam, timeStamp, bodyParam.toString())
+    }
+
+    // const publicParams = helpers.publicParam(timeStamp)
+
+    // const signature = `&signature=${sourceSignature}`
+
+    // endPoint += '?' + publicParams + params + signature
+
+    return await helpers.sendApiWithImg(endPoint, method, payload)
 }

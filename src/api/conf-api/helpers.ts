@@ -57,6 +57,30 @@ class ConfApiHelper {
         }
     }
 
+    async sendApiWithImg<T = any>(endpoint: string, method: HttpMethod, data?: any): Promise<T> {
+        const API_URI = `https://pandusiwibandung.co.id/${endpoint}`;
+        const requestConfig = {
+            url: API_URI,
+            method,
+            headers: {
+                'api-key': config.API_KEY,
+                'Content-Type': 'multipart/form-data', // Set content type for FormData
+            },
+            data: method === 'post' ? data : null, // Pass FormData for POST requests
+        };
+    
+        try {
+            const response = await axios(requestConfig)
+            return response.data
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                if (error.response?.data) return error.response.data
+            }
+
+            throw error
+        }
+    }
+
     // send_api = async (endpoint: any, method: any, data: any) => {
     //     if (method === 'post') {
     //         return await axios.post(`${process.env.VUE_APP_API_URL}${endpoint}`, data)

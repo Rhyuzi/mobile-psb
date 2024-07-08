@@ -1,5 +1,5 @@
 /* eslint-disable no-async-promise-executor */
-import { getKunjungan, getProspek } from '@/api/conf-api/api'
+import { getKunjungan, getProspek, getKomoditi, saveProspek } from '@/api/conf-api/api'
 import md5 from 'crypto-js/md5'
 import { State } from 'ionicons/dist/types/stencil-public-runtime'
 import { Commit } from 'vuex'
@@ -11,11 +11,13 @@ interface State {
     [key: string]: any
     prospekList: any[],
     kunjunganList: any[],
+    komoditiLists: any[]
 }
 
 const initialState: State = {
     prospekList: [],
     kunjunganList: [],
+    komoditiLists: []
 }
 
 export default {
@@ -80,6 +82,36 @@ export default {
                 if (res.error === false) {
                     commit("SET", ["kunjunganList", res.data]);
                 }
+                // console.debug("data pickup", res);
+                return res;
+            } catch (error) {
+                console.error("Error fetching pickup data:", error);
+                throw error; // Re-throw the error to be handled by the caller if needed
+            }
+        },
+        async getKomoditi({ commit }: { commit: Commit }, payload: any) {
+            try {
+                const data = {
+                    customer_id: localStorage.pegawai_id
+                };
+                const res = await getKomoditi(data);
+                if (res.error === false) {
+                    commit("SET", ["komoditiLists", res.data]);
+                }
+                // console.debug("data pickup", res);
+                return res;
+            } catch (error) {
+                console.error("Error fetching pickup data:", error);
+                throw error; // Re-throw the error to be handled by the caller if needed
+            }
+        },
+
+        async saveProspek({ commit }: { commit: Commit }, payload: any) {
+            try {
+                const res = await saveProspek(payload);
+                // if (res.error === false) {
+                //     commit("SET", ["komoditiLists", res.data]);
+                // }
                 // console.debug("data pickup", res);
                 return res;
             } catch (error) {
