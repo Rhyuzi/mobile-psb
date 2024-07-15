@@ -554,3 +554,29 @@ ion-list {
   white-space: normal !important;
   word-break: break-word !important;
 }
+
+.font-size-10 {
+  font-size: 10px !important;
+}
+
+.margin-bottom-50 {
+  margin-bottom: 50px;
+}
+
+.margin-bottom-10 {
+  margin-bottom: 10px;
+}
+
+.toast-success {
+  --background: #4CAF50;
+  /* Green background color */
+  --color: white;
+  /* Text color */
+}
+
+.toast-error {
+  --background: #F44336;
+  /* Red background color */
+  --color: white;
+  /* Text color */
+}

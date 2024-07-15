@@ -24,6 +24,11 @@ const GET_PROSPEK = 'api/marketing/getprospek.php'
 const GET_KUNJUNGAN = 'api/marketing/getkunjungan.php'
 const GET_KOMODITI = "api/master/getkomoditi.php"
 const SAVE_PROSPEK = 'api/marketing/saveprospek.php'
+const SAVE_KUNJUNGAN = 'api/marketing/savekunjungan.php'
+
+const GET_CUST_OLD = 'api/master/getcustomer.php'
+const GET_CUST_NEW = 'api/master/get_custnew.php'
+const GET_VISIT_STATUS = 'api/master/getvisitstatus.php'
 
 // const ACCOUNT_LOGIN = 'siapx/mobile_psb/android_login.php' // method post
 // const PICKUP_DATA = 'siapx/mobile_psb/android_getpickuporder.php' // method post
@@ -41,7 +46,7 @@ const SAVE_PROSPEK = 'api/marketing/saveprospek.php'
 // const PICKUP_CHECKPOINT = 'siapx/mobile_psb/android_pickupcheckpoint.php'
 
 export {
-    ACCOUNT_LOGIN,   
+    ACCOUNT_LOGIN,
     PICKUP_DATA,
     DETAIL_PICKUP_DATA,
     UPDATE_STATUS_PICKUP,
@@ -61,7 +66,11 @@ export {
     GET_KUNJUNGAN,
     MAIN_URL_MARKETING_PROSPEK,
     GET_KOMODITI,
-    SAVE_PROSPEK
+    SAVE_PROSPEK,
+    GET_CUST_OLD,
+    GET_CUST_NEW,
+    GET_VISIT_STATUS,
+    SAVE_KUNJUNGAN
 }
 
 export default {
@@ -85,5 +94,9 @@ export default {
     GET_KUNJUNGAN,
     MAIN_URL_MARKETING_PROSPEK,
     GET_KOMODITI,
-    SAVE_PROSPEK
+    SAVE_PROSPEK,
+    GET_CUST_OLD,
+    GET_CUST_NEW,
+    GET_VISIT_STATUS,
+    SAVE_KUNJUNGAN
 }

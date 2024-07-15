@@ -1,5 +1,5 @@
 /* eslint-disable no-async-promise-executor */
-import { getKunjungan, getProspek, getKomoditi, saveProspek } from '@/api/conf-api/api'
+import { getKunjungan, getProspek, getKomoditi, saveProspek, getCustNew, getCustOld, getVisitStatus, saveKunjungan } from '@/api/conf-api/api'
 import md5 from 'crypto-js/md5'
 import { State } from 'ionicons/dist/types/stencil-public-runtime'
 import { Commit } from 'vuex'
@@ -11,13 +11,19 @@ interface State {
     [key: string]: any
     prospekList: any[],
     kunjunganList: any[],
-    komoditiLists: any[]
+    komoditiLists: any[],
+    custnew: any[],
+    custold: any[],
+    visitstatus: any[]
 }
 
 const initialState: State = {
     prospekList: [],
     kunjunganList: [],
-    komoditiLists: []
+    komoditiLists: [],
+    custnew: [],
+    custold: [],
+    visitstatus: []
 }
 
 export default {
@@ -113,6 +119,66 @@ export default {
                 //     commit("SET", ["komoditiLists", res.data]);
                 // }
                 // console.debug("data pickup", res);
+                return res;
+            } catch (error) {
+                console.error("Error fetching pickup data:", error);
+                throw error; // Re-throw the error to be handled by the caller if needed
+            }
+        },
+
+        async getCustNew({ commit }: { commit: Commit }, payload: any) {
+            try {
+                const data = {
+                    customer_id: localStorage.pegawai_id
+                };
+                const res = await getCustNew(data);
+                if (res.error === false) {
+                    commit("SET", ["custnew", res.data]);
+                }
+                return res;
+            } catch (error) {
+                console.error("Error fetching pickup data:", error);
+                throw error; // Re-throw the error to be handled by the caller if needed
+            }
+        },
+
+        async getCustOld({ commit }: { commit: Commit }, payload: any) {
+            try {
+                const data = {
+                    customer_id: localStorage.pegawai_id
+                };
+                const res = await getCustOld(data);
+                if (res.error === false) {
+                    commit("SET", ["custold", res.data]);
+                }
+                return res;
+            } catch (error) {
+                console.error("Error fetching pickup data:", error);
+                throw error; // Re-throw the error to be handled by the caller if needed
+            }
+        },
+
+        async getVisitStatus({ commit }: { commit: Commit }, payload: any) {
+            try {
+                const data = {
+                    customer_id: localStorage.pegawai_id
+                };
+                const res = await getVisitStatus(data);
+                if (res.error === false) {
+                    commit("SET", ["visitstatus", res.data]);
+                }
+                return res;
+            } catch (error) {
+                console.error("Error fetching pickup data:", error);
+                throw error; // Re-throw the error to be handled by the caller if needed
+            }
+        },
+        async saveKunjungan({ commit }: { commit: Commit }, payload: any) {
+            try {
+                const res = await saveKunjungan(payload);
+                // if (res.error === false) {
+                //     commit("SET", ["visitstatus", res.data]);
+                // }
                 return res;
             } catch (error) {
                 console.error("Error fetching pickup data:", error);

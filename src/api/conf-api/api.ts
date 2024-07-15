@@ -80,6 +80,18 @@ export async function getKunjungan(payload: any): Promise<any> {
 export async function getKomoditi(payload: any): Promise<any> {
     return await request(endPoints.GET_KOMODITI, 'post', payload)
 }
+export async function getCustNew(payload: any): Promise<any> {
+    return await request(endPoints.GET_CUST_NEW, 'post', payload)
+}
+export async function getCustOld(payload: any): Promise<any> {
+    return await request(endPoints.GET_CUST_OLD, 'post', payload)
+}
+export async function getVisitStatus(payload: any): Promise<any> {
+    return await request(endPoints.GET_VISIT_STATUS, 'post', payload)
+}
 export async function saveProspek(payload: any): Promise<any> {
     return await requestpost(endPoints.SAVE_PROSPEK, 'post', payload)
+}
+export async function saveKunjungan(payload: any): Promise<any> {
+    return await requestpost(endPoints.SAVE_KUNJUNGAN, 'post', payload)
 }

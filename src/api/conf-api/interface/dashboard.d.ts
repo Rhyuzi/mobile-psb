@@ -151,3 +151,54 @@ export interface VisitData {
   VisitValue: string;
   VisitCode: string;
 }
+
+export interface Customer {
+  ID: string;
+  CustNo: string;
+  CustLocation: string;
+  CustName: string;
+  CustAddr: string;
+  CustKdPos: string;
+  CustAddr2: string;
+  CustAddrKdPos2: string;
+  CustAddr3: string;
+  CustKdPos3: string;
+  CustEmail: string;
+  CustTelp: string;
+  CustPicNm1: string;
+  CustPicRc1: string;
+  CustPicTlp1: string;
+  CustPicJbt1: string;
+  CustPicMemo1: string;
+  CustPicNm2: string;
+  CustPicRc2: string;
+  CustPicTlp2: string;
+  CustPicJbt2: string;
+  CustPicMemo2: string;
+  CustSales: string;
+  CustSalesKomisi: string;
+  CustDisc: string;
+  CustDeposit: string;
+  CustCategory: string;
+  CustBussType: string;
+  CustMemberDate: string;
+  CustLastDate: string;
+  CustTaxValue: string;
+  CustCreditLimit: string;
+  CustCreditCurr: string;
+  CustOverDue: string;
+  CustMemo: string;
+  CustRecId1: string;
+  CustRecId2: string;
+  CustVendor: string;
+  CustCreateBy: string;
+  CustCreateLocation: string;
+  CustModiBy: string;
+  CustDraft: string;
+  CustTaxNo: string;
+  CustDeleteBy: string;
+  CustSync: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string;
+}
