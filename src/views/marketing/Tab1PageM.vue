@@ -7,7 +7,7 @@
                         slot="start"></ion-icon> -->
 
                 <div class="display-fl">
-                    <img src="../../assets/image/logo-pandu.png" class="logo-header-home" alt="">
+                    <!-- <img src="../../assets/image/logo-pandu.png" class="logo-header-home" alt=""> -->
                     <div class="title-header">
                         <p class="font-monospace font-white">Selamat Datang,</p>
                         <p class="font-white">{{ dataUser.name }}</p>

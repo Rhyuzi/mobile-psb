@@ -34,7 +34,7 @@ class ConfApiHelper {
     }
 
     async sendApi<T = any>(endpoint: string, method: HttpMethod, data?: any): Promise<T> {
-        const API_URI = `https://trilas.com/${endpoint}`
+        const API_URI = `https://trilas-express.com/${endpoint}`
         const requestConfig: AxiosRequestConfig = {
             url: API_URI,
             method,
@@ -58,7 +58,7 @@ class ConfApiHelper {
     }
 
     async sendApiWithImg<T = any>(endpoint: string, method: HttpMethod, data?: any): Promise<T> {
-        const API_URI = `https://trilas.com/${endpoint}`;
+        const API_URI = `https://trilas-express.com/${endpoint}`;
         const requestConfig = {
             url: API_URI,
             method,

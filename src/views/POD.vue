@@ -25,7 +25,7 @@
                 </ion-segment-button>
             </ion-segment>
         </ion-header>
-        <ion-content :fullscreen="true">
+        <ion-content :fullscreen="true" style="--background: lightgrey">
             <div v-if="state.selectedSegment == 'history'" class="main-history">
                 <div class="item-pick" v-for="pickup in paginatedHistoryData" :key="pickup.POrderNo">
                     <ion-card-content @click="seeDetail(pickup.POrderID)">
