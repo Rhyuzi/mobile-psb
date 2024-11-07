@@ -1,30 +1,34 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar style="--background: #f8f9fa; --color: #333;">
+    <img src="../assets/image/Cover.png" class="bg-logo" alt="">
+    <!-- <ion-header>
+      <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-menu-button></ion-menu-button>
+          <ion-back-button default-href="/"></ion-back-button>
         </ion-buttons>
-        <ion-title>Login</ion-title>
+        <ion-title>Masuk</ion-title>
       </ion-toolbar>
+    </ion-header> -->
+    <ion-header>
+      <img src="../assets/image/logo-pandu.png" class="bg-logo-pandu" alt="">
     </ion-header>
-
-    <div class="login-container">
-      <ion-card class="login-card">
+    <div class="container-join">
+      <img src="../assets/image/psb-logo.png" class="login-logo" alt="">
+      <ion-card class="font-black">
         <ion-card-header>
-          <ion-card-title>Masuk</ion-card-title>
+          <ion-card-title class="font-black">Masuk</ion-card-title>
         </ion-card-header>
 
         <ion-card-content>
-          <form ref="formLoginRef">
+          <form action="" ref="formLoginRef" class="font-black">
             <ion-input
               ref="email"
               color="dark"
-              label="Username"
+              label="Email atau Nama Akun"
               label-placement="floating"
               fill="outline"
-              placeholder="Masukan Username"
-              :class="v$.username.$error ? 'ion-invalid' : 'ion-valid'"
+              placeholder="Masukan Email atau Nama Akun"
+              :class="v$.username.$error ? 'ion-invalid font-black' : 'ion-valid font-black'"
               :error-text="
                 v$.username.$error
                   ? v$.username.$errors[0].$message.toString()
@@ -32,12 +36,12 @@
               "
               v-model="state.username"
               @ion-blur="markTouched"
-            ></ion-input>
-            
+            ></ion-input
+            ><br />
             <ion-input
               ref="password"
               color="dark"
-              label="Password"
+              label="Kata Sandi (jika diperlukan)"
               label-placement="floating"
               fill="outline"
               type="password"
@@ -51,14 +55,25 @@
               v-model="state.password"
               @ion-blur="markTouched"
             ></ion-input>
-            
-            <ion-button expand="block" class="login-button" @click="login">Masuk</ion-button>
+            <br />
+            <ion-button
+              expand="full"
+              shape="round"
+              size="default"
+              @click="login"
+              >Masuk</ion-button
+            >
           </form>
         </ion-card-content>
       </ion-card>
     </div>
 
-    <ion-toast :is-open="isOpen" :message="errMessage" :duration="5000" @didDismiss="setOpen(false)"></ion-toast>
+    <ion-toast
+      :is-open="isOpen"
+      :message="errMessage"
+      :duration="5000"
+      @didDismiss="setOpen(false)"
+    ></ion-toast>
   </ion-page>
 </template>
 
@@ -105,14 +120,14 @@ const setOpen = (state: boolean) => {
 const rules = computed(() => {
   return {
     username: {
-      required: helpers.withMessage("Username tidak boleh kosong", required),
+      required: helpers.withMessage("Name can not be empty", required),
       maxlength: helpers.withMessage(
         "Username tidak boleh lebih dari 64 karakter",
         maxLength(64)
       ),
     },
     password: {
-      required: helpers.withMessage("Password tidak boleh kosong", required),
+      required: helpers.withMessage("Password Must be a number", required),
       maxlength: helpers.withMessage(
         "Password tidak boleh lebih dari 16 karakter",
         maxLength(16)
@@ -138,74 +153,31 @@ const login = async () => {
     backdropDismiss: false,
   });
   try {
-    v$.value.$validate();
-    loading.present();
-    if (v$.value.$error) {
-      const inputs = formLoginRef.value?.querySelectorAll("input");
-      inputs?.forEach((input) => input.focus());
+  v$.value.$validate();
+  loading.present();
+  if (v$.value.$error) {
+    const inputs = formLoginRef.value?.querySelectorAll("input");
+    inputs?.forEach((input) => input.focus());
 
-      return;
-    }
-
-    const res = await store.dispatch("auth/signIn", state);
-    if (res.error === false) {
-      const result = await store.dispatch('arrive/cityOrig');
-      if (result.error == false) {
-        loading.dismiss();
-        router.push("/tabs/");
-      }
-    } else {
-      errMessage.value = res.message;
-      setOpen(true);
+    return;
+  }
+  
+  const res = await store.dispatch("auth/signIn", state);
+  if (res.error === false) {
+    // const result = await store.dispatch('arrive/cityOrig');
+    // if (result.error == false) {
       loading.dismiss();
-    }
+      // router.push("/tabs/");
+    // }
+  } else {
+    errMessage.value = res.message;
+    setOpen(true);
+    loading.dismiss();
+  }
   } catch (error) {
     console.error(error)
     loading.dismiss()
   }
-
+  
 };
 </script>
-
-<style scoped>
-/* Main container to center the form */
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  padding: 20px;
-  background: linear-gradient(135deg, #e0f7fa, #00796b); /* Soft turquoise gradient */
-}
-
-/* Card styling */
-.login-card {
-  width: 100%;
-  max-width: 400px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-/* Input styles for better spacing */
-ion-input {
-  margin-top: 12px;
-}
-
-/* Button styling */
-.login-button {
-  margin-top: 20px;
-  --background: #007bff;
-  --background-hover: #0056b3;
-  --color: #fff;
-}
-
-ion-card-title {
-  text-align: center;
-  color: #333;
-  font-size: 1.4em;
-}
-
-ion-toolbar {
-  --border-color: transparent;
-}
-</style>

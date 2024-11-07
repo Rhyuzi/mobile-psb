@@ -1,6 +1,6 @@
 'use strict'
 
-const MAIN_URL_MARKETING_PROSPEK = 'https://pandusiwibandung.co.id/mpsb/data/images/prospek/'
+const MAIN_URL_MARKETING_PROSPEK = 'https://trilas.com/api/data/images/prospek/'
 // ACCOUNT RELATED INTERFACE
 const ACCOUNT_LOGIN = 'api/auth/login.php' // method post
 const PICKUP_DATA = 'api/pickup/getpickuporder.php' // method post

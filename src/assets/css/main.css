@@ -23,7 +23,7 @@
 
 .container-join {
   padding: 0px;
-  /* margin: auto 0; */
+  margin: auto 0;
   display: flex;
   flex-direction: column;
 }
